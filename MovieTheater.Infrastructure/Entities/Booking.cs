@@ -1,3 +1,5 @@
+using MovieTheater.Infrastructure.Enums;
+
 namespace MovieTheater.Infrastructure.Entities;
 
 public class Booking
@@ -6,7 +8,7 @@ public class Booking
     public long UserId { get; set; }
     public long ScreeningId { get; set; }
     public long SeatId { get; set; }
-    public string Status { get; set; } = null!;
+    public BookingStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
 
     public User User { get; set; } = null!;
