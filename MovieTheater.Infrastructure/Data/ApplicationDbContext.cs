@@ -10,8 +10,8 @@ public class ApplicationDbContext : DbContext
     {
     }
 
-    public DbSet<Movie> Movies => Set<Movie>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<Movie> Movies => Set<Movie>();
     public DbSet<Actor> Actors => Set<Actor>();
     public DbSet<Rating> Ratings => Set<Rating>();
     public DbSet<Genre> Genres => Set<Genre>();
@@ -29,10 +29,69 @@ public class ApplicationDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        // Composite keys
         modelBuilder.Entity<MovieActor>()
             .HasKey(ma => new { ma.MovieId, ma.ActorId });
 
         modelBuilder.Entity<MovieGenre>()
             .HasKey(mg => new { mg.MovieId, mg.GenreId });
+
+        // Enums
+        modelBuilder.Entity<Movie>()
+            .Property(m => m.ActivityStatus)
+            .HasConversion<string>();
+
+        modelBuilder.Entity<Booking>()
+            .Property(b => b.Status)
+            .HasConversion<string>();
+
+        // Generated autoincrement IDs
+        modelBuilder.Entity<User>()
+            .Property(u => u.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Movie>()
+            .Property(m => m.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Actor>()
+            .Property(a => a.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Genre>()
+            .Property(g => g.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Rating>()
+            .Property(r => r.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Hall>()
+            .Property(h => h.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<HallSector>()
+            .Property(s => s.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<HallSeat>()
+            .Property(s => s.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Session>()
+            .Property(s => s.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Booking>()
+            .Property(b => b.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<Recommendation>()
+            .Property(r => r.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<MovieStats>()
+            .Property(s => s.Id)
+            .ValueGeneratedOnAdd();
     }
 }
