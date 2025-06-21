@@ -2,7 +2,175 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@section Styles {
+    <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
+}
+
+  <div class="greetings-div">
+    <p class="greetings-text-big roboto-condensed-400"> Найкраще місце в Дніпрі для кіноманів</p>
+    <p class="greetings-text-small inter-200"> Keen-chick кожен день чекає 
+        вас на показах найкращого кіно сьогодення!</p>
+  </div>
+
+  <div class="container ml-3 mt-3">
+    <p class="new-movies-text roboto-condensed-400 "> Гарячі новинки</p>
+  </div>
+
+  <div class="container-fluid new-movies-container">
+
+    <button class="new-movie-btn btn-prev" onclick="prevSlide()">←</button>
+      <div id="movie-slider" class="row justify-content-center gx-4 gy-4">
+
+
+      
+          
+      </div>
+    <button class="new-movie-btn btn-next" onclick="nextSlide()">→</button>
+
+  </div>
+
+    
+
+   <div class="container ml-3 mt-3 row">
+      <p class="new-movies-text roboto-condensed-400 col-2 mt-4"> У прокаті</p>
+    <div class="dates-container col-10">
+
+      <div class="date-div">
+        <span class="date-text"> 21.06</span>
+        <a href="#" class="date-circle date-active"></a>
+      </div>
+      
+      <div class="date-div">
+        <span class="date-text"> 22.06</span>
+        <a href="#" class="date-circle"></a>
+      </div>
+
+       <div class="date-div">
+        <span class="date-text"> 23.06</span>
+        <a href="#" class="date-circle"></a>
+      </div>
+
+      <div class="date-div">
+        <span class="date-text"> 24.06</span>
+        <a href="#" class="date-circle"></a>
+      </div>
+
+      <div class="date-div">
+        <span class="date-text"> 25.06</span>
+        <a href="#" class="date-circle"></a>
+      </div>
+
+      <div class="date-div">
+        <span class="date-text"> 26.06</span>
+        <a href="#" class="date-circle"></a>
+      </div>
+
+      <div class="date-div">
+        <span class="date-text"> 27.06</span>
+        <a href="#" class="date-circle"></a>
+      </div>
+      
+       <div class="date-div date-next-week">
+        <i class="fa-solid fa-chevron-up fa-rotate-90 next-week-btn"></i>
+      </div>
+
+
+    </div>
+
+    <div class="filters-div mt-4">
+      <div id ="genreDropdown" class="dropdown-div">
+        <select class="dropdown-select">
+          <option selected disabled hidden>Жанр</option>
+          <option>Бойовик</option>
+          <option>Драма</option>
+          <option>Комедія</option>
+          <option>Будь-який</option>
+        </select>
+        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+      </div>
+
+      <div id ="ratingDropdown" class="dropdown-div">
+        <select class="dropdown-select">
+          <option selected disabled hidden>Жанр</option>
+          <option>Бойовик</option>
+          <option>Драма</option>
+          <option>Комедія</option>
+          <option>Будь-який</option>
+        </select>
+        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+      </div>
+
+      <div id ="lengthDropdown" class="dropdown-div">
+        <select class="dropdown-select">
+          <option selected disabled hidden>Жанр</option>
+          <option>Бойовик</option>
+          <option>Драма</option>
+          <option>Комедія</option>
+          <option>Будь-який</option>
+        </select>
+        <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+      </div>
+
+        <div id ="searchInput" class="search-div">
+          <input type="text" class="movie-search-input" placeholder="Назва фільму...">
+      </div>
+
+
+    </div>
+
+    <div class="movie-session-card mt-5">
+        <div class="poster-col">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFz2k4fixIcTZ9giaweLrGQ0AMjieRV_9R3A&s"
+           alt="Shrek 5" class="movie-thumb">
+        </div>
+
+      <div class="info-col flex-grow-1">
+        <h6 class="mb-2 movie-title">Shrek 5</h6>
+        
+
+        <div class="session-info text-muted small mb-2">
+          <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
+          <span class="me-3"><i class="fa-solid fa-child me-1"></i> 12+</span>
+          <span class="me-3"><i class="fa-solid fa-film me-1"></i> Мультфільм</span>
+          <span><i class="fa-regular fa-clock me-1"></i> 2:15</span>
+        </div>
+
+        <div class=" session-times-block"></div>
+          <div class="session-time text-light-emphasis small">
+            15:45
+          </div>
+        </div>
+        
+      </div>
+
+      <div>
+        <a href="#" class="btn btn-outline-light btn-sm px-3">Забронювати</a>
+      </div>
+    </div>
+
+  </div>
+
+  
+
+    <div class="greetings-div mt-5">
+    </div>
+
+<div class="greetings-div mt-5">
+  </div>
+
+  <div class="greetings-div mt-5">
+  </div>
+
+
+<div class="greetings-div mt-5">
+  </div>
+
+
+<div class="greetings-div mt-5">
+  </div>
+
+
+<div class="greetings-div mt-5">
+  </div>
+
+<script src="~/js/newMoviesSlider.js" asp-append-version="true"></script>
