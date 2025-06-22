@@ -350,7 +350,6 @@
 
   display: flex;
   flex-wrap: wrap; 
-  gap: 1rem; 
   align-items: center;
   padding: 10px;
 
@@ -363,20 +362,45 @@
   border-radius: 8px;
 }
 
-.movie-title {
+.session-movie-title {
   font-family: "Roboto Condensed", sans-serif;
-  font-size: 1.25rem;
+  font-size: 2rem;
   margin-bottom: 0.5rem;
+  color: #bee1ff;
+  text-shadow: 4px 3px 2px rgba(0,0,0,0.5);
+  isolation: isolate;    
 }
 
-.showtime {
-  background-color: rgba(120,150,200,0.15);
+.title-sessiontimes-div,
+.sessioninfo-booking-div{
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+}
+
+.session-times-block{
+   display: flex;
+  gap: 0.5rem; 
+  align-items: center;
+  flex-wrap: wrap;
+}
+.session-time {
+  color: #bee1ff;
   border-radius: 12px;
   padding: 0.3rem 0.8rem;
   font-weight: 500;
-  color: #bee1ff;
-  border: 1px solid rgba(255,255,255,0.1);
+  background: linear-gradient(180deg,rgba(45, 38, 86, 0.3) 0%,
+                                rgba(51, 77, 114, 0.3) 40%,
+                                  rgba(18, 40, 81, 0.3) 100%);
+  box-shadow: 0 0 10px rgba(0,0,0,0.4);
+  border: 2px solid #53638043;
+  backdrop-filter: blur(10px);
 }
+
+.session-info span{
+  font-size: 1rem;
+    
+}
+
 
 .showtime:hover {
   background-color: rgba(120,150,200,0.3);
@@ -393,4 +417,50 @@
 .reserve-btn:hover {
   background-color: #bee1ff;
   color: #1a253d;
+}
+
+.booking-btn{
+  width: 100%;
+  display: inline-block;
+  padding:  5px 5px 5px 5px;
+  border-radius: 10px;
+
+  background: linear-gradient(180deg,rgba(42, 37, 71, 0.5) 0%,
+                                rgba(57, 63, 75, 0.3) 40%,
+                                  rgba(17, 30, 52, 0.2) 100%);
+  backdrop-filter: blur(10px);
+
+  color:hsla(227, 16%, 60%, 0.9);
+  font-size: 14pt;
+  text-shadow: 2px 2px 2px rgba(0,0,0,0.6);
+  text-decoration: none;
+  text-align: center;
+
+  box-shadow: -1px 6px 12px 3px rgba(7,0,42,0.1);
+  -webkit-box-shadow: -1px 6px 12px 3px rgba(7,0,42,0.1);
+  -moz-box-shadow: -1px 6px 12px 3px rgba(7,0,42,0.1);
+
+  border:solid 3px rgba(12, 109, 109, 0.2);
+}
+
+.booking-btn-div{
+  width: 15vw;
+
+}
+
+.movie-button:hover,
+.booking-btn:hover{
+   background: linear-gradient(180deg,rgba(70, 61, 116, 0.5) 0%,
+                                rgba(92, 104, 126, 0.3) 40%,
+                                  rgba(54, 70, 99, 0.2) 100%);
+
+   color: #98cde3;
+
+}
+
+.session-time:hover{
+     background: linear-gradient(180deg,rgba(52, 44, 94, 0.5) 0%,
+                                rgba(51, 65, 92, 0.3) 40%,
+                                  rgba(54, 70, 99, 0.2) 100%);
+
 }

@@ -12,6 +12,15 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
 </head>
 <body>
 
@@ -32,11 +41,11 @@
                     <a data-bs-toggle="offcanvas" href="#sidebar" role="sidebar" aria-controls="offcanvas">
                     <i id = "sidebar-toggle" class="fa-solid fa-bars fa-rotate-90"></i></a>
 
-                    <a class="site-name-link" asp-area="" asp-controller="Home" asp-action="Index">keen-chick!</a>
+                    <a class="site-name-link font-main " asp-area="" asp-controller="Home" asp-action="Index">keen-chick!</a>
                 </div>
 
                 <div id = "profileLinkDiv" class="profile-link-div">
-                    <a class="profile-link" asp-area="" asp-controller="Home" asp-action="Index">Ім'я користувача</a>
+                    <a class="profile-link font-main" asp-area="" asp-controller="Home" asp-action="Index">Ім'я користувача</a>
                     <i class="user-icon fa-regular fa-user"></i>
                 </div>
             
@@ -52,7 +61,6 @@
             @RenderBody()
         </main>
     </div>
-    
 
     <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
         <div class="offcanvas-header">
@@ -63,16 +71,16 @@
                     aria-label="Close"></i>
         </div>
         <div class="offcanvas-body">
-            <a class="offcanvas-link active">
+            <a class="font-main offcanvas-link active">
         У прокаті
             </a>
-            <a class="offcanvas-link">
+            <a class="font-main offcanvas-link">
         Ціни
             </a>
-            <a class="offcanvas-link">
+            <a class="font-main offcanvas-link">
         Скоро в кіно
             </a>
-            <a class="offcanvas-link admin-link">
+            <a class="font-main offcanvas-link admin-link">
         Адмін-панель
             </a>
 
@@ -80,34 +88,35 @@
         
         <div class="offcanvas-footer">
                 <div class="our-socials-text-div">
-                    <p > Наші соцмережі </p>
+                    <p class="font-main"> Наші соцмережі </p>
                 </div>
-                <div class="socials-link-div">
+                <div class="font-secondary socials-link-div">
                       <i class="fa-brands fa-instagram fa-beat"></i>
                       <a class="socials-link" href="#"> Instagram</a>     
                 </div>
 
-                <div class="socials-link-div">
+                <div class="font-secondary socials-link-div">
                       <i class="fa-brands fa-facebook-f fa-beat"></i>
                       <a class="socials-link" href="#"> Facebook</a>     
                 </div>
                 
-                <div class="socials-link-div">
+                <div class="font-secondary socials-link-div">
                       <i class="fa-brands fa-telegram fa-beat"></i>
                       <a class="socials-link" href="#"> Telegram</a>     
                 </div>
                 
-                <div class="socials-link-div">
+                <div class="font-secondary socials-link-div">
                       <i class="fa-brands fa-tiktok fa-beat "></i>
                       <a class="socials-link" href="#"> TikTok</a>     
                 </div>
                 
             </div>
-        
 
         
     </div>
-
+    <div class="container-fluid pt-3 footer-div font-secondary d-flex justify-content-center">
+        <a class="navbar-brand" href="#">Summer-practice project. © 2025. All rights reserved</a>
+    </div>
 
     
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

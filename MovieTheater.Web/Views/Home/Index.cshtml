@@ -6,14 +6,14 @@
     <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
 }
 
-  <div class="greetings-div">
-    <p class="greetings-text-big roboto-condensed-400"> Найкраще місце в Дніпрі для кіноманів</p>
-    <p class="greetings-text-small inter-200"> Keen-chick кожен день чекає 
+  <div class="greetings-div " >
+    <p class="greetings-text-big font-main"> Найкраще місце в Дніпрі для кіноманів</p>
+    <p class="greetings-text-small font-secondary"> Keen-chick кожен день чекає 
         вас на показах найкращого кіно сьогодення!</p>
   </div>
 
   <div class="container ml-3 mt-3">
-    <p class="new-movies-text roboto-condensed-400 "> Гарячі новинки</p>
+    <p class="new-movies-text font-main "> Гарячі новинки</p>
   </div>
 
   <div class="container-fluid new-movies-container">
@@ -31,8 +31,8 @@
 
     
 
-   <div class="container ml-3 mt-3 row">
-      <p class="new-movies-text roboto-condensed-400 col-2 mt-4"> У прокаті</p>
+   <div class="container mt-3 row" style=" padding-right: 10px;">
+      <p class="new-movies-text font-main col-2 mt-4"> У прокаті</p>
     <div class="dates-container col-10">
 
       <div class="date-div">
@@ -61,7 +61,7 @@
       </div>
 
       <div class="date-div">
-        <span class="date-text"> 26.06</span>
+        <span class="date-text "> 26.06</span>
         <a href="#" class="date-circle"></a>
       </div>
 
@@ -91,10 +91,10 @@
 
       <div id ="ratingDropdown" class="dropdown-div">
         <select class="dropdown-select">
-          <option selected disabled hidden>Жанр</option>
-          <option>Бойовик</option>
-          <option>Драма</option>
-          <option>Комедія</option>
+          <option selected disabled hidden>Рейтинг</option>
+          <option>12+</option>
+          <option>16+</option>
+          <option>18+</option>
           <option>Будь-який</option>
         </select>
         <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
@@ -102,10 +102,10 @@
 
       <div id ="lengthDropdown" class="dropdown-div">
         <select class="dropdown-select">
-          <option selected disabled hidden>Жанр</option>
-          <option>Бойовик</option>
-          <option>Драма</option>
-          <option>Комедія</option>
+          <option selected disabled hidden>Довжина</option>
+          <option>Менше години</option>
+          <option>1 год -2 год</option>
+          <option>Більше 2 годин</option>
           <option>Будь-який</option>
         </select>
         <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
@@ -117,60 +117,158 @@
 
 
     </div>
+ </div>
+    
 
-    <div class="movie-session-card mt-5">
-        <div class="poster-col">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFz2k4fixIcTZ9giaweLrGQ0AMjieRV_9R3A&s"
-           alt="Shrek 5" class="movie-thumb">
+    <div class="container" style=" padding: 10px 2rem 0px 1.2rem;">
+      <div class="movie-session-card mt-3 row">
+          <div class="poster-col col-auto">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFz2k4fixIcTZ9giaweLrGQ0AMjieRV_9R3A&s"
+            alt="Shrek 5" class="movie-thumb">
+          </div>
+
+        <div class="flex-grow-1 col">
+
+          <div class="title-sessiontimes-div container d-flex justify-content-between mb-5">
+
+            <div class="movie-title-div">
+              <span class="mb-2 session-movie-title font-main">Shrek 5</span>
+            </div>
+
+            <div class=" session-times-block  ">
+
+              <div class="session-time text-light-emphasis small">
+              9:15
+              </div>
+
+              <div class="session-time text-light-emphasis small">
+                15:45
+              </div>
+
+              <div class="session-time text-light-emphasis small">
+                22:45
+              </div>
+
+            </div>
+              
+          </div>
+
+          <div class="sessioninfo-booking-div container d-flex justify-content-between">
+            <div class="session-info text-muted small pt-2 font-secondary">
+              <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
+              <span class="me-3"><i class="fa-solid fa-child me-1"></i> 12+</span>
+              <span class="me-3"><i class="fa-solid fa-film me-1"></i> Мультфільм</span>
+              <span><i class="fa-regular fa-clock me-1"></i> 2:15</span>
+            </div>
+
+            <div class="booking-btn-div font-main">
+              <a href="#" class="booking-btn ">Забронювати</a>
+            </div>
+          </div>
         </div>
 
-      <div class="info-col flex-grow-1">
-        <h6 class="mb-2 movie-title">Shrek 5</h6>
         
+      </div>
 
-        <div class="session-info text-muted small mb-2">
-          <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
-          <span class="me-3"><i class="fa-solid fa-child me-1"></i> 12+</span>
-          <span class="me-3"><i class="fa-solid fa-film me-1"></i> Мультфільм</span>
-          <span><i class="fa-regular fa-clock me-1"></i> 2:15</span>
+        <div class="movie-session-card mt-3 row">
+          <div class="poster-col col-auto">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFz2k4fixIcTZ9giaweLrGQ0AMjieRV_9R3A&s"
+            alt="Shrek 5" class="movie-thumb">
+          </div>
+
+        <div class="flex-grow-1 col">
+
+          <div class="title-sessiontimes-div container d-flex justify-content-between mb-5">
+
+            <div class="movie-title-div">
+              <span class="mb-2 session-movie-title font-main">Shrek 5</span>
+            </div>
+
+            <div class=" session-times-block  ">
+
+              <div class="session-time text-light-emphasis small">
+              9:15
+              </div>
+
+              <div class="session-time text-light-emphasis small">
+                15:45
+              </div>
+
+              <div class="session-time text-light-emphasis small">
+                22:45
+              </div>
+
+            </div>
+              
+          </div>
+
+          <div class="sessioninfo-booking-div container d-flex justify-content-between">
+            <div class="session-info text-muted small pt-2 font-secondary">
+              <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
+              <span class="me-3"><i class="fa-solid fa-child me-1"></i> 12+</span>
+              <span class="me-3"><i class="fa-solid fa-film me-1"></i> Мультфільм</span>
+              <span><i class="fa-regular fa-clock me-1"></i> 2:15</span>
+            </div>
+
+            <div class="booking-btn-div font-main">
+              <a href="#" class="booking-btn ">Забронювати</a>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div class=" session-times-block"></div>
-          <div class="session-time text-light-emphasis small">
-            15:45
+        <div class="movie-session-card mt-3 row">
+          <div class="poster-col col-auto">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFz2k4fixIcTZ9giaweLrGQ0AMjieRV_9R3A&s"
+            alt="Shrek 5" class="movie-thumb">
+          </div>
+
+        <div class="flex-grow-1 col">
+
+          <div class="title-sessiontimes-div container d-flex justify-content-between mb-5">
+
+            <div class="movie-title-div">
+              <span class="mb-2 session-movie-title font-main">Shrek 5</span>
+            </div>
+
+            <div class=" session-times-block  ">
+
+              <div class="session-time text-light-emphasis small">
+              9:15
+              </div>
+
+              <div class="session-time text-light-emphasis small">
+                15:45
+              </div>
+
+              <div class="session-time text-light-emphasis small">
+                22:45
+              </div>
+
+            </div>
+              
+          </div>
+
+          <div class="sessioninfo-booking-div container d-flex justify-content-between">
+            <div class="session-info text-muted small pt-2 font-secondary">
+              <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
+              <span class="me-3"><i class="fa-solid fa-child me-1"></i> 12+</span>
+              <span class="me-3"><i class="fa-solid fa-film me-1"></i> Мультфільм</span>
+              <span><i class="fa-regular fa-clock me-1"></i> 2:15</span>
+            </div>
+
+            <div class="booking-btn-div font-main">
+              <a href="#" class="booking-btn ">Забронювати</a>
+            </div>
           </div>
         </div>
         
       </div>
 
-      <div>
-        <a href="#" class="btn btn-outline-light btn-sm px-3">Забронювати</a>
-      </div>
     </div>
-
-  </div>
 
   
 
-    <div class="greetings-div mt-5">
-    </div>
-
-<div class="greetings-div mt-5">
-  </div>
-
-  <div class="greetings-div mt-5">
-  </div>
-
-
-<div class="greetings-div mt-5">
-  </div>
-
-
-<div class="greetings-div mt-5">
-  </div>
-
-
-<div class="greetings-div mt-5">
-  </div>
+    
 
 <script src="~/js/newMoviesSlider.js" asp-append-version="true"></script>
