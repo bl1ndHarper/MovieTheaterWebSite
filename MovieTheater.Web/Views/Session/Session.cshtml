@@ -1,0 +1,179 @@
+﻿@{
+    ViewData["Title"] = "Keen-chick: перегляд сеансу";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/session.css" asp-append-version="true" />
+}
+
+  <div class="back-btn-div font-main">
+    <a asp-area="" asp-controller="Home" asp-action="Index" class="back-btn "> ← Назад</a>
+  </div>
+  <div class="container">
+    <div class="movie-info-big-div row mt-4">
+        <div class="poster-col col-auto">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhLILYiJ17dczi8Qfm6RzVeV9NNTKIpACtqg&s"
+            alt="Jeepers Creepers" class="movie-thumb">
+        </div>
+        <div class="movie-info-div col">
+          <div class="movie-title-div">
+            <span class="mb-2 session-movie-title font-main">Jeepers Creepers</span>
+          </div>
+
+          <div class=" session-all-tags d-flex align-items-start">
+            <div class="tags-genres-div   ">
+                <div class="genre-tag text-light-emphasis small">
+                  Жахи
+                  </div>
+
+                  <div class="genre-tag text-light-emphasis small">
+                  Документальний
+                  </div>
+
+                  <div class="rating-tag text-light-emphasis small">
+                  18+
+                  </div>
+            </div>
+
+            <div class="session-info text-end font-secondary">
+              <span class="stats-tag">12+</span>
+              <span class="stats-tag">⭐ 4.5 / 5 IMBD</span>
+              <span class="stats-tag">2:07</span>
+              <span class="stats-tag">2013</span>
+            </div>
+          </div>
+
+
+          <p class="movie-director font-main">
+            <span> Режисер: </span> Мартін Скорс'єзе
+
+          </p>
+
+          <p class="movie-actors font-main">
+            <span> Актори: </span> Джина Филипс, Джастин Лонг, Джонатан Брек
+
+          </p>
+
+          <p class="movie-desc font-main">
+            Деррі та Тріш, молоді брат і сестра подорожують на своєму автомобілі. 
+            Несподівано їх обганяє дивного вигляду вантажівка, а потім вони вдруге бачать цю моторошну машину, проїжджаючи повз покинуту церкву. Біля вантажівки молоді люди встигають помітити постать дивної людини в чорному плащі, 
+            яка скидає в трубу закривавлені пакунки, схожі на людські тіла. 
+            Зрозумівши, що його помітили, незнайомець починає переслідувати Деррі та Тріш. 
+            Але підліткам вдається уникнути погоні. 
+            Деррі вмовляє сестру повернутися до церкви і перевірити, що саме робив там незнайомець. 
+            Коли хлопець заглядає в трубу, то несподівано скочується вниз і опиняється у пастці.
+             Те, що Дері знаходить внизу жахає його.
+
+          </p>
+
+
+        </div>
+
+    </div>
+  </div>
+
+
+<div class="session-time-windows-div mt-4 ">
+    <div class ="d-flex justify-content-between session-times-text-div" style=" width:100%">
+      <div><span class="session-times-text font-main"> Розклад сенасів </span></div>
+      <div><span data-date="25.06"class="session-times-text font-main" id ="sessionDate"> 25.06 </span></div>
+    </div>
+
+    <div class="session-time-window"  
+        data-time="11:00"
+        data-hall="Зала 1"
+        data-seats="69">
+
+        <p class="session-time font-main">11:00</p>
+        <p class="session-hall font-secondary">Зала 1</p>
+        <span class=" session-free-places font-secondary">69 вільних місць</span>
+
+    </div>
+    <div class="session-time-window"
+        data-time="14:30"
+        data-hall="Зала 1"
+        data-seats="69"">
+
+        <p class="session-time font-main">14:30</p>
+        <p class="session-hall font-secondary">Зала 1</p>
+        <span class=" session-free-places font-secondary">69 вільних місць</span>
+
+    </div>
+    <div class="session-time-window "
+        data-time="21:15"
+        data-hall="Зала 1"
+        data-seats="69">
+
+        <p class="session-time font-main">21:15</p>
+        <p class="session-hall font-secondary">Зала 1</p>
+        <span class=" session-free-places font-secondary">69 вільних місць</span>
+    </div>
+</div>
+
+<div class="session-time-windows-div mt-4  ">
+    <div style=" width:100%">
+      <p class="session-times-text font-main"> Оберіть місця </p>
+      </div>
+      <div class="seat-legend d-flex justify-content-center" style="width:100%">
+
+          <div class="seat"></div>
+          <span class="seat-desc font-secondary"> Стандарт - 150₴</span>
+
+          <div class="premium-seat" style="width:40px"></div>
+          <span class="seat-desc font-secondary"> Vip - 150₴</span>
+
+          <div class="seat occupied"></div>
+          <span class="seat-desc font-secondary"> Зайнято</span>
+
+          <div class="seat selected"></div>
+          <span class="seat-desc font-secondary"> Обрано</span>
+      </div>
+
+      <div class="d-flex justify-content-center" style="width:100%">
+
+        
+        <div class="seats-layout">
+        
+
+        </div>
+      </div>
+</div>
+
+<div class="session-time-windows-div mt-4 d-flex justify-content-between  ">
+    <div class="session-booking-info-div">
+      <p class="session-booking-text-places font-main"> 
+        Обрано місць: <span id="selected-count">0</span>
+         </p>
+      <spanp class="session-booking-text font-secondary"> 
+        На суму <span id="total-price">0</span>₴
+        </span>
+      </div>
+
+      <div class="booking-btn-div">
+           <a class="booking-btn disabled" id="bookingBtn">
+                Забронювати</a>
+      </div>
+</div>
+
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <h5 class="modal-title font-main">Деталі бронювання</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрити"></button>
+      </div>
+      <div class="modal-body">
+        <p class="font-secondary" id="session-info">Сеанс ...</p>
+        <ul id="selected-seats-list" class="font-secondary mb-3"></ul>
+        <hr />
+        <p class="font-main">Загальна сума: <span id="modal-total" class="text-info">0</span>₴</p>
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button class="modal-booking-btn" >Забронювати</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/session.js"></script>
+

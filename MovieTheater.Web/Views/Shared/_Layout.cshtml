@@ -1,46 +1,125 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+    
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MovieTheater.Web</title>
+    <title>@ViewData["Title"] </title>
+    @RenderSection("Styles", required: false)
+
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/MovieTheater.Web.styles.css" asp-append-version="true" />
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
 </head>
 <body>
+
+    <div class="bubble-bg">
+        <div class="bubble bubble-1 bubble-clr-1" data-depth="0.3"></div>
+        <div class="bubble bubble-2 bubble-clr-2" data-depth="0.1"></div>
+        <div class="bubble bubble-3 bubble-clr-1" data-depth="0.15"></div>
+        <div class="bubble bubble-4 bubble-clr-2" data-depth="0.1"></div>
+        <div class="bubble bubble-5 bubble-clr-1" data-depth="0.3"></div>
+    </div>
+
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">MovieTheater.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light">
+            <div class="container-fluid d-flex justify-content-between align-items-center">
+            
+                <div class="sitename-button-div">
+
+                    <a data-bs-toggle="offcanvas" href="#sidebar" role="sidebar" aria-controls="offcanvas">
+                    <i id = "sidebar-toggle" class="fa-solid fa-bars fa-rotate-90"></i></a>
+
+                    <a class="site-name-link font-main " asp-area="" asp-controller="Home" asp-action="Index">keen-chick!</a>
                 </div>
+
+                <div id = "profileLinkDiv" class="profile-link-div">
+                    <a class="profile-link font-main" asp-area="" asp-controller="Home" asp-action="Index">Ім'я користувача</a>
+                    <i class="user-icon fa-regular fa-user"></i>
+                </div>
+            
             </div>
         </nav>
     </header>
-    <div class="container">
+
+
+
+    <div class="container main-block mt-4">
         <main role="main" class="pb-3">
+            
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - MovieTheater.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebar" aria-labelledby="sidebarLabel">
+        <div class="offcanvas-header">
+           
+            <i class="fa-solid fa-xmark fa-2x  close-cnvs "
+                    data-bs-dismiss="offcanvas"
+                    role="button"
+                    aria-label="Close"></i>
         </div>
-    </footer>
+        <div class="offcanvas-body">
+            <a class="font-main offcanvas-link active">
+        У прокаті
+            </a>
+            <a class="font-main offcanvas-link">
+        Ціни
+            </a>
+            <a class="font-main offcanvas-link">
+        Скоро в кіно
+            </a>
+            <a class="font-main offcanvas-link admin-link">
+        Адмін-панель
+            </a>
+
+        </div>
+        
+        <div class="offcanvas-footer">
+                <div class="our-socials-text-div">
+                    <p class="font-main"> Наші соцмережі </p>
+                </div>
+                <div class="font-secondary socials-link-div">
+                      <i class="fa-brands fa-instagram fa-beat"></i>
+                      <a class="socials-link" href="#"> Instagram</a>     
+                </div>
+
+                <div class="font-secondary socials-link-div">
+                      <i class="fa-brands fa-facebook-f fa-beat"></i>
+                      <a class="socials-link" href="#"> Facebook</a>     
+                </div>
+                
+                <div class="font-secondary socials-link-div">
+                      <i class="fa-brands fa-telegram fa-beat"></i>
+                      <a class="socials-link" href="#"> Telegram</a>     
+                </div>
+                
+                <div class="font-secondary socials-link-div">
+                      <i class="fa-brands fa-tiktok fa-beat "></i>
+                      <a class="socials-link" href="#"> TikTok</a>     
+                </div>
+                
+            </div>
+
+        
+    </div>
+    <div class="container-fluid pt-3 footer-div font-secondary d-flex justify-content-center">
+        <a class="navbar-brand" href="#">Summer-practice project. © 2025. All rights reserved</a>
+    </div>
+
+    
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
