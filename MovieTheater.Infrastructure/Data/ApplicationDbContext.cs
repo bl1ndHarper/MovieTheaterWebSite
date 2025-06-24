@@ -45,6 +45,10 @@ public class ApplicationDbContext : DbContext
             .Property(b => b.Status)
             .HasConversion<string>();
 
+        modelBuilder.Entity<HallSeat>()
+            .Property(b => b.Status)
+            .HasConversion<string>();
+
         // Generated autoincrement IDs
         modelBuilder.Entity<User>()
             .Property(u => u.Id)
