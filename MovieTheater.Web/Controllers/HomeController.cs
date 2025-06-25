@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using MovieTheater.Application.Interfaces;
+using MovieTheater.Application.Services;
 using MovieTheater.Web.Models;
+using MovieTheater.Web.ViewModels;
 using System.Diagnostics;
 
 namespace MovieTheater.Web.Controllers
@@ -7,15 +10,27 @@ namespace MovieTheater.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMovieService _movieService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMovieService movieService)
         {
             _logger = logger;
+            _movieService = movieService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var today = DateTime.UtcNow.Date;
+            var latestMovies = await _movieService.GetLatestMoviesAsync(6);
+            var sessions = await _movieService.GetNowShowingAsync(today);
+
+            var viewModel = new HomePageViewModel
+            {
+                LatestMovies = latestMovies,
+                AllSessions = sessions
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
