@@ -12,7 +12,7 @@ namespace MovieTheater.Web.Controllers
             _logger = logger;
         }
 
-        public IActionResult Admin()
+        public IActionResult Index()
         {
             return View();
         }
