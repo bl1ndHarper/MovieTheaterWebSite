@@ -1,3 +1,4 @@
+/*
 const movies = [
   {
     title: "Pulp Fiction",
@@ -41,8 +42,11 @@ const movies = [
     rating: 4.5,
     image: "https://m.media-amazon.com/images/I/81UTs3sC5hL._UF1000,1000_QL80_.jpg"
   },
-  
 ];
+*/
+
+const slider = document.getElementById("movie-slider");
+const movies = slider.children;
 
 let currentIndex = 0;
 
@@ -50,10 +54,9 @@ let currentSlide = 1;
 let totalSlides = Math.ceil(movies.length / 3)
 
 function renderSlider() {
-  const slider = document.getElementById("movie-slider");
   slider.innerHTML = "";
 
-  const visible = movies.slice(currentIndex, currentIndex + 3);
+    const visible = movies.slice(currentIndex, currentIndex + 3);
   visible.forEach(movie => {
     const fullStars = Math.floor(movie.rating);
     const hasHalf = movie.rating % 1 >= 0.5;
@@ -131,5 +134,5 @@ function updateNavButtons() {
   }
 }
 
-renderSlider();
+//renderSlider();
 updateNavButtons();

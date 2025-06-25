@@ -1,10 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using MovieTheater.Application.Interfaces;
+using MovieTheater.Application.Services;
 using MovieTheater.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IMovieService, MovieService>();
 
 DotNetEnv.Env.Load();
 

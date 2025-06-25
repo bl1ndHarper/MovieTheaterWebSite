@@ -1,4 +1,7 @@
-﻿@{
+﻿@using MovieTheater.Web.ViewModels;
+@model HomePageViewModel
+
+@{
     ViewData["Title"] = "Keen-chick: кращий кінотеатр Дніпра";
 }
 
@@ -20,10 +23,29 @@
 
     <button class="new-movie-btn btn-prev" onclick="prevSlide()">←</button>
       <div id="movie-slider" class="row justify-content-center gx-4 gy-4">
-
-
-      
-          
+          @foreach (var movie in Model.LatestMovies)
+          {
+            <div class="col-lg-4 col-md-6">
+                <div class="new-movie-card h-100">
+                    <div class="card-img-container">
+                        <img class="card-img-top" src="@movie.ThumbnailUrl">
+                    </div>
+                    <div class="card-text-content">
+                        <div class="movie-title-div">
+                            <p class="movie-title">@movie.Title</p>
+                        </div>
+                        <div class="genre-length-info-div row">
+                            <p class="movie-genre col text-start">@movie.Genre</p>
+                            <p class="movie-length col text-end">@movie.Duration</p>
+                        </div>
+                        @*<div class="star-rating">${starsHTML}</div>*@
+                        <div class="movie-button-div">
+                            <a href="#" class="movie-button">Детальніше</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          }
       </div>
     <button class="new-movie-btn btn-next" onclick="nextSlide()">→</button>
 
@@ -118,160 +140,44 @@
 
     </div>
  </div>
-    
 
-    <div class="container" style=" padding: 10px 2rem 0px 1.2rem;">
-      <div class="movie-session-card mt-3 row">
-          <div class="poster-col col-auto">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFz2k4fixIcTZ9giaweLrGQ0AMjieRV_9R3A&s"
-            alt="Shrek 5" class="movie-thumb">
-          </div>
-
-        <div class="flex-grow-1 col">
-
-          <div class="title-sessiontimes-div container d-flex justify-content-between mb-5">
-
-            <div class="movie-title-div">
-              <span class="mb-2 session-movie-title font-main">Shrek 5</span>
-            </div>
-
-            <div class=" session-times-block  ">
-
-              <div class="session-time text-light-emphasis small">
-              9:15
-              </div>
-
-              <div class="session-time text-light-emphasis small">
-                15:45
-              </div>
-
-              <div class="session-time text-light-emphasis small">
-                22:45
-              </div>
-
-            </div>
-              
-          </div>
-
-          <div class="sessioninfo-booking-div container d-flex justify-content-between">
-            <div class="session-info text-muted small pt-2 font-secondary">
-              <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
-              <span class="me-3"><i class="fa-solid fa-child me-1"></i> 12+</span>
-              <span class="me-3"><i class="fa-solid fa-film me-1"></i> Мультфільм</span>
-              <span><i class="fa-regular fa-clock me-1"></i> 2:15</span>
-            </div>
-
-            <div class="booking-btn-div font-main">
-              <a asp-controller="Session" asp-action="Session" asp-route-id="1" class="booking-btn">
-                Забронювати</a>
-            </div>
-          </div>
-        </div>
-
-        
-      </div>
-
+<div class="container" style="padding: 10px 2rem 0px 1.2rem;">
+    @foreach (var movie in Model.AllSessions)
+    {
         <div class="movie-session-card mt-3 row">
-          <div class="poster-col col-auto">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFz2k4fixIcTZ9giaweLrGQ0AMjieRV_9R3A&s"
-            alt="Shrek 5" class="movie-thumb">
-          </div>
-
-        <div class="flex-grow-1 col">
-
-          <div class="title-sessiontimes-div container d-flex justify-content-between mb-5">
-
-            <div class="movie-title-div">
-              <span class="mb-2 session-movie-title font-main">Shrek 5</span>
+            <div class="poster-col col-auto">
+                <img src="@movie.ThumbnailUrl" alt="@movie.Title" class="movie-thumb" />
             </div>
 
-            <div class=" session-times-block  ">
+            <div class="flex-grow-1 col">
+                <div class="title-sessiontimes-div container d-flex justify-content-between mb-5">
+                    <div class="movie-title-div">
+                        <span class="mb-2 session-movie-title font-main">@movie.Title</span>
+                    </div>
 
-              <div class="session-time text-light-emphasis small">
-              9:15
-              </div>
+                    <div class="session-times-block">
+                        @foreach (var time in movie.Sessions)
+                        {
+                            <div class="session-time text-light-emphasis small">@time</div>
+                        }
+                    </div>
+                </div>
 
-              <div class="session-time text-light-emphasis small">
-                15:45
-              </div>
+                <div class="sessioninfo-booking-div container d-flex justify-content-between">
+                    <div class="session-info text-muted small pt-2 font-secondary">
+                        <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
+                        <span class="me-3"><i class="fa-solid fa-child me-1"></i> @movie.AgeRating</span>
+                        <span class="me-3"><i class="fa-solid fa-film me-1"></i> @movie.Genre</span>
+                        <span><i class="fa-regular fa-clock me-1"></i> @(movie.Duration / 60):@(movie.Duration % 60)</span>
+                    </div>
 
-              <div class="session-time text-light-emphasis small">
-                22:45
-              </div>
-
+                    <div class="booking-btn-div font-main">
+                        <a asp-controller="Session" asp-action="Session" asp-route-id="@movie.Id" class="booking-btn">Забронювати</a>
+                    </div>
+                </div>
             </div>
-              
-          </div>
-
-          <div class="sessioninfo-booking-div container d-flex justify-content-between">
-            <div class="session-info text-muted small pt-2 font-secondary">
-              <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
-              <span class="me-3"><i class="fa-solid fa-child me-1"></i> 12+</span>
-              <span class="me-3"><i class="fa-solid fa-film me-1"></i> Мультфільм</span>
-              <span><i class="fa-regular fa-clock me-1"></i> 2:15</span>
-            </div>
-
-            <div class="booking-btn-div font-main">
-               <a asp-controller="Session" asp-action="Session" asp-route-id="2" class="booking-btn">
-                Забронювати</a>
-            </div>
-          </div>
         </div>
-      </div>
-
-        <div class="movie-session-card mt-3 row">
-          <div class="poster-col col-auto">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFz2k4fixIcTZ9giaweLrGQ0AMjieRV_9R3A&s"
-            alt="Shrek 5" class="movie-thumb">
-          </div>
-
-        <div class="flex-grow-1 col">
-
-          <div class="title-sessiontimes-div container d-flex justify-content-between mb-5">
-
-            <div class="movie-title-div">
-              <span class="mb-2 session-movie-title font-main">Shrek 5</span>
-            </div>
-
-            <div class=" session-times-block  ">
-
-              <div class="session-time text-light-emphasis small">
-              9:15
-              </div>
-
-              <div class="session-time text-light-emphasis small">
-                15:45
-              </div>
-
-              <div class="session-time text-light-emphasis small">
-                22:45
-              </div>
-
-            </div>
-              
-          </div>
-
-          <div class="sessioninfo-booking-div container d-flex justify-content-between">
-            <div class="session-info text-muted small pt-2 font-secondary">
-              <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
-              <span class="me-3"><i class="fa-solid fa-child me-1"></i> 12+</span>
-              <span class="me-3"><i class="fa-solid fa-film me-1"></i> Мультфільм</span>
-              <span><i class="fa-regular fa-clock me-1"></i> 2:15</span>
-            </div>
-
-            <div class="booking-btn-div font-main">
-               <a asp-controller="Session" asp-action="Session" asp-route-id="3" class="booking-btn">
-                Забронювати</a>
-            </div>
-          </div>
-        </div>
-        
-      </div>
-
-    </div>
-
-  
-
-    
+    }
+</div>
 
 <script src="~/js/newMoviesSlider.js" asp-append-version="true"></script>
