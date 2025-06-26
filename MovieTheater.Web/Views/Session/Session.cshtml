@@ -1,4 +1,7 @@
-﻿@{
+﻿@using MovieTheater.Web.ViewModels;
+@model SessionPageViewModel
+
+@{
     ViewData["Title"] = "Keen-chick: перегляд сеансу";
 }
 
@@ -12,34 +15,31 @@
   <div class="container">
     <div class="movie-info-big-div row mt-4">
         <div class="poster-col col-auto">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRhLILYiJ17dczi8Qfm6RzVeV9NNTKIpACtqg&s"
+            <img src=@Model.MovieDetails.ThumbnailUrl
             alt="Jeepers Creepers" class="movie-thumb">
         </div>
         <div class="movie-info-div col">
           <div class="movie-title-div">
-            <span class="mb-2 session-movie-title font-main">Jeepers Creepers</span>
+            <span class="mb-2 session-movie-title font-main">@Model.MovieDetails.Title</span>
           </div>
 
           <div class=" session-all-tags d-flex align-items-start">
-            <div class="tags-genres-div   ">
-                <div class="genre-tag text-light-emphasis small">
-                  Жахи
-                  </div>
-
-                  <div class="genre-tag text-light-emphasis small">
-                  Документальний
-                  </div>
+            <div class="tags-genres-div">
+                  @foreach (var genre in Model.MovieDetails.Genres)
+                  {
+                      <div class="genre-tag text-light-emphasis small">@genre</div>
+                  }
 
                   <div class="rating-tag text-light-emphasis small">
-                  18+
+                  @Model.MovieDetails.AgeRating
                   </div>
-            </div>
+              </div>
 
             <div class="session-info text-end font-secondary">
-              <span class="stats-tag">12+</span>
-              <span class="stats-tag">⭐ 4.5 / 5 IMBD</span>
-              <span class="stats-tag">2:07</span>
-              <span class="stats-tag">2013</span>
+              <span class="stats-tag">@($"{Model.MovieDetails.MinAgeRating}+")</span>
+              <span class="stats-tag">⭐ @{var rating = Model.MovieDetails.ImdbRating / 2;} @rating/ 5 IMBD</span>
+              <span class="stats-tag">@(TimeSpan.FromMinutes(Model.MovieDetails.Duration ?? 0).ToString(@"h\:mm"))</span>
+              <span class="stats-tag">@Model.MovieDetails.ReleaseYear</span>
             </div>
           </div>
 
@@ -55,14 +55,7 @@
           </p>
 
           <p class="movie-desc font-main">
-            Деррі та Тріш, молоді брат і сестра подорожують на своєму автомобілі. 
-            Несподівано їх обганяє дивного вигляду вантажівка, а потім вони вдруге бачать цю моторошну машину, проїжджаючи повз покинуту церкву. Біля вантажівки молоді люди встигають помітити постать дивної людини в чорному плащі, 
-            яка скидає в трубу закривавлені пакунки, схожі на людські тіла. 
-            Зрозумівши, що його помітили, незнайомець починає переслідувати Деррі та Тріш. 
-            Але підліткам вдається уникнути погоні. 
-            Деррі вмовляє сестру повернутися до церкви і перевірити, що саме робив там незнайомець. 
-            Коли хлопець заглядає в трубу, то несподівано скочується вниз і опиняється у пастці.
-             Те, що Дері знаходить внизу жахає його.
+            @Model.MovieDetails.Description
 
           </p>
 
