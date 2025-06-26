@@ -64,6 +64,7 @@ namespace MovieTheater.Application.Services
                 Genre = m.Genres.FirstOrDefault()?.Genre.Name,
                 AgeRating = m.AgeRating.Label,
                 Duration = m.Duration,
+                ImdbRating = m.ImdbRating,
                 Sessions = new List<string>()
             }).ToList();
         }

@@ -46,6 +46,7 @@
                                   rgba(46, 0, 38, 0.3) 100%);
   backdrop-filter: blur(10px);
 
+
 }
 
 .card-img-container {
@@ -124,11 +125,22 @@
 .genre-length-info-div p{
   margin-bottom: 0px;
 }
-
-.card-text-content{
-  padding: 0px 10% 0px 10%;
-
+.genre-length-info-div,
+.star-rating{
+  padding: 0px 2rem 0px 2rem;
 }
+
+
+
+.carousel-item.active {
+    text-decoration: none;
+}
+
+
+.new-movie-card * {
+    text-decoration: none !important;
+}
+
 .movie-title-div{
   text-align: center;
 
