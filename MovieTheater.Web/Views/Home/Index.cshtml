@@ -19,37 +19,70 @@
     <p class="new-movies-text font-main "> Гарячі новинки</p>
   </div>
 
-  <div class="container-fluid new-movies-container">
+  <div class="new-movies-container">
 
-    <button class="new-movie-btn btn-prev" onclick="prevSlide()">←</button>
-      <div id="movie-slider" class="row justify-content-center gx-4 gy-4">
-          @foreach (var movie in Model.LatestMovies)
-          {
-            <div class="col-lg-4 col-md-6">
-                <div class="new-movie-card h-100">
-                    <div class="card-img-container">
-                        <img class="card-img-top" src="@movie.ThumbnailUrl">
-                    </div>
-                    <div class="card-text-content">
-                        <div class="movie-title-div">
-                            <p class="movie-title">@movie.Title</p>
+    
+
+<div id="movieCarousel" class="carousel slide" >
+    <div class="carousel-inner">
+        @for (int i = 0; i < Model.LatestMovies.Count; i += 3)
+        {
+            <div class="carousel-item @(i == 0 ? "active" : "")">
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+
+                  
+                    @foreach (var movie in Model.LatestMovies.Skip(i).Take(3))
+                    {
+                        <div class="col ">
+                            <div class="new-movie-card h-100">
+                                <div class="card-img-container">
+                                    <img class="card-img-top" src="@movie.ThumbnailUrl" />
+                                </div>
+                                <div class="card-text-content">
+                                    <div class="movie-title-div">
+                                        <p class="movie-title">@movie.Title</p>
+                                    </div>
+                                    <div class="genre-length-info-div row">
+                                        <p class="movie-genre col text-start">@movie.Genre</p>
+                                        <p class="movie-length col text-end">
+                                            @(TimeSpan.FromMinutes(movie.Duration ?? 0).ToString(@"h\:mm"))
+                                        </p>
+                                    </div>
+                                    <div class="star-rating">
+                                        @{
+                                            var rating = movie.ImdbRating / 2;
+                                            var full = (int)Math.Floor(rating);
+                                            var half = rating % 1 >= 0.5m;
+                                            var empty = 5 - full - (half ? 1 : 0);
+
+                                            for (int s = 0; s < full; s++) {
+                                                <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                            }
+                                            if (half) {
+                                                <i class="fa-solid fa-star-half-stroke" style="color: #FFD43B;"></i>
+                                            }
+                                            for (int s = 0; s < empty; s++) {
+                                                <i class="fa-regular fa-star" style="color: #FFD43B;"></i>
+                                            }
+                                        }
+                                    </div>
+                                    <div class="movie-button-div">
+                                        <a href="#" class="movie-button">Детальніше</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="genre-length-info-div row">
-                            <p class="movie-genre col text-start">@movie.Genre</p>
-                            <p class="movie-length col text-end">@movie.Duration</p>
-                        </div>
-                        @*<div class="star-rating">${starsHTML}</div>*@
-                        <div class="movie-button-div">
-                            <a href="#" class="movie-button">Детальніше</a>
-                        </div>
-                    </div>
+
+
+                    }
                 </div>
             </div>
-          }
-      </div>
-    <button class="new-movie-btn btn-next" onclick="nextSlide()">→</button>
+        }
+    </div>
+    <button class="new-movie-btn btn-prev" data-bs-target="#movieCarousel" data-bs-slide="prev">←</button>
+    <button class="new-movie-btn btn-next" data-bs-target="#movieCarousel" data-bs-slide="next">→</button>
+</div>
 
-  </div>
 
     
 
@@ -179,5 +212,9 @@
         </div>
     }
 </div>
+
+<script>
+    const movies = @Html.Raw(Json.Serialize(Model.LatestMovies));
+</script>
 
 <script src="~/js/newMoviesSlider.js" asp-append-version="true"></script>
