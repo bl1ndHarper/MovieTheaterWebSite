@@ -68,5 +68,37 @@ namespace MovieTheater.Application.Services
                 Sessions = new List<string>()
             }).ToList();
         }
+
+        public async Task<MovieMainDto?> GetMovieByIdAsync(long id)
+        {
+
+            var movie = await _context.Movies
+                .Include(m => m.Genres).ThenInclude(mg => mg.Genre)
+                .Include(m => m.AgeRating)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (movie is null) return null;
+
+
+
+            
+
+            return new MovieMainDto
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Duration = movie.Duration,
+                ImdbRating = movie.ImdbRating,
+                ThumbnailUrl = movie.ThumbnailUrl,
+                AgeRating = movie.AgeRating.Label,
+                MinAgeRating = movie.AgeRating.MinAge,
+                ReleaseYear = movie.ReleaseDate.Year,
+                Description = movie.Description,
+                Genre = movie.Genres.FirstOrDefault()?.Genre.Name,
+                Genres = movie.Genres.Select(g => g.Genre.Name).ToList()
+            };
+            
+            
+        }
     }
 }
