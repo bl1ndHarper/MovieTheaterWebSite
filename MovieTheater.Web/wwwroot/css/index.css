@@ -461,12 +461,14 @@
 }
 
 .movie-button:hover,
-.booking-btn:hover{
+.booking-btn:hover,
+.price-btn:hover{
    background: linear-gradient(180deg,rgba(70, 61, 116, 0.5) 0%,
                                 rgba(92, 104, 126, 0.3) 40%,
                                   rgba(54, 70, 99, 0.2) 100%);
 
    color: #98cde3;
+   cursor: pointer;
 
 }
 
@@ -475,4 +477,124 @@
                                 rgba(51, 65, 92, 0.3) 40%,
                                   rgba(54, 70, 99, 0.2) 100%);
 
+}
+
+
+.big-stat-container{
+  border:solid 3px rgba(90, 90, 90, 0.2);
+  border-radius: 28px;
+
+  background: linear-gradient(199deg,rgba(5, 0, 36, 0.3) 0%, 
+                                  rgba(91, 137, 150, 0.3) 50%, 
+                                  rgba(46, 0, 38, 0.3) 100%);
+  backdrop-filter: blur(10px);
+
+  padding: 10px;
+
+}
+
+.big-stat-container img{
+  height: 50vh;
+  width: auto;
+}
+
+.chart-text{
+  color:rgba(217, 254, 255, 1);
+  font-size: 20pt;
+  text-shadow: 4px 3px 2px rgba(0,0,0,0.5);
+  isolation: isolate;   
+  text-align: center; 
+}
+.price-div-text{
+  color:rgba(217, 254, 255, 1);
+  font-size: 13pt;
+  text-shadow: 4px 3px 2px rgba(0,0,0,0.5);
+  isolation: isolate;   
+  margin-top: 5px;
+  margin-left: 10px;
+}
+
+.stat-text{
+  color:rgb(133, 185, 186);
+  font-size: 16pt;
+  text-shadow: 4px 3px 2px rgba(0,0,0,0.5);
+  isolation: isolate;   
+  margin-left: 10px;
+
+}
+.price-input{
+    appearance: none; 
+  background: linear-gradient(140deg, rgba(40,40,85,0.4), rgba(15,15,35,0.6));
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border-radius: 1.5rem;
+  color: #e2edff;
+  font-size: 14px;
+  text-shadow: 1px 1px rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  position: relative;
+   width: 50%;
+}
+
+.price-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(107, 100, 207, 0.3);
+   background: linear-gradient(140deg, rgba(50, 50, 103, 0.4), rgba(27, 27, 63, 0.6));
+}
+
+
+.price-btn{
+
+
+  padding:  5px 10px 5px 10px;
+  border-radius: 20px;
+
+  background: linear-gradient(180deg,rgba(42, 37, 71, 0.5) 0%,
+                                rgba(57, 63, 75, 0.3) 40%,
+                                  rgba(17, 30, 52, 0.2) 100%);
+  backdrop-filter: blur(10px);
+
+  color:hsla(227, 16%, 60%, 0.9);
+  font-size: 14pt;
+  text-shadow: 2px 2px 2px rgba(0,0,0,0.6);
+  text-decoration: none;
+  text-align: center;
+
+  box-shadow: -1px 6px 12px 3px rgba(7,0,42,0.1);
+  -webkit-box-shadow: -1px 6px 12px 3px rgba(7,0,42,0.1);
+  -moz-box-shadow: -1px 6px 12px 3px rgba(7,0,42,0.1);
+
+  border:solid 3px rgba(12, 109, 109, 0.2);
+}
+
+.booking-btn-div{
+  width: 15vw;
+
+}
+
+.popular-films-title{
+  color:rgba(217, 254, 255, 1);
+  font-size: 13pt;
+  text-shadow: 4px 3px 2px rgba(0,0,0,0.5);
+  isolation: isolate;   
+  margin-top: 10px;
+  margin-left: 10px;
+  text-align:center;
+  
+}
+
+.popular-films-content{
+  color:rgb(115, 167, 169);
+  font-size: 10pt;
+  text-shadow: 4px 3px 2px rgba(0,0,0,0.5);
+  isolation: isolate;   
+  margin-top: 10px;
+  text-align:center;
+  
+}
+
+.stat-container{
+  padding: 1rem ;
+  width: 50%;
 }
