@@ -14,6 +14,8 @@ public class Movie
     public decimal ImdbRating { get; set; }
     public ActivityStatus ActivityStatus { get; set; }
     public long AgeRatingId { get; set; }
+    public string DirectorName { get; set; } = null!;
+    public string? DirectorDetailsUrl { get; set; }
 
     public Rating AgeRating { get; set; } = null!;
     public ICollection<MovieGenre> Genres { get; set; } = new List<MovieGenre>();
