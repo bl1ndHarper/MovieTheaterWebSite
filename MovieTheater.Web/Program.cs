@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
 
 DotNetEnv.Env.Load();
 
@@ -38,8 +39,15 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+   endpoints.MapControllerRoute(
+        name: "MovieSessionsRoute",
+        pattern: "Movies/{id}/Sessions");
+});
 
 app.Run();
