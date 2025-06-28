@@ -79,10 +79,6 @@ namespace MovieTheater.Application.Services
 
             if (movie is null) return null;
 
-
-
-            
-
             return new MovieMainDto
             {
                 Id = movie.Id,
@@ -94,6 +90,7 @@ namespace MovieTheater.Application.Services
                 MinAgeRating = movie.AgeRating.MinAge,
                 ReleaseYear = movie.ReleaseDate.Year,
                 Description = movie.Description,
+                Director = movie.DirectorName,
                 Genre = movie.Genres.FirstOrDefault()?.Genre.Name,
                 Genres = movie.Genres.Select(g => g.Genre.Name).ToList()
             };

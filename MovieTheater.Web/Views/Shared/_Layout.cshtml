@@ -72,13 +72,17 @@
                     aria-label="Close"></i>
         </div>
         <div class="offcanvas-body">
-            <a class="font-main offcanvas-link active">
+            <a class="font-main offcanvas-link
+             @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")
+             " asp-controller="Home" asp-action="Index">
         У прокаті
             </a>
             <a class="font-main offcanvas-link">
         Скоро в кіно
             </a>
-            <a class="font-main offcanvas-link admin-link">
+            <a class="font-main offcanvas-link admin-link 
+             @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "active" : "")
+             " asp-controller="Admin" asp-action="Index">
         Адмін-панель
             </a>
 

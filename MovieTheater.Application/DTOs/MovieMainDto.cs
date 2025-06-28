@@ -19,6 +19,7 @@ namespace MovieTheater.Application.DTOs
         public short? Duration { get; set; }
         public decimal ImdbRating { get; set; }
         public string? Description { get; set; }
+        public string? Director { get; set; }
         public List<string> Sessions { get; set; } = new();
         
     }

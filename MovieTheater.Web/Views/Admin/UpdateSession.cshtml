@@ -1,0 +1,188 @@
+﻿
+@{
+    ViewData["Title"] = "Keen-chick: перегляд сеансу";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/session.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+}
+
+  <div class="back-btn-div font-main">
+    <a asp-area="" asp-controller="Admin" asp-action="Index" class="back-btn "> ← Назад</a>
+  </div>
+  <div class="container">
+    <div class="row">
+        <div class="col-9 ">
+          <div class="movie-info-big-div row mt-4">
+              <div class="poster-col col-auto">
+                  <img src=https://static.hdrezka.ac/i/2023/11/7/g71252039840enb30v13d.png
+                  alt="Jeepers Creepers" class="movie-thumb">
+              </div>
+              <div class="movie-info-div col">
+                <div class="movie-title-div">
+                  <span class="mb-2 session-movie-title font-main">Назва фільму</span>
+                </div>
+
+                
+                  <div class="tags-genres-div mt-2">
+                        
+                      <!-- Тут форіч для жанрів фільму  -->
+                        <div class="genre-tag text-light-emphasis small">Жанр 1</div>
+                        <div class="genre-tag text-light-emphasis small">Жанр 2</div>
+                      <!-- Тут форіч для жанрів фільму закінчується  -->
+                        <div class="rating-tag text-light-emphasis small">
+                        Рейтинг
+                        </div>
+                    </div>
+
+                  <div class="session-info font-secondary mt-2" style="margin-left: 0px;">
+                    <span class="stats-tag" style="margin-left: 0px;">Мін.Вік</span>
+                    <span class="stats-tag">⭐ рейтинг/ 5 IMBD</span>
+                    <span class="stats-tag">Тривалість</span>
+                    <span class="stats-tag">Рік випуску</span>
+                  </div>
+                
+
+
+                <p class="movie-director font-main">
+                  <span> Режисер: </span> ФІ режисера 
+
+                </p>
+
+                <p class="movie-actors font-main">
+                  <span> Актори: </span> Перелік акторів(певно через форіч)
+
+                </p>
+
+                <p class="movie-desc font-main">
+                  Опис фільму блаблабла блаблабла блаблабла блаблабла блаблабла блаблабла
+                  блаблаблаблаблаблаблаблабла блаблабла.
+                </p>
+
+
+              </div>
+
+          </div>
+        </div>
+
+        <div class="col-3  ml-3 ">
+            <div class="styled-container mt-4 " style="padding: 15px;">
+              <div id="selectedMovie" class="d-flex justify-content-between">
+                <span id="selectedMovieTitle"> Назва обраного фільму</span>
+                <i class="fa-solid fa-xmark" id="changeMovieIcon" style=" margin-top:5px; margin-right:5px"></i>
+              </div>
+
+              <p class="font-secondary change-movie-text mt-3"> Змінити фільм</p>
+
+              <input id ="searchMovieInApi" type="text" value="" placeholder="Шукати фільм...">
+
+               <!-- Тут динамічно будуть підтягуватись фільми, знайдені у апі за назвою
+               клас search-active може бути маркером, чи треба показвувати цей блок
+               тобто, якщо адмін почав писати назву у searchMovieInApi інпуті, і пошук к апі розпочався
+               то у цей дів додається клас search-active і він починає відображатися
+               може можна якось по-іншому реалізувати, хз, подивимось -->
+              <div id = "foundMoviesDiv" class="search-active">
+                  
+                  <!-- Тут знайдені фільми -->
+                  <div class="d-flex justify-content-between found-movie mt-3">
+                     <span class ="found-movie-title"> Назва обраного фільму</span>
+                     <i class="fa-solid fa-plus addMovieIcon" style=" margin-top:5px; margin-right:5px"></i>
+                  </div>
+
+                  <div class="d-flex justify-content-between found-movie mt-3">
+                     <span class ="found-movie-title"> Назва обраного фільму</span>
+                     <i class="fa-solid fa-plus addMovieIcon" style=" margin-top:5px; margin-right:5px"></i>
+                  </div>
+
+              </div>
+            </div>
+
+             <div class="mt-3" style="width:70%;margin-left:15%">
+                <button class="delete-time-btn" style="font-size:16pt"> Змінити цей сеанс</button>
+            </div>
+
+        </div>
+ </div>
+
+<div class="session-time-windows-div mt-4 container" style=" cursor:default">
+    <div class ="row session-times-text-div" style=" width:100%">
+        <div class=" col-auto" >
+          <span class=" session-times-text font-main" style=" font-size: 14pt; margin-left:20px"> Розклад сенасів </span>
+          <span class="session-times-admin-text " style="padding-left:1rem"> Обрані дати:</span>
+        
+        </div>
+        <div class="col-6">
+          
+          <div id="dateContainer">
+            <!-- тут додаються дати -->
+            </div>
+        </div>
+        <div class=" col-3" >
+          <input type="text" id="datePicker" placeholder="Оберіть дати" class="form-control " />
+      </div>
+    </div>
+
+     <!-- Структура для часу сеансу-->
+    <div class="session-time-admin-window"  
+        data-time="11:00"
+        data-hall="Зала 1"
+        data-seats="69">
+
+        <input class="change-time-input form-control" type="time" step="60">
+
+        <div class="dropdown-div hall-dropdown mt-3">
+        <select class="dropdown-select">
+          <option>Зала 1</option>
+          <option>Зала 2</option>
+        </select>
+        
+        <div class=" d-flex justify-content-center mt-3">
+            <button class="delete-time-btn"> Видалити</button>
+        </div>
+        
+      </div>
+
+    </div>
+
+     <!-- Кнопка для додавання нового часу сеансу-->
+    <button class=" session-time-add-window">
+       <i class="fa-solid fa-plus addMovieIcon" ></i>
+    </button>
+
+</div>
+
+
+      <!-- бібліотека календаря -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<script>
+    const dateContainer = document.getElementById("dateContainer");
+
+    flatpickr("#datePicker", {
+        mode: "multiple",
+        dateFormat: "d.m",
+        onChange:  function (selectedDates, dateStr, instance) {
+      // очистити контейнер перед оновленням
+      dateContainer.innerHTML = "";
+
+       // кожну дату форматую
+      selectedDates.forEach(date => {
+        const formatted = date.toLocaleDateString('uk-UA', {
+          day: '2-digit',
+          month: '2-digit'
+        });
+
+        // створюю span-елемент
+        const span = document.createElement("span");
+        span.className = "session-times-admin-text font-main mx-1 ";
+        span.dataset.date = formatted;
+        span.innerText = formatted;
+
+        dateContainer.appendChild(span);
+      });
+    }
+    });
+
+    
+</script>
