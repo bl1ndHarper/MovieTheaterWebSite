@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace MovieTheater.Infrastructure.Entities;
 
-public class User
+public class User : IdentityUser<long>
 {
     public long Id { get; set; }
     public string Username { get; set; } = null!;
