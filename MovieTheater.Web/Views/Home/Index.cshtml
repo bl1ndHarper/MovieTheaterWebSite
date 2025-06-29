@@ -29,8 +29,6 @@
         {
             <div class="carousel-item @(i == 0 ? "active" : "")">
                 <div class="d-flex justify-content-center gap-3 flex-wrap">
-
-                  
                     @foreach (var movie in Model.LatestMovies.Skip(i).Take(3))
                     {
                         <div class="col ">
@@ -72,8 +70,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                     }
                 </div>
             </div>
@@ -82,9 +78,6 @@
     <button class="new-movie-btn btn-prev" data-bs-target="#movieCarousel" data-bs-slide="prev">←</button>
     <button class="new-movie-btn btn-next" data-bs-target="#movieCarousel" data-bs-slide="next">→</button>
 </div>
-
-
-    
 
    <div class="container mt-3 row" style=" padding-right: 10px;">
       <p class="new-movies-text font-main col-2 mt-4"> У прокаті</p>
@@ -204,8 +197,11 @@
                         <span><i class="fa-regular fa-clock me-1"></i> @(movie.Duration / 60):@(movie.Duration % 60)</span>
                     </div>
 
+                        @{
+                            var dayNow = DateTime.UtcNow.ToLocalTime().ToString("dd.MM");
+                        }
                     <div class="booking-btn-div font-main">
-                        <a asp-controller="Session" asp-action="Session" asp-route-id="@movie.Id" class="booking-btn">Забронювати</a>
+                        <a asp-route="MovieSessionsRoute" asp-route-id="@movie.Id" asp-route-day="@dayNow" class="booking-btn">Забронювати</a>
                     </div>
                 </div>
             </div>

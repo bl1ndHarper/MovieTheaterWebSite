@@ -24,6 +24,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<MovieStats> MovieStats => Set<MovieStats>();
     public DbSet<MovieActor> MovieActors => Set<MovieActor>();
     public DbSet<MovieGenre> MovieGenres => Set<MovieGenre>();
+    public DbSet<SessionSeat> SessionSeats { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -97,5 +98,20 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<MovieStats>()
             .Property(s => s.Id)
             .ValueGeneratedOnAdd();
+
+        // SessionSeat config
+        modelBuilder.Entity<SessionSeat>()
+            .HasOne(x => x.Session)
+            .WithMany(s => s.SessionSeats)
+            .HasForeignKey(x => x.SessionId);
+
+        modelBuilder.Entity<SessionSeat>()
+            .HasOne(x => x.HallSeat)
+            .WithMany()
+            .HasForeignKey(x => x.HallSeatId);
+
+        modelBuilder.Entity<SessionSeat>()
+            .Property(x => x.Status)
+            .HasConversion<string>();
     }
 }

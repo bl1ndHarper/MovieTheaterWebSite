@@ -16,5 +16,6 @@ namespace MovieTheater.Infrastructure.Entities
 
         public Movie Movie { get; set; } = null!;
         public Hall Hall { get; set; } = null!;
+        public ICollection<SessionSeat> SessionSeats { get; set; } = null!;
     }
 }
