@@ -1,200 +1,153 @@
-let sessionData = null;
-let sessionDate = document.getElementById("sessionDate").dataset.date;
-
-// логіка обирання часу сеансу
-document.querySelectorAll(".session-time-window").forEach(block => {
-    block.addEventListener("click", () => {
-      document.querySelectorAll(".session-time-window").forEach(el => el.classList.remove("selected"));
-
-      block.classList.add("selected");
-
-      sessionData = {
-        time: block.dataset.time,
-        hall: block.dataset.hall,
-        seats: block.dataset.seats
-      };
-
-    updateBookingButton();
-    });
-  });
-
-function updateBookingButton() {
-  const btn = document.getElementById("bookingBtn");
-  if (sessionData && selectedSeats.size > 0) {
-    btn.classList.remove("disabled");
-  } else {
-    btn.classList.add("disabled");
-  }
-}
-
-// ціни місць
-const standardPrice = 150;
-const premiumPrice = 250;
-
-// букви звичайних рядів
-const rows = ["A","B","C","D","E","F","G","H","I"];
-// скільки звичайних місць в ряду
-const seatsPerRow = 12;
-// зайнято (і звичайні і преміум)
-const occupiedSeats = ["A7", "B3", "B12","C4", "J5"];
-// для збереження обраних місць
+let selectedSessionId = null;
+let sessionDate = document.getElementById("sessionDateSelect")?.value;
 const selectedSeats = new Set();
-// букви преміум рядів
-const premiumRows = ["J"]
-// преміум місць має бути в два рази менше в ряду
-// або треба якось переписати стиль для них (поки хз як зробити адаптовану width у них)
-const seatsPerPremiumRow = 6;
-
-
 const layoutDiv = document.querySelector(".seats-layout");
 
+// Зберігатимемо інформацію про сектори/ціни
+let sectorsInfo = {};
 
-// генерую звичайні місця
-
-rows.forEach(row => {
-  const rowDiv = document.createElement("div");
-  rowDiv.className = "seat-row";
-
-  for (let i = 1; i <= seatsPerRow; i++) {
-    const seatId = `${row}${i}`;
-    const seat = document.createElement("div");
-    seat.className = "seat";
-    seat.dataset.id = seatId;
-
-    if (occupiedSeats.includes(seatId)) {
-      seat.classList.add("occupied");
-    }
-
-    seat.textContent = i;
-    seat.addEventListener("click", () => {
-      if (seat.classList.contains("occupied")) return;
-
-      seat.classList.toggle("selected");
-
-      if (selectedSeats.has(seatId)) {
-        selectedSeats.delete(seatId);
-      } else {
-        selectedSeats.add(seatId);
-      }
-      
-      updateBookingSummary();
-      updateBookingButton();
-
-    });
-
-    rowDiv.appendChild(seat);
-  }
-
-  const rowLabel = document.createElement("span");
-  rowLabel.className = "row-label";
-  rowLabel.textContent = row;
-  rowDiv.prepend(rowLabel);
-
-  layoutDiv.appendChild(rowDiv);
-});
-
-// генерую преміум місця
-
-
-premiumRows.forEach(row => {
-  const rowDiv = document.createElement("div");
-  rowDiv.className = "seat-row";
-
-  for (let i = 1; i <= seatsPerPremiumRow; i++) {
-    const seatId = `${row}${i}`;
-    const seat = document.createElement("div");
-    seat.className = "premium-seat";
-    seat.dataset.id = seatId;
-
-    if (occupiedSeats.includes(seatId)) {
-      seat.classList.add("occupied");
-    }
-
-    seat.textContent = i;
-    seat.addEventListener("click", () => {
-      if (seat.classList.contains("occupied")) return;
-
-      seat.classList.toggle("selected");
-
-      
-
-      if (selectedSeats.has(seatId)) {
-        selectedSeats.delete(seatId);
-      } else {
-        selectedSeats.add(seatId);
-      }
-
-      updateBookingSummary();
-      updateBookingButton();
-
-    });
-
-    rowDiv.appendChild(seat);
-  }
-
-  const rowLabel = document.createElement("span");
-  rowLabel.className = "row-label";
-  rowLabel.textContent = row;
-  rowDiv.prepend(rowLabel);
-
-  layoutDiv.appendChild(rowDiv);
-});
-
-// оновлювати дані про бронювання внизу сторінки
-
-
-function updateBookingSummary() {
-  const countSpan = document.getElementById("selected-count");
-  const priceSpan = document.getElementById("total-price");
-
-  let total = 0;
-
-  selectedSeats.forEach(id => {
-    const rowLetter = id[0];
-    if (premiumRows.includes(rowLetter)) {
-      total += premiumPrice;
+function updateBookingButton() {
+    const btn = document.getElementById("bookingBtn");
+    if (selectedSessionId && selectedSeats.size > 0) {
+        btn.classList.remove("disabled");
     } else {
-      total += standardPrice;
+        btn.classList.add("disabled");
     }
-  });
-
-  countSpan.textContent = selectedSeats.size;
-  priceSpan.textContent = total;
 }
 
-// відкриття модального вікна
+function updateBookingSummary() {
+    const countSpan = document.getElementById("selected-count");
+    const priceSpan = document.getElementById("total-price");
 
-document.querySelector(".booking-btn").addEventListener("click", openBookingModal);
+    let total = 0;
+    selectedSeats.forEach(id => {
+        const sector = id.split(":")[0];
+        total += sectorsInfo[sector] || 0;
+    });
+
+    countSpan.textContent = selectedSeats.size;
+    priceSpan.textContent = total;
+}
+
+async function loadSeats(sessionId) {
+    selectedSeats.clear();
+    layoutDiv.innerHTML = "";
+    const res = await fetch(`/Sessions/${sessionId}/Seats`);
+    const data = await res.json();
+
+    sectorsInfo = {};
+    const rows = {};
+
+    // формуємо rows та зберігаємо ціну секторів
+    data.forEach(seat => {
+        const rowLetter = seat.label[0];
+        if (!rows[rowLetter]) rows[rowLetter] = [];
+        rows[rowLetter].push(seat);
+
+        const sector = seat.sectorName;
+        if (!sectorsInfo[sector]) sectorsInfo[sector] = seat.price;
+    });
+
+    // малюємо ряди в алфавітному порядку (від A до Z)
+    Object.keys(rows)
+        .sort((a, b) => a.charCodeAt(0) - b.charCodeAt(0))
+        .forEach(rowLetter => {
+            const rowSeats = rows[rowLetter].sort((a, b) => {
+                const aNum = parseInt(a.label.substring(1));
+                const bNum = parseInt(b.label.substring(1));
+                return aNum - bNum;
+            });
+
+            const rowDiv = document.createElement("div");
+            rowDiv.className = "seat-row";
+
+            const rowLabel = document.createElement("span");
+            rowLabel.className = "row-label";
+            rowLabel.textContent = rowLetter;
+            rowDiv.appendChild(rowLabel);
+
+            rowSeats.forEach(seat => {
+                const sector = seat.sectorName;
+
+                const seatEl = document.createElement("div");
+                seatEl.className = sectorsInfo[sector] >= 200 ? "premium-seat" : "seat";
+                seatEl.dataset.id = `${sector}:${seat.label}`;
+                seatEl.textContent = seat.label.substring(1); // лише число
+
+                if (seat.status === 1) {
+                    seatEl.classList.add("occupied");
+                }
+
+                seatEl.addEventListener("click", () => {
+                    if (seatEl.classList.contains("occupied")) return;
+                    seatEl.classList.toggle("selected");
+
+                    const seatId = seatEl.dataset.id;
+                    if (selectedSeats.has(seatId)) {
+                        selectedSeats.delete(seatId);
+                    } else {
+                        selectedSeats.add(seatId);
+                    }
+
+                    updateBookingSummary();
+                    updateBookingButton();
+                });
+
+                rowDiv.appendChild(seatEl);
+            });
+
+            layoutDiv.appendChild(rowDiv);
+        });
+
+    // підписуємо ціни після побудови рядів (щоб не порушити порядок)
+
+    for (const sector in sectorsInfo) {
+        const label = document.createElement("p");
+        label.className = "text-light font-secondary mt-2";
+        label.textContent = `${sector} — ${sectorsInfo[sector]}₴`;
+        layoutDiv.appendChild(label);
+    }
+}
+
+
+// Обробка натискання на час сеансу
+
+const sessionBlocks = document.querySelectorAll(".session-time-window");
+sessionBlocks.forEach(block => {
+    block.addEventListener("click", () => {
+        sessionBlocks.forEach(b => b.classList.remove("selected"));
+        block.classList.add("selected");
+        selectedSessionId = block.dataset.sessionid;
+        loadSeats(selectedSessionId);
+        updateBookingButton();
+    });
+});
+
+// Кнопка бронювання
+
+document.getElementById("bookingBtn")?.addEventListener("click", openBookingModal);
 
 function openBookingModal() {
-  
-// якщо не обрано час та місце модальне не відкриється
-  if (!sessionData || selectedSeats.size === 0) {
-    return; 
-  }
+    if (!selectedSessionId || selectedSeats.size === 0) return;
 
-  const sessionInfo = `Сеанс ${sessionData.time}, ${sessionDate}, ${sessionData.hall}`;
+    const listEl = document.getElementById("selected-seats-list");
+    const modalTotal = document.getElementById("modal-total");
+    const sessionInfoEl = document.getElementById("session-info");
 
-  const listEl = document.getElementById("selected-seats-list");
-  const modalTotal = document.getElementById("modal-total");
+    listEl.innerHTML = "";
+    let total = 0;
+    selectedSeats.forEach(fullId => {
+        const [sector, label] = fullId.split(":");
+        const price = sectorsInfo[sector] || 0;
+        total += price;
+        const li = document.createElement("li");
+        li.textContent = `Сектор ${sector}, місце ${label} — ${price}₴`;
+        listEl.appendChild(li);
+    });
 
-  listEl.innerHTML = ""; 
+    sessionInfoEl.textContent = `Сеанс ${sessionDate}, ID: ${selectedSessionId}`;
+    modalTotal.textContent = total;
 
-  let total = 0;
-  selectedSeats.forEach(id => {
-    const row = id[0];
-    const number = id.slice(1);
-    const price = premiumRows.includes(row) ? premiumPrice : standardPrice;
-    total += price;
-
-    const li = document.createElement("li");
-    li.textContent = `Ряд ${row}, місце ${number} — ${price}₴`;
-    listEl.appendChild(li);
-  });
-
-  document.getElementById("session-info").textContent = sessionInfo;
-  modalTotal.textContent = total;
-
-  const modal = new bootstrap.Modal(document.getElementById("bookingModal"));
-  modal.show();
+    const modal = new bootstrap.Modal(document.getElementById("bookingModal"));
+    modal.show();
 }

@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MovieTheater.Infrastructure.Entities;
 
 namespace MovieTheater.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<long>, long>
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -24,6 +26,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<MovieStats> MovieStats => Set<MovieStats>();
     public DbSet<MovieActor> MovieActors => Set<MovieActor>();
     public DbSet<MovieGenre> MovieGenres => Set<MovieGenre>();
+    public DbSet<SessionSeat> SessionSeats { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -53,6 +56,12 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.Id)
             .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<User>(b =>
+        {
+            b.ToTable("Users");
+            b.Property(u => u.IsAdmin).IsRequired();
+        });
 
         modelBuilder.Entity<Movie>()
             .Property(m => m.Id)
@@ -97,5 +106,20 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<MovieStats>()
             .Property(s => s.Id)
             .ValueGeneratedOnAdd();
+
+        // SessionSeat config
+        modelBuilder.Entity<SessionSeat>()
+            .HasOne(x => x.Session)
+            .WithMany(s => s.SessionSeats)
+            .HasForeignKey(x => x.SessionId);
+
+        modelBuilder.Entity<SessionSeat>()
+            .HasOne(x => x.HallSeat)
+            .WithMany()
+            .HasForeignKey(x => x.HallSeatId);
+
+        modelBuilder.Entity<SessionSeat>()
+            .Property(x => x.Status)
+            .HasConversion<string>();
     }
 }

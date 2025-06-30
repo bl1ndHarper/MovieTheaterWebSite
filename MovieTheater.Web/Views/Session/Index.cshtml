@@ -27,99 +27,127 @@
             <div class="tags-genres-div">
                   @foreach (var genre in Model.MovieDetails.Genres)
                   {
-                      <div class="genre-tag text-light-emphasis small">@genre</div>
+                      <div class="genre-tag text-light-emphasis small">@genre.Genre.Name</div>
                   }
 
                   <div class="rating-tag text-light-emphasis small">
-                  @Model.MovieDetails.AgeRating
+                    @Model.MovieDetails.AgeRatingLabel
                   </div>
               </div>
 
             <div class="session-info text-end font-secondary">
               <span class="stats-tag">@($"{Model.MovieDetails.MinAgeRating}+")</span>
-              <span class="stats-tag">⭐ @{var rating = Model.MovieDetails.ImdbRating / 2;} @rating/ 5 IMBD</span>
+              <span class="stats-tag">⭐ @{var rating = Model.MovieDetails.ImdbRating;} @rating/ 10.0 IMBD</span>
               <span class="stats-tag">@(TimeSpan.FromMinutes(Model.MovieDetails.Duration ?? 0).ToString(@"h\:mm"))</span>
               <span class="stats-tag">@Model.MovieDetails.ReleaseYear</span>
             </div>
           </div>
 
-
           <p class="movie-director font-main">
-            <span> Режисер: </span> @Model.MovieDetails.Director
+
+            <span> Режисер: </span> @Model.MovieDetails.DirectorName
+
 
           </p>
 
           <p class="movie-actors font-main">
-            <span> Актори: </span> Джина Филипс, Джастин Лонг, Джонатан Брек
-
+            <span> Актори: </span>
+            @foreach(var actor in Model.MovieDetails.Actors)
+            {
+                @actor.Actor.Name
+            }
           </p>
 
           <p class="movie-desc font-main">
             @Model.MovieDetails.Description
-
           </p>
-
-
         </div>
-
     </div>
   </div>
 
-
 <div class="session-time-windows-div mt-4 ">
+    @{
+        var dayNow = DateTime.Now.ToLocalTime().ToString("dd.MM");
+        bool anyAvailableToday = Model.AvailableDates.Contains(dayNow);
+    }
     <div class ="d-flex justify-content-between session-times-text-div" style=" width:100%">
-      <div><span class="session-times-text font-main"> Розклад сенасів </span></div>
-      <div><span data-date="25.06"class="session-times-text font-main" id ="sessionDate"> 25.06 </span></div>
+        <div><span class="session-times-text font-main"> Розклад сенасів </span></div>
+        <form asp-route="MovieSessionsRoute" method="get" asp-route-day="@dayNow" class="d-flex">
+            <label for="sessionDateSelect" class="me-2 session-times-text font-main">Оберіть день:</label>
+            <select id="sessionDateSelect" name="day" class="form-select" onchange="this.form.submit()">
+                @if (!anyAvailableToday && dayNow == Model.SelectedDate)
+                {
+                    <option class="sessionDate" value="dayNow" selected>@dayNow (Сьогодні)</option>
+                }
+                @foreach (var date in Model.AvailableDates)
+                {
+                    if (date == Model.SelectedDate)
+                    {
+                        <option class="sessionDate" value="@date" selected>
+                            @date
+                            @if (date == dayNow)
+                            {
+                                <span>(Сьогодні)</span>
+                            }
+                        </option>
+                    }
+                    else
+                    {
+                        <option value="@date">
+                            @date
+                            @if (date == dayNow)
+                            {
+                                <span>(Сьогодні)</span>
+                            }
+                        </option>
+                    }
+                }
+            </select>
+        </form>
+
     </div>
-
-    <div class="session-time-window"  
-        data-time="11:00"
-        data-hall="Зала 1"
-        data-seats="69">
-
-        <p class="session-time font-main">11:00</p>
-        <p class="session-hall font-secondary">Зала 1</p>
-        <span class=" session-free-places font-secondary">69 вільних місць</span>
-
-    </div>
-    <div class="session-time-window"
-        data-time="14:30"
-        data-hall="Зала 1"
-        data-seats="69"">
-
-        <p class="session-time font-main">14:30</p>
-        <p class="session-hall font-secondary">Зала 1</p>
-        <span class=" session-free-places font-secondary">69 вільних місць</span>
-
-    </div>
-    <div class="session-time-window "
-        data-time="21:15"
-        data-hall="Зала 1"
-        data-seats="69">
-
-        <p class="session-time font-main">21:15</p>
-        <p class="session-hall font-secondary">Зала 1</p>
-        <span class=" session-free-places font-secondary">69 вільних місць</span>
-    </div>
+    @if (Model.Sessions != null && Model.Sessions.Any())
+    {
+        foreach (var kvp in Model.Sessions)
+        {
+            var sessionList = kvp.Value;
+            foreach (var session in sessionList)
+            {
+                <div class="session-time-window"
+                     data-sessionId="@session.Id"
+                     data-time="@session.StartTime"
+                     data-hall="@session.Hall.Name"
+                     data-seats="@session.SeatsTotal">
+                    <p class="session-time font-main">@session.StartTime.ToString("HH:mm")</p>
+                    <p class="session-hall font-secondary">Зала: @session.Hall.Name</p>
+                    <span class="session-free-places font-secondary">Вільних місць: @session.SeatsTotal</span>
+                </div>
+            }
+        }
+    }
+    else
+    {
+        <h3>Сьогодні сеансів нема</h3>
+    }
 </div>
 
-<div class="session-time-windows-div mt-4  ">
+<div class="session-time-windows-div mt-4">
     <div style=" width:100%">
       <p class="session-times-text font-main"> Оберіть місця </p>
       </div>
       <div class="seat-legend d-flex justify-content-center" style="width:100%">
 
           <div class="seat"></div>
-          <span class="seat-desc font-secondary"> Стандарт - 150₴</span>
+          <span class="seat-desc font-secondary"> Стандарт </span>
 
           <div class="premium-seat" style="width:40px"></div>
-          <span class="seat-desc font-secondary"> Vip - 150₴</span>
+          <span class="seat-desc font-secondary"> Vip </span>
 
           <div class="seat occupied"></div>
-          <span class="seat-desc font-secondary"> Зайнято</span>
+          <span class="seat-desc font-secondary"> Зайнято </span>
 
           <div class="seat selected"></div>
-          <span class="seat-desc font-secondary"> Обрано</span>
+          <span class="seat-desc font-secondary"> Обрано </span>
       </div>
 
       <div class="d-flex justify-content-center" style="width:100%">
@@ -136,10 +164,10 @@
     <div class="session-booking-info-div">
       <p class="session-booking-text-places font-main"> 
         Обрано місць: <span id="selected-count">0</span>
-         </p>
-      <spanp class="session-booking-text font-secondary"> 
+      </p>
+      <span class="session-booking-text font-secondary"> 
         На суму <span id="total-price">0</span>₴
-        </span>
+      </span>
       </div>
 
       <div class="booking-btn-div">

@@ -69,9 +69,8 @@ namespace MovieTheater.Application.Services
             }).ToList();
         }
 
-        public async Task<MovieMainDto?> GetMovieByIdAsync(long id)
+        public async Task<MovieDto?> GetMovieByIdAsync(long id)
         {
-
             var movie = await _context.Movies
                 .Include(m => m.Genres).ThenInclude(mg => mg.Genre)
                 .Include(m => m.AgeRating)
@@ -79,23 +78,20 @@ namespace MovieTheater.Application.Services
 
             if (movie is null) return null;
 
-            return new MovieMainDto
+            return new MovieDto
             {
                 Id = movie.Id,
                 Title = movie.Title,
                 Duration = movie.Duration,
                 ImdbRating = movie.ImdbRating,
                 ThumbnailUrl = movie.ThumbnailUrl,
-                AgeRating = movie.AgeRating.Label,
+                AgeRatingLabel = movie.AgeRating.Label,
                 MinAgeRating = movie.AgeRating.MinAge,
                 ReleaseYear = movie.ReleaseDate.Year,
                 Description = movie.Description,
-                Director = movie.DirectorName,
-                Genre = movie.Genres.FirstOrDefault()?.Genre.Name,
-                Genres = movie.Genres.Select(g => g.Genre.Name).ToList()
+                MainGenre = movie.Genres.FirstOrDefault()?.Genre,
+                Genres = movie.Genres.ToList()
             };
-            
-            
         }
     }
 }
