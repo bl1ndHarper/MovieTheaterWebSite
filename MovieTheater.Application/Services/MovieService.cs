@@ -65,6 +65,7 @@ namespace MovieTheater.Application.Services
                 AgeRating = m.AgeRating.Label,
                 Duration = m.Duration,
                 ImdbRating = m.ImdbRating,
+                DirectorName = m.DirectorName,
                 Sessions = new List<string>()
             }).ToList();
         }
@@ -73,6 +74,7 @@ namespace MovieTheater.Application.Services
         {
             var movie = await _context.Movies
                 .Include(m => m.Genres).ThenInclude(mg => mg.Genre)
+                .Include(m => m.Actors).ThenInclude(ma => ma.Actor)
                 .Include(m => m.AgeRating)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
@@ -89,8 +91,10 @@ namespace MovieTheater.Application.Services
                 MinAgeRating = movie.AgeRating.MinAge,
                 ReleaseYear = movie.ReleaseDate.Year,
                 Description = movie.Description,
+                DirectorName = movie.DirectorName,
                 MainGenre = movie.Genres.FirstOrDefault()?.Genre,
-                Genres = movie.Genres.ToList()
+                Genres = movie.Genres.ToList(),
+                Actors = movie.Actors.ToList()
             };
         }
     }

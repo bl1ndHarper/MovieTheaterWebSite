@@ -101,20 +101,29 @@ async function loadSeats(sessionId) {
 
     // підписуємо ціни після побудови рядів (щоб не порушити порядок)
 
-    for (const sector in sectorsInfo) {
-        const label = document.createElement("p");
-        label.className = "text-light font-secondary mt-2";
-        label.textContent = `${sector} — ${sectorsInfo[sector]}₴`;
-        layoutDiv.appendChild(label);
-    }
+    const standartSeatName = document.getElementById("standartPriceName");
+    const vipSeatName = document.getElementById("VIPPriceName");
+
+    standartSeatName.textContent = `Standard — ${sectorsInfo["Standard"]}₴`;
+    vipSeatName.textContent = `VIP — ${sectorsInfo["VIP"]}₴`;
+    
+   
 }
 
 
 // Обробка натискання на час сеансу
 
 const sessionBlocks = document.querySelectorAll(".session-time-window");
+const seatlegend = document.getElementById("seatLegendInner");
+
 sessionBlocks.forEach(block => {
     block.addEventListener("click", () => {
+        
+
+        seatlegend.classList.remove("hidden");
+
+         
+
         sessionBlocks.forEach(b => b.classList.remove("selected"));
         block.classList.add("selected");
         selectedSessionId = block.dataset.sessionid;
