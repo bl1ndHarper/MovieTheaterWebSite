@@ -1,0 +1,19 @@
+﻿using MovieTheater.Infrastructure.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MovieTheater.Infrastructure.Interfaces
+{
+    public interface ISessionRepository
+    {
+        Task<List<Session>> GetMovieSessionsByDateAsync(long movieId, DateTime date);
+        Task<List<DateTime>> GetAvailableSessionDatesAsync(long movieId);
+        Task<Session?> GetByIdAsync(long id);
+        Task AddAsync(Session session);
+        void Remove(Session session);
+        Task SaveAsync();
+    }
+}

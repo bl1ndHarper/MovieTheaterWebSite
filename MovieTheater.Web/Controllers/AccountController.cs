@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using MovieTheater.Infrastructure.Entities;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using MovieTheater.Application.DTOs;
 
 namespace MovieTheater.Web.Controllers
 {
-    public class AccountController : Controller
+    [Route("api/account")]
+    [ApiController]
+    public class AccountController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
@@ -19,36 +23,57 @@ namespace MovieTheater.Web.Controllers
             _signInManager = signInManager;
         }
 
-        [HttpGet]
-        public IActionResult Login() => View();
-
-        [HttpPost]
-        public async Task<IActionResult> Login(string email, string password)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-            if (user != null)
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+            if (user == null)
+                return Unauthorized("Invalid email or password");
+
+            var result = await _signInManager.CheckPasswordSignInAsync(user, dto.Password, false);
+            if (!result.Succeeded)
+                return Unauthorized("Invalid email or password");
+
+            var claims = new List<Claim>
             {
-                var result = await _signInManager.PasswordSignInAsync(user, password, true, false);
-                if (result.Succeeded)
-                {
-                    var identity = new ClaimsIdentity("Identity.Application");
-                    identity.AddClaim(new Claim("IsAdmin", user.IsAdmin.ToString()));
-                    var principal = new ClaimsPrincipal(identity);
-                    await HttpContext.SignInAsync(principal);
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.UserName ?? user.Email),
+                new Claim(ClaimTypes.Role, user.IsAdmin ? "Admin" : "User")
+            };
 
-                    return RedirectToAction("Index", "Home");
-                }
-            }
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
 
-            ModelState.AddModelError("", "Невірна пошта або пароль");
-            return View();
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return Ok(new { message = "Login successful", role = user.IsAdmin ? "Admin" : "User" });
         }
 
-        [HttpPost]
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDto dto)
+        {
+            var existing = await _userManager.FindByEmailAsync(dto.Email);
+            if (existing != null)
+                return Conflict("User with this email already exists.");
+
+            var user = new User
+            {
+                Email = dto.Email,
+                UserName = dto.UserName
+            };
+
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            if (!result.Succeeded)
+                return BadRequest(result.Errors);
+
+            return Ok(new { message = "User registered successfully" });
+        }
+
+        [HttpPost("logout")]
         public async Task<IActionResult> Logout()
         {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return Ok(new { message = "Logged out" });
         }
     }
 }
