@@ -45,17 +45,17 @@
 
           <p class="movie-director font-main">
 
-            <span> Режисер: </span> @Model.MovieDetails.DirectorName
+            <span> Режисер:  </span> @Model.MovieDetails.DirectorName
 
 
           </p>
 
           <p class="movie-actors font-main">
             <span> Актори: </span>
-            @foreach(var actor in Model.MovieDetails.Actors)
-            {
-                @actor.Actor.Name
-            }
+             @{
+                 var actorNames = string.Join(", ", Model.MovieDetails.Actors.Select(a => a.Actor.Name));
+             }
+             @actorNames
           </p>
 
           <p class="movie-desc font-main">
@@ -72,8 +72,9 @@
     }
     <div class ="d-flex justify-content-between session-times-text-div" style=" width:100%">
         <div><span class="session-times-text font-main"> Розклад сенасів </span></div>
-        <form asp-route="MovieSessionsRoute" method="get" asp-route-day="@dayNow" class="d-flex">
-            <label for="sessionDateSelect" class="me-2 session-times-text font-main">Оберіть день:</label>
+        <form asp-route="MovieSessionsRoute" method="get" asp-route-day="@dayNow" class="d-flex justify-content-between date-form">
+            <label for="sessionDateSelect" class="me-2 session-times-text font-main" >Оберіть день:</label>
+            <div class="dropdown-div">
             <select id="sessionDateSelect" name="day" class="form-select" onchange="this.form.submit()">
                 @if (!anyAvailableToday && dayNow == Model.SelectedDate)
                 {
@@ -103,6 +104,8 @@
                     }
                 }
             </select>
+            <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+            </div>
         </form>
 
     </div>
@@ -127,27 +130,32 @@
     }
     else
     {
-        <h3>Сьогодні сеансів нема</h3>
+        <div class="d-flex justify-content-center" style="width:100%">
+          <h3 class="no-sessions-text font-secondary">Сьогодні сеансів нема  :(   Спробуй інший день</h3>
+        </div>
     }
 </div>
 
 <div class="session-time-windows-div mt-4">
-    <div style=" width:100%">
+    <div style=" width:100%" >
       <p class="session-times-text font-main"> Оберіть місця </p>
       </div>
-      <div class="seat-legend d-flex justify-content-center" style="width:100%">
+      <div id = "seatLegendInner" class="hidden" style="width:100%" >
+        <div id = "seatLegend" class="seat-legend d-flex justify-content-center" style="width:100%">
+            
+              <div class="seat"></div>
+              <span class="seat-desc font-secondary"> <span id = "standartPriceName">₴</span> </span> </span>
 
-          <div class="seat"></div>
-          <span class="seat-desc font-secondary"> Стандарт </span>
+              <div class="premium-seat" style="width:40px"></div>
+              <span class="seat-desc font-secondary"> <span id = "VIPPriceName">₴</span> </span>
 
-          <div class="premium-seat" style="width:40px"></div>
-          <span class="seat-desc font-secondary"> Vip </span>
+              <div class="seat occupied"></div>
+              <span class="seat-desc font-secondary"> Зайнято </span>
 
-          <div class="seat occupied"></div>
-          <span class="seat-desc font-secondary"> Зайнято </span>
+              <div class="seat selected"></div>
+              <span class="seat-desc font-secondary"> Обрано </span>
 
-          <div class="seat selected"></div>
-          <span class="seat-desc font-secondary"> Обрано </span>
+          </div>        
       </div>
 
       <div class="d-flex justify-content-center" style="width:100%">

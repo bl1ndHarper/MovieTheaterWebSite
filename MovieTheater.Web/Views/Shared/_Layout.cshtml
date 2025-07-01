@@ -45,10 +45,20 @@
                     <a class="site-name-link font-main " asp-area="" asp-controller="Home" asp-action="Index">keen-chick!</a>
                 </div>
 
+                @if (User.Identity?.IsAuthenticated == true){
+        
                 <div id = "profileLinkDiv" class="profile-link-div">
-                    <a class="profile-link font-main" asp-area="" asp-controller="Home" asp-action="Index">Ім'я користувача</a>
+                    <a class="profile-link font-main" asp-area="" asp-controller="SignIn" asp-action="Account">Ім'я користувача</a>
                     <i class="user-icon fa-regular fa-user"></i>
                 </div>
+                }
+                 else
+                {
+                <div id = "profileLinkDiv" class="profile-link-div">
+                    <a class="profile-link font-main" asp-area="" asp-controller="SignIn" asp-action="Index">Увійти</a>
+                    <i class="user-icon fa-regular fa-user"></i>
+                </div>
+                }   
             
             </div>
         </nav>

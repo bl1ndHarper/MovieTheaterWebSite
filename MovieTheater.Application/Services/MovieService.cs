@@ -141,6 +141,7 @@ namespace MovieTheater.Application.Services
                 AgeRating = m.AgeRating.Label,
                 Duration = m.Duration,
                 ImdbRating = m.ImdbRating,
+                DirectorName = m.DirectorName,
                 Sessions = new List<string>()
             }).ToList();
         }
