@@ -1,0 +1,104 @@
+@{
+    ViewData["Title"] = "Keen-Chick!: Account";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
+}
+
+ <div class="back-btn-div font-main">
+  <a asp-area="" asp-controller="Home" asp-action="Index" class="back-btn "> ← Назад</a>
+</div>
+
+<div class="d-flex justify-content-center">
+    <div class="styled-container mt-4 " style="width:60vw;">
+        <div class="d-flex justify-content-left " style="padding-left:2rem; padding-top: 1rem;">
+            <div class="d-flex flex-column">
+                <p class="font-main form-main-text" style="text-align:left">Мій аккаунт</p>
+                <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-user" style="margin-right:0.5rem"></i>  Логін: Нікнейм користувача</p>
+                <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-envelope" style="margin-right:0.5rem"></i>  Електрона пошта: пошта користувача</p>
+            </div>
+            
+        </div>
+       <button class="profile-button" style="margin-left: 2rem;"> Змінити пароль</button>
+       <button class="profile-button"> Вийти з акаунту</button>
+    </div>
+</div>
+<div class="d-flex justify-content-center">
+    <div class="styled-container mt-4 " style="width:60vw;">
+        <p class="font-main form-main-text" style="text-align:left;padding-left:2rem; padding-top: 1rem;">Мої бронювання</p>
+
+        <div id ="bookingsDiv" class="d-flex flex-column align-items-center ">
+            <!-- Тут будуть усі бронювання через форіч-->
+
+            <!-- Приклад картки бронювання-->
+
+            <div class="styled-inner-container mt-4" style="width:90%;">
+                
+                <div class="d-flex justify-content-between booking-main-text" style="padding: 1rem 2rem 1rem 2rem;">
+                    <span class="font-main form-main-text" > Назва фільму</span>
+                    <div >
+                        <div class="font-main form-main-text" style="text-align: right; font-size: 14pt;">450₴</div>                       
+                            <div class="booking-status"> Майбутнє </div>
+                    </div>
+                    
+                </div>
+
+                <div class="container row">
+                    <div class=" col-6">
+                         <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i> 01.07.2025</p>
+                         <p class="font-secondary profile-text"><i class="user-icon fa-solid fa-location-dot" style="margin-right:0.5rem"></i> Зала 2</p>
+                    </div>
+                    <div class=" col-6">
+                                           <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-clock" style="margin-right:0.5rem"></i> 22:00</p>
+                         <p class="font-secondary profile-text"><i class="user-icon fa-solid fa-chair" style="margin-right:0.5rem"></i> А9,А10,А11</p>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Кінець картки бронювання-->
+
+             <!-- Приклад картки бронювання-->
+
+            <div class="styled-inner-container mt-4" style="width:90%;">
+                
+                <div class="d-flex justify-content-between booking-main-text" style="padding: 1rem 2rem 1rem 2rem;">
+                    <span class="font-main form-main-text" > Назва фільму</span>
+                    <div >
+                        <div class="font-main form-main-text" style="text-align: right; font-size: 14pt;">450₴</div>                       
+                            <div class="booking-status"> Майбутнє </div>
+                    </div>
+                    
+                </div>
+
+                <div class="container row">
+                    <div class=" col-6">
+                         <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i> 01.07.2025</p>
+                         <p class="font-secondary profile-text"><i class="user-icon fa-solid fa-location-dot" style="margin-right:0.5rem"></i> Зала 2</p>
+                    </div>
+                    <div class=" col-6">
+                                           <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-clock" style="margin-right:0.5rem"></i> 22:00</p>
+                         <p class="font-secondary profile-text"><i class="user-icon fa-solid fa-chair" style="margin-right:0.5rem"></i> А9,А10,А11</p>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Кінець картки бронювання-->
+            
+
+            
+            
+
+            
+
+            
+
+        </div>
+    </div>
+</div>

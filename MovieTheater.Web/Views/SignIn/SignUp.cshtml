@@ -1,18 +1,23 @@
 @{
-    ViewData["Title"] = "Keen-Chick!: Sign In";
+    ViewData["Title"] = "Keen-Chick!: Sign Up";
 }
 
 @section Styles {
     <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
 }
-<div class="back-btn-div font-main">
-    <a asp-area="" asp-controller="Home" asp-action="Index" class="back-btn "> ← Назад</a>
-</div>
 
+ <div class="back-btn-div font-main">
+  <a asp-area="" asp-controller="Home" asp-action="Index" class="back-btn "> ← Назад</a>
+</div>
 <div class="d-flex justify-content-center">
     <div class="styled-container" style="width:30vw;">
-        <form  class="d-flex flex-column" action="" id = "signInForm">
+        <form  class="d-flex flex-column" action="" id = "signUpForm">
             <p class="font-main form-main-text">Вхід в акаунт</p>
+
+            <label for="userNickname" style="text-align:center" class="font-secondary ">Логін</label>
+            <div class="d-flex justify-content-center">
+                 <input type="text" id="userNickname">
+            </div>
             
             
             <label for="userEmail" class="font-secondary mt-3"> Електрона пошта</label>
@@ -27,13 +32,10 @@
             </div>
             
             <div class="d-flex justify-content-center mt-4 mb-3">
-                <button type="submit" id ="submitSignIn" > Увійти</button>
+                <button type="submit" id ="submitSignIn" > Зареєструватися</button>
             </div>
-
-            <span class="link-bottom mt-3 font-secondary"> Немає акаунта? <a asp-controller="SignIn" asp-action="SignUp" >Зареєструватися</a></span>
-
+         <span class="link-bottom mt-3 font-secondary"> Є акаунт? <a asp-controller="SignIn" asp-action="Index" >Увійти</a></span>
             
         </form>
     </div>
 </div>
-<div class="keep-footer-down" style="height:5vh"></div>
