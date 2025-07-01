@@ -7,6 +7,7 @@ using MovieTheater.Web.Models;
 using MovieTheater.Web.ViewModels;
 using System.Diagnostics;
 using System.Security.Claims;
+using MovieTheater.Application.DTOs;
 
 namespace MovieTheater.Web.Controllers
 {
@@ -21,20 +22,35 @@ namespace MovieTheater.Web.Controllers
             _movieService = movieService;
         }
 
+        // Index (MVC)
         public async Task<IActionResult> Index()
         {
-            var today = DateTime.UtcNow.Date;
-            var latestMovies = await _movieService.GetLatestMoviesAsync(6);
-            var sessions = await _movieService.GetNowShowingAsync(today);
-
-            var viewModel = new HomePageViewModel
+            var vm = new HomePageViewModel
             {
-                LatestMovies = latestMovies,
-                AllSessions = sessions
+                LatestMovies = await GetLatestMovies(6),
+                AllSessions = await GetNowShowing()
             };
-
-            return View(viewModel);
+            return View(vm);
         }
+
+
+        // Private methods
+        private Task<List<MovieMainDto>> GetLatestMovies(int count) =>
+            _movieService.GetLatestMoviesAsync(count);
+
+        private Task<List<MovieMainDto>> GetNowShowing() =>
+            _movieService.GetNowShowingAsync(DateTime.UtcNow.Date);
+
+
+        // API endpoints
+        [HttpGet("api/movies/latest/{count}")]
+        public async Task<IActionResult> ApiLatestMovies(int count) =>
+            Ok(await GetLatestMovies(count));
+
+        [HttpGet("api/movies/now-showing")]
+        public async Task<IActionResult> ApiNowShowing() =>
+            Ok(await GetNowShowing());
+
 
         public IActionResult Privacy()
         {
@@ -45,49 +61,6 @@ namespace MovieTheater.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> LoginAsAdmin()
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, "1"),
-                new Claim(ClaimTypes.Name, "admin"),
-                new Claim(ClaimTypes.Role, "Admin")
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> LoginAsUser()
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, "2"),
-                new Claim(ClaimTypes.Name, "user"),
-                new Claim(ClaimTypes.Role, "User")
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
         }
     }
 }
