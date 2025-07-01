@@ -17,6 +17,18 @@ namespace MovieTheater.Web.Controllers
             return View();
         }
 
+        [HttpGet("SignUp")]
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+        [HttpGet("Account")]
+        public IActionResult Account()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
