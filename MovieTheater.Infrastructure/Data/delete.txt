@@ -5,6 +5,7 @@ DELETE FROM "MovieGenres";
 DELETE FROM "MovieActors";
 DELETE FROM "Sessions";
 DELETE FROM "HallSeats";
+DELETE FROM "SessionSeats";
 
 -- Видалення даних з таблиць, на які посилаються вищезазначені таблиці
 DELETE FROM "HallSectors";
