@@ -32,6 +32,11 @@ namespace MovieTheater.Web.Controllers
             };
             return View(vm);
         }
+        [HttpGet("/Upcoming")]
+        public async Task<IActionResult> Upcoming()
+        { 
+            return View();
+        }
 
 
         // Private methods
