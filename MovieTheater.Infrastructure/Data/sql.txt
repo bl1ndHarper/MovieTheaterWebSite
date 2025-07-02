@@ -1,0 +1,348 @@
+-- Create InitialData
+
+INSERT INTO "Ratings" (
+"Id", "Label", "Description", "MinAge"
+)
+VALUES (
+1, 'G', 'All ages admitted', 0
+),
+(
+2, 'PG', 'Parental Guidance Suggested', 4
+),
+(
+3, 'PG-13', 'Parents strongly cautioned', 13
+),
+(
+4, 'R', 'Under 17 requires accompaniying parent or adult guardian', 16
+),
+(
+5, 'NC-17', 'No one 17 and under admitted', 18
+);
+
+INSERT INTO "Movies" (
+"Id", "Title", "Description", "Duration", "TrailerUrl",
+"ThumbnailUrl", "ReleaseDate", "ImdbRating", "ActivityStatus",
+"AgeRatingId", "DirectorDetailsUrl", "DirectorName")
+	VALUES
+(1, 'Shrek', 'A mean lord exiles fairytale creatures to the swamp of a grumpy ogre, who must go on a quest and rescue a princess for the lord in order to get his land back.',
+90, 'https://www.youtube.com/watch?v=CwXOrWvPBPk',
+ 'https://picfiles.alphacoders.com/364/thumb-1920-364107.jpg', '2001-05-18', 7.9, 'active', 1, 'https://en.wikipedia.org/wiki/Andrew_Adamson',
+ 'Andrew Adamson'),
+(2, 'Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.',
+148, 'https://www.youtube.com/watch?v=YoHD9XEInc0',
+ 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg', '2010-07-16', 8.8, 'active', 2, 'https://en.wikipedia.org/wiki/Christopher_Nolan', 'Christopher Nolan'),
+(3, 'Snatch', 'Unscrupulous boxing promoters, violent bookmakers, a Russian gangster, incompetent amateur robbers, and Jewish jewelers all collide.', 104, 'https://www.youtube.com/watch?v=ni4tEtuTccc', 'https://m.media-amazon.com/images/M/MV5BYzk5NjJkMTQtN2IyNC00YWM5LTlhZmMtNGI3MWNhMTU1YTc4XkEyXkFqcGc@._V1_.jpg', '2000-08-23', 8.2, 'active', 5, 'https://en.wikipedia.org/wiki/Guy_Ritchie', 'Guy Ritchie'),
+(4, 'The Good, the Bad and the Ugly', 'A bounty hunting scam joins two men in an uneasy alliance against a third in a race to find a fortune in gold.', 178, 'https://www.youtube.com/watch?v=WCN5JJY_wiA', 'https://m.media-amazon.com/images/M/MV5BMWM5ZjQxM2YtNDlmYi00ZDNhLWI4MWUtN2VkYjBlMTY1ZTkwXkEyXkFqcGc@._V1_.jpg', '1966-12-23', 8.8, 'archived', 5,
+'https://en.wikipedia.org/wiki/Sergio_Leone', 'Sergio Leone'),
+(5, 'Phone Booth', 'Publicist Stuart Shepard is trapped in a phone booth by a sniper who insists he confess his sins.', 81, 'https://www.youtube.com/watch?v=gUqTCsjCsA8', 'https://m.media-amazon.com/images/M/MV5BYjJhYTNhYmEtODcyOS00ZGEwLWEwZTYtNzlkMmY0MjQ1OWQwXkEyXkFqcGc@._V1_.jpg', '2002-09-10', 7.1, 'active', 5, 'https://en.wikipedia.org/wiki/Joel_Schumacher', 'Joel Schumacher'),
+(6, 'Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine.', 154, 'https://www.youtube.com/watch?v=s7EdQ4FqbhY', 'https://m.media-amazon.com/images/M/MV5BYTViYTE3ZGQtNDBlMC00ZTAyLTkyODMtZGRiZDg0MjA2YThkXkEyXkFqcGc@._V1_.jpg', '1994-10-14', 8.9, 'active', 5, 'https://en.wikipedia.org/wiki/Quentin_Tarantino', 'Quentin Tarantino'),
+(7, 'Lock, Stock and Two Smoking Barrels', 'A botched card game triggers a series of unfortunate events involving gangsters, debt collectors and weed growers.', 107, 'https://www.youtube.com/watch?v=HY7mRdQuUSw', 'https://m.media-amazon.com/images/M/MV5BMmY1M2M5ZmMtYzllZC00YzAxLTk4MjktZDJkNjA1MTUwMGQ4XkEyXkFqcGc@._V1_.jpg', '1998-08-28', 8.2, 'active', 5, 'https://en.wikipedia.org/wiki/Guy_Ritchie', 'Guy Ritchie'),
+(8, 'A Minecraft Movie', 'Four misfits are suddenly pulled through a mysterious portal into a bizarre cubic wonderland that thrives on imagination. To get back home they''ll have to master this world while embarking on a quest with an unexpected expert crafter.',
+120, 'https://www.youtube.com/watch?v=wJO_vIDZn-I', 'https://m.media-amazon.com/images/M/MV5BYzFjMzNjOTktNDBlNy00YWZhLWExYTctZDcxNDA4OWVhOTJjXkEyXkFqcGc@._V1_.jpg', '2025-04-04', 0.0, 'active', 2, 'https://en.wikipedia.org/wiki/Jared_Hess', 'Jared Hess'),
+(9, 'American Psycho', 'A wealthy New York City investment banking executive hides his psychopathic ego from his circle of friends.',
+102, 'https://www.youtube.com/watch?v=81mibtQWWBg', 'https://m.media-amazon.com/images/M/MV5BNzg0ZDBmZDAtZjIyNC00MDE2LWIzY2YtNTkxMjIzNGZmNjIyXkEyXkFqcGc@._V1_.jpg', '2000-04-14', 7.6, 'active', 5, 'https://en.wikipedia.org/wiki/Mary_Harron', 'Mary Harron'),
+(10, 'Gladiator',
+'A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family.',
+155, 'https://www.youtube.com/watch?v=P5ieIbInFpg', 'https://m.media-amazon.com/images/M/MV5BYWQ4YmNjYjEtOWE1Zi00Y2U4LWI4NTAtMTU0MjkxNWQ1ZmJiXkEyXkFqcGc@._V1_.jpg', '2000-05-05', 8.5, 'archived', 5, 'https://en.wikipedia.org/wiki/Ridley_Scott', 'Ridley Scott'),
+(11, 'Lilo & Stitch', 'A lonely Hawaiian girl befriends a runaway alien, helping to mend her fragmented family.', 108, 'https://www.youtube.com/watch?v=VWqJifMMgZE', 'https://m.media-amazon.com/images/M/MV5BYmFmZjM1ZTEtYzQ5ZS00MTRmLTkzMDktYWMxNTg2NGE3YjY4XkEyXkFqcGc@._V1_.jpg', '2002-06-21', 7.3, 'archived', 1, 'https://en.wikipedia.org/wiki/Dean_Fleischer_Camp', 'Dean Fleischer Camp'),
+(12, 'Five Nights at Freddy''s 2', '1987, after a rather unstable life, Jeremy Fitzgerald found work as a security guard at the new Freddy''s Fazbear Pizzeria, but when he entered there he would realize that not everything there is as it seems.',
+110, 'https://www.youtube.com/watch?v=eGV7zwjvxKs', 'https://m.media-amazon.com/images/M/MV5BYjllM2RjZWYtZjk2MS00OTE3LWE1MTItM2U3Y2ZlNDRkYmNmXkEyXkFqcGc@._V1_.jpg', '2025-11-05', 0.0, 'upcoming', 5, 'https://en.wikipedia.org/wiki/Emma_Tammi', 'Emma Tammi'),
+(13, 'Ballerina',
+'An assassin trained in the traditions of the Ruska Roma organization sets out to seek revenge after her father''s death.', 164, 'https://www.youtube.com/watch?v=0FSwsrFpkbw', 'https://m.media-amazon.com/images/M/MV5BNzdhZmY2OTQtYWI4OC00ZThkLTlhZjAtNzE2YzRjM2Q5YjJlXkEyXkFqcGc@._V1_.jpg', '2025-06-06', 7.2, 'active', 5, 'https://en.wikipedia.org/wiki/Len_Wiseman', 'Len Wiseman');
+
+INSERT INTO "Halls" ("Id", "Name", "Description") VALUES
+(1, 'Red Hall', 'Main hall with 200 seats and Dolby Atmos sound system'),
+(2, 'Blue Hall', 'Smaller hall with 100 seats and VIP seating'),
+(3, 'Green Hall', 'Economy hall with 150 seats, standard equipment'),
+(4, 'Gold Hall', 'Luxury experience with recliner chairs and food service'),
+(5, 'Black Box', 'Experimental theater with 80 flexible seats');
+
+INSERT INTO "HallSectors" ("Id", "HallId", "Name", "SeatPrice") VALUES
+-- Red Hall (HallId = 1)
+(1, 1, 'Front', 180.00),
+(2, 1, 'Middle', 150.00),
+(3, 1, 'Back', 120.00),
+
+-- Blue Hall (HallId = 2)
+(4, 2, 'VIP', 250.00),
+(5, 2, 'Regular', 160.00),
+
+-- Green Hall (HallId = 3)
+(6, 3, 'Center', 130.00),
+(7, 3, 'Side', 100.00),
+
+-- Gold Hall (HallId = 4)
+(8, 4, 'VIP', 300.00),
+(9, 4, 'Standard', 180.00),
+
+-- Black Box (HallId = 5)
+(10, 5, 'Flexible Zone', 90.00);
+
+
+INSERT INTO "HallSeats" ("Id", "SectorId", "Label", "Status") VALUES
+-- Sector 1
+(1, 1, 'A1', 'Free'), (2, 1, 'A2', 'Free'), (3, 1, 'A3', 'Free'), (4, 1, 'A4', 'Free'), (5, 1, 'A5', 'Free'),
+(6, 1, 'A6', 'Free'), (7, 1, 'A7', 'Free'), (8, 1, 'A8', 'Free'), (9, 1, 'A9', 'Free'), (10, 1, 'A10', 'Free'),
+(11, 1, 'B1', 'Free'), (12, 1, 'B2', 'Free'), (13, 1, 'B3', 'Free'), (14, 1, 'B4', 'Free'), (15, 1, 'B5', 'Free'),
+(16, 1, 'B6', 'Free'), (17, 1, 'B7', 'Free'), (18, 1, 'B8', 'Free'), (19, 1, 'B9', 'Free'), (20, 1, 'B10', 'Free'),
+(21, 1, 'C1', 'Free'), (22, 1, 'C2', 'Free'), (23, 1, 'C3', 'Free'), (24, 1, 'C4', 'Free'), (25, 1, 'C5', 'Free'),
+(26, 1, 'C6', 'Free'), (27, 1, 'C7', 'Free'), (28, 1, 'C8', 'Free'), (29, 1, 'C9', 'Free'), (30, 1, 'C10', 'Free'),
+(31, 1, 'D1', 'Free'), (32, 1, 'D2', 'Free'), (33, 1, 'D3', 'Free'), (34, 1, 'D4', 'Free'), (35, 1, 'D5', 'Free'),
+(36, 1, 'D6', 'Free'), (37, 1, 'D7', 'Free'), (38, 1, 'D8', 'Free'), (39, 1, 'D9', 'Free'), (40, 1, 'D10', 'Free'),
+(41, 1, 'E1', 'Free'), (42, 1, 'E2', 'Free'), (43, 1, 'E3', 'Free'), (44, 1, 'E4', 'Free'), (45, 1, 'E5', 'Free'),
+(46, 1, 'E6', 'Free'), (47, 1, 'E7', 'Free'), (48, 1, 'E8', 'Free'), (49, 1, 'E9', 'Free'), (50, 1, 'E10', 'Free'),
+
+-- Sector 2
+(51, 2, 'A1', 'Free'), (52, 2, 'A2', 'Free'), (53, 2, 'A3', 'Free'), (54, 2, 'A4', 'Free'), (55, 2, 'A5', 'Free'),
+(56, 2, 'A6', 'Free'), (57, 2, 'A7', 'Free'), (58, 2, 'A8', 'Free'), (59, 2, 'A9', 'Free'), (60, 2, 'A10', 'Free'),
+(61, 2, 'B1', 'Free'), (62, 2, 'B2', 'Free'), (63, 2, 'B3', 'Free'), (64, 2, 'B4', 'Free'), (65, 2, 'B5', 'Free'),
+(66, 2, 'B6', 'Free'), (67, 2, 'B7', 'Free'), (68, 2, 'B8', 'Free'), (69, 2, 'B9', 'Free'), (70, 2, 'B10', 'Free'),
+(71, 2, 'C1', 'Free'), (72, 2, 'C2', 'Free'), (73, 2, 'C3', 'Free'), (74, 2, 'C4', 'Free'), (75, 2, 'C5', 'Free'),
+(76, 2, 'C6', 'Free'), (77, 2, 'C7', 'Free'), (78, 2, 'C8', 'Free'), (79, 2, 'C9', 'Free'), (80, 2, 'C10', 'Free'),
+(81, 2, 'D1', 'Free'), (82, 2, 'D2', 'Free'), (83, 2, 'D3', 'Free'), (84, 2, 'D4', 'Free'), (85, 2, 'D5', 'Free'),
+(86, 2, 'D6', 'Free'), (87, 2, 'D7', 'Free'), (88, 2, 'D8', 'Free'), (89, 2, 'D9', 'Free'), (90, 2, 'D10', 'Free'),
+(91, 2, 'E1', 'Free'), (92, 2, 'E2', 'Free'), (93, 2, 'E3', 'Free'), (94, 2, 'E4', 'Free'), (95, 2, 'E5', 'Free'),
+(96, 2, 'E6', 'Free'), (97, 2, 'E7', 'Free'), (98, 2, 'E8', 'Free'), (99, 2, 'E9', 'Free'), (100, 2, 'E10', 'Free'),
+
+-- Sector 3
+(101, 3, 'A1', 'Free'), (102, 3, 'A2', 'Free'), (103, 3, 'A3', 'Free'), (104, 3, 'A4', 'Free'), (105, 3, 'A5', 'Free'),
+(106, 3, 'A6', 'Free'), (107, 3, 'A7', 'Free'), (108, 3, 'A8', 'Free'), (109, 3, 'A9', 'Free'), (110, 3, 'A10', 'Free'),
+(111, 3, 'B1', 'Free'), (112, 3, 'B2', 'Free'), (113, 3, 'B3', 'Free'), (114, 3, 'B4', 'Free'), (115, 3, 'B5', 'Free'),
+(116, 3, 'B6', 'Free'), (117, 3, 'B7', 'Free'), (118, 3, 'B8', 'Free'), (119, 3, 'B9', 'Free'), (120, 3, 'B10', 'Free'),
+(121, 3, 'C1', 'Free'), (122, 3, 'C2', 'Free'), (123, 3, 'C3', 'Free'), (124, 3, 'C4', 'Free'), (125, 3, 'C5', 'Free'),
+(126, 3, 'C6', 'Free'), (127, 3, 'C7', 'Free'), (128, 3, 'C8', 'Free'), (129, 3, 'C9', 'Free'), (130, 3, 'C10', 'Free'),
+(131, 3, 'D1', 'Free'), (132, 3, 'D2', 'Free'), (133, 3, 'D3', 'Free'), (134, 3, 'D4', 'Free'), (135, 3, 'D5', 'Free'),
+(136, 3, 'D6', 'Free'), (137, 3, 'D7', 'Free'), (138, 3, 'D8', 'Free'), (139, 3, 'D9', 'Free'), (140, 3, 'D10', 'Free'),
+(141, 3, 'E1', 'Free'), (142, 3, 'E2', 'Free'), (143, 3, 'E3', 'Free'), (144, 3, 'E4', 'Free'), (145, 3, 'E5', 'Free'),
+(146, 3, 'E6', 'Free'), (147, 3, 'E7', 'Free'), (148, 3, 'E8', 'Free'), (149, 3, 'E9', 'Free'), (150, 3, 'E10', 'Free'),
+
+-- Sector 4
+(151, 4, 'A1', 'Free'), (152, 4, 'A2', 'Free'), (153, 4, 'A3', 'Free'), (154, 4, 'A4', 'Free'), (155, 4, 'A5', 'Free'),
+(156, 4, 'A6', 'Free'), (157, 4, 'A7', 'Free'), (158, 4, 'A8', 'Free'), (159, 4, 'A9', 'Free'), (160, 4, 'A10', 'Free'),
+(161, 4, 'B1', 'Free'), (162, 4, 'B2', 'Free'), (163, 4, 'B3', 'Free'), (164, 4, 'B4', 'Free'), (165, 4, 'B5', 'Free'),
+(166, 4, 'B6', 'Free'), (167, 4, 'B7', 'Free'), (168, 4, 'B8', 'Free'), (169, 4, 'B9', 'Free'), (170, 4, 'B10', 'Free'),
+(171, 4, 'C1', 'Free'), (172, 4, 'C2', 'Free'), (173, 4, 'C3', 'Free'), (174, 4, 'C4', 'Free'), (175, 4, 'C5', 'Free'),
+(176, 4, 'C6', 'Free'), (177, 4, 'C7', 'Free'), (178, 4, 'C8', 'Free'), (179, 4, 'C9', 'Free'), (180, 4, 'C10', 'Free'),
+(181, 4, 'D1', 'Free'), (182, 4, 'D2', 'Free'), (183, 4, 'D3', 'Free'), (184, 4, 'D4', 'Free'), (185, 4, 'D5', 'Free'),
+(186, 4, 'D6', 'Free'), (187, 4, 'D7', 'Free'), (188, 4, 'D8', 'Free'), (189, 4, 'D9', 'Free'), (190, 4, 'D10', 'Free'),
+(191, 4, 'E1', 'Free'), (192, 4, 'E2', 'Free'), (193, 4, 'E3', 'Free'), (194, 4, 'E4', 'Free'), (195, 4, 'E5', 'Free'),
+(196, 4, 'E6', 'Free'), (197, 4, 'E7', 'Free'), (198, 4, 'E8', 'Free'), (199, 4, 'E9', 'Free'), (200, 4, 'E10', 'Free'),
+
+-- Sector 5
+(201, 5, 'A1', 'Free'), (202, 5, 'A2', 'Free'), (203, 5, 'A3', 'Free'), (204, 5, 'A4', 'Free'), (205, 5, 'A5', 'Free'),
+(206, 5, 'A6', 'Free'), (207, 5, 'A7', 'Free'), (208, 5, 'A8', 'Free'), (209, 5, 'A9', 'Free'), (210, 5, 'A10', 'Free'),
+(211, 5, 'B1', 'Free'), (212, 5, 'B2', 'Free'), (213, 5, 'B3', 'Free'), (214, 5, 'B4', 'Free'), (215, 5, 'B5', 'Free'),
+(216, 5, 'B6', 'Free'), (217, 5, 'B7', 'Free'), (218, 5, 'B8', 'Free'), (219, 5, 'B9', 'Free'), (220, 5, 'B10', 'Free'),
+(221, 5, 'C1', 'Free'), (222, 5, 'C2', 'Free'), (223, 5, 'C3', 'Free'), (224, 5, 'C4', 'Free'), (225, 5, 'C5', 'Free'),
+(226, 5, 'C6', 'Free'), (227, 5, 'C7', 'Free'), (228, 5, 'C8', 'Free'), (229, 5, 'C9', 'Free'), (230, 5, 'C10', 'Free'),
+(231, 5, 'D1', 'Free'), (232, 5, 'D2', 'Free'), (233, 5, 'D3', 'Free'), (234, 5, 'D4', 'Free'), (235, 5, 'D5', 'Free'),
+(236, 5, 'D6', 'Free'), (237, 5, 'D7', 'Free'), (238, 5, 'D8', 'Free'), (239, 5, 'D9', 'Free'), (240, 5, 'D10', 'Free'),
+(241, 5, 'E1', 'Free'), (242, 5, 'E2', 'Free'), (243, 5, 'E3', 'Free'), (244, 5, 'E4', 'Free'), (245, 5, 'E5', 'Free'),
+(246, 5, 'E6', 'Free'), (247, 5, 'E7', 'Free'), (248, 5, 'E8', 'Free'), (249, 5, 'E9', 'Free'), (250, 5, 'E10', 'Free');
+
+INSERT INTO "Genres" ("Id", "Name") VALUES
+(1, 'Animation'),
+(2, 'Family'),
+(3, 'Fantasy'),
+(4, 'Adventure'),
+(5, 'Action'),
+(6, 'Sci-Fi'),
+(7, 'Thriller'),
+(8, 'Crime'),
+(9, 'Comedy'),
+(10, 'Western'),
+(11, 'Drama'),
+(12, 'Horror'),
+(13, 'Biography');
+
+INSERT INTO "MovieGenres" ("MovieId", "GenreId") VALUES
+(1, 1), -- Shrek (Animation)
+(1, 2), -- Shrek (Family)
+(1, 3), -- Shrek (Fantasy)
+(1, 4), -- Shrek (Adventure)
+(1, 9), -- Shrek (Comedy)
+
+(2, 5), -- Inception (Action)
+(2, 6), -- Inception (Sci-Fi)
+(2, 7), -- Inception (Thriller)
+
+(3, 8), -- Snatch (Crime)
+(3, 9), -- Snatch (Comedy)
+(3, 5), -- Snatch (Action)
+
+(4, 10), -- The Good, the Bad and the Ugly (Western)
+(4, 4), -- The Good, the Bad and the Ugly (Adventure)
+
+(5, 7), -- Phone Booth (Thriller)
+(5, 8), -- Phone Booth (Crime)
+(5, 11), -- Phone Booth (Drama)
+
+(6, 8), -- Pulp Fiction (Crime)
+(6, 11), -- Pulp Fiction (Drama)
+(6, 7), -- Pulp Fiction (Thriller)
+
+(7, 8), -- Lock, Stock and Two Smoking Barrels (Crime)
+(7, 9), -- Lock, Stock and Two Smoking Barrels (Comedy)
+(7, 7), -- Lock, Stock and Two Smoking Barrels (Thriller)
+
+(8, 1), -- A Minecraft Movie (Animation)
+(8, 4), -- A Minecraft Movie (Adventure)
+(8, 2), -- A Minecraft Movie (Family)
+(8, 3), -- A Minecraft Movie (Fantasy)
+
+(9, 8), -- American Psycho (Crime)
+(9, 11), -- American Psycho (Drama)
+(9, 12), -- American Psycho (Horror)
+(9, 7), -- American Psycho (Thriller)
+
+(10, 5), -- Gladiator (Action)
+(10, 4), -- Gladiator (Adventure)
+(10, 11), -- Gladiator (Drama)
+(10, 13), -- Gladiator (Biography/History)
+
+(11, 1), -- Lilo & Stitch (Animation)
+(11, 2), -- Lilo & Stitch (Family)
+(11, 6), -- Lilo & Stitch (Sci-Fi)
+(11, 9), -- Lilo & Stitch (Comedy)
+
+(12, 12), -- Five Nights at Freddy's 2 (Horror)
+(12, 7), -- Five Nights at Freddy's 2 (Thriller)
+
+(13, 5), -- Ballerina (Action)
+(13, 7); -- Ballerina (Thriller)
+
+INSERT INTO "Actors" ("Id", "Name", "DetailsUrl") VALUES
+(1, 'Mike Myers', 'https://en.wikipedia.org/wiki/Mike_Myers'),
+(2, 'Eddie Murphy', 'https://en.wikipedia.org/wiki/Eddie_Murphy'),
+(3, 'Cameron Diaz', 'https://en.wikipedia.org/wiki/Cameron_Diaz'),
+(4, 'Leonardo DiCaprio', 'https://en.wikipedia.org/wiki/Leonardo_DiCaprio'),
+(5, 'Joseph Gordon-Levitt', 'https://en.wikipedia.org/wiki/Joseph_Gordon-Levitt'),
+(6, 'Tom Hardy', 'https://en.wikipedia.org/wiki/Tom_Hardy'),
+(7, 'Jason Statham', 'https://en.wikipedia.org/wiki/Jason_Statham'),
+(8, 'Brad Pitt', 'https://en.wikipedia.org/wiki/Brad_Pitt'),
+(9, 'Benicio del Toro', 'https://en.wikipedia.org/wiki/Benicio_del_Toro'),
+(10, 'Clint Eastwood', 'https://en.wikipedia.org/wiki/Clint_Eastwood'),
+(11, 'Lee Van Cleef', 'https://en.wikipedia.org/wiki/Lee_Van_Cleef'),
+(12, 'Eli Wallach', 'https://en.wikipedia.org/wiki/Eli_Wallach'),
+(13, 'Colin Farrell', 'https://en.wikipedia.org/wiki/Colin_Farrell'),
+(14, 'Forest Whitaker', 'https://en.wikipedia.org/wiki/Forest_Whitaker'),
+(15, 'Bruce Willis', 'https://en.wikipedia.org/wiki/Bruce_Willis'),
+(16, 'John Travolta', 'https://en.wikipedia.org/wiki/John_Travolta'),
+(17, 'Samuel L. Jackson', 'https://en.wikipedia.org/wiki/Samuel_L._Jackson'),
+(18, 'Uma Thurman', 'https://en.wikipedia.org/wiki/Uma_Thurman'),
+(19, 'Vinnie Jones', 'https://en.wikipedia.org/wiki/Vinnie_Jones'),
+(20, 'Guy Ritchie', 'https://en.wikipedia.org/wiki/Guy_Ritchie'), -- Often has small cameos in his films
+(21, 'Christian Bale', 'https://en.wikipedia.org/wiki/Christian_Bale'),
+(22, 'Willem Dafoe', 'https://en.wikipedia.org/wiki/Willem_Dafoe'),
+(23, 'Russell Crowe', 'https://en.wikipedia.org/wiki/Russell_Crowe'),
+(24, 'Joaquin Phoenix', 'https://en.wikipedia.org/wiki/Joaquin_Phoenix'),
+(25, 'Daveigh Chase', 'https://en.wikipedia.org/wiki/Daveigh_Chase'),
+(26, 'Chris Sanders', 'https://en.wikipedia.org/wiki/Chris_Sanders_(animator)'),
+(27, 'Tia Carrere', 'https://en.wikipedia.org/wiki/Tia_Carrere'),
+(28, 'Josh Hutcherson', 'https://en.wikipedia.org/wiki/Josh_Hutcherson'),
+(29, 'Elizabeth Lail', 'https://en.wikipedia.org/wiki/Elizabeth_Lail'),
+(30, 'Chloe Coleman', 'https://en.wikipedia.org/wiki/Chloe_Coleman'),
+(31, 'Ana de Armas', 'https://en.wikipedia.org/wiki/Ana_de_Armas'),
+(32, 'Keanu Reeves', 'https://en.wikipedia.org/wiki/Keanu_Reeves');
+
+INSERT INTO "MovieActors" ("MovieId", "ActorId") VALUES
+(1, 1),  -- Shrek - Mike Myers (Shrek)
+(1, 2),  -- Shrek - Eddie Murphy (Donkey)
+(1, 3),  -- Shrek - Cameron Diaz (Princess Fiona)
+
+(2, 4),  -- Inception - Leonardo DiCaprio (Cobb)
+(2, 5),  -- Inception - Joseph Gordon-Levitt (Arthur)
+(2, 6),  -- Inception - Tom Hardy (Eames)
+
+(3, 7),  -- Snatch - Jason Statham (Turkish)
+(3, 8),  -- Snatch - Brad Pitt (Mickey O'Neil)
+(3, 9),  -- Snatch - Benicio del Toro (Franky Four Fingers)
+(3, 19), -- Snatch - Vinnie Jones (Bullet Tooth Tony)
+
+(4, 10), -- The Good, the Bad and the Ugly - Clint Eastwood (Blondie)
+(4, 11), -- The Good, the Bad and the Ugly - Lee Van Cleef (Angel Eyes)
+(4, 12), -- The Good, the Bad and the Ugly - Eli Wallach (Tuco)
+
+(5, 13), -- Phone Booth - Colin Farrell (Stuart Shepard)
+(5, 14), -- Phone Booth - Forest Whitaker (Captain Ramey)
+(5, 15), -- Phone Booth - Bruce Willis (The Caller - voice only, but still an actor)
+
+(6, 16), -- Pulp Fiction - John Travolta (Vincent Vega)
+(6, 17), -- Pulp Fiction - Samuel L. Jackson (Jules Winnfield)
+(6, 18), -- Pulp Fiction - Uma Thurman (Mia Wallace)
+(6, 15), -- Pulp Fiction - Bruce Willis (Butch Coolidge)
+
+(7, 7),  -- Lock, Stock and Two Smoking Barrels - Jason Statham (Bacon)
+(7, 19), -- Lock, Stock and Two Smoking Barrels - Vinnie Jones (Big Chris)
+(7, 20), -- Lock, Stock and Two Smoking Barrels - Guy Ritchie (brief cameo as Man with Gun)
+
+(8, 28), -- A Minecraft Movie - Josh Hutcherson (Possible lead)
+(8, 30), -- A Minecraft Movie - Chloe Coleman (Possible lead)
+
+(9, 21), -- American Psycho - Christian Bale (Patrick Bateman)
+(9, 22), -- American Psycho - Willem Dafoe (Donald Kimball)
+
+(10, 23), -- Gladiator - Russell Crowe (Maximus Decimus Meridius)
+(10, 24), -- Gladiator - Joaquin Phoenix (Commodus)
+
+(11, 25), -- Lilo & Stitch - Daveigh Chase (Lilo Pelekai - voice)
+(11, 26), -- Lilo & Stitch - Chris Sanders (Stitch - voice)
+(11, 27), -- Lilo & Stitch - Tia Carrere (Nani Pelekai - voice)
+
+(12, 28), -- Five Nights at Freddy's 2 - Josh Hutcherson (Mike Schmidt)
+(12, 29), -- Five Nights at Freddy's 2 - Elizabeth Lail (Vanessa)
+
+(13, 31), -- Ballerina - Ana de Armas (Rooney)
+(13, 32); -- Ballerina - Keanu Reeves (John Wick)
+
+INSERT INTO "Sessions" ("Id", "MovieId", "HallId", "StartTime", "SeatsTotal") VALUES
+-- Сеанси на 21 червня 2025
+(1, 2, 1, '2025-06-21 10:00:00', 150), -- Inception in Red Hall
+(2, 6, 2, '2025-06-21 12:30:00', 100), -- Pulp Fiction in Blue Hall
+(3, 10, 3, '2025-06-21 15:00:00', 150), -- Gladiator in Green Hall
+(4, 1, 4, '2025-06-21 18:00:00', 100), -- Shrek in Gold Hall
+(5, 7, 1, '2025-06-21 20:30:00', 150), -- Lock, Stock and Two Smoking Barrels in Red Hall
+
+-- Сеанси на 22 червня 2025
+(6, 4, 2, '2025-06-22 11:00:00', 100), -- The Good, the Bad and the Ugly in Blue Hall
+(7, 9, 3, '2025-06-22 14:00:00', 150), -- American Psycho in Green Hall
+(8, 2, 1, '2025-06-22 17:00:00', 150), -- Inception in Red Hall
+(9, 13, 4, '2025-06-22 19:30:00', 100), -- Ballerina in Gold Hall
+(10, 3, 5, '2025-06-22 21:00:00', 50),  -- Snatch in Black Box
+
+-- Сеанси на 23 червня 2025
+(11, 11, 1, '2025-06-23 10:30:00', 150), -- Lilo & Stitch in Red Hall
+(12, 6, 2, '2025-06-23 13:00:00', 100), -- Pulp Fiction in Blue Hall
+(13, 5, 3, '2025-06-23 16:00:00', 150), -- Phone Booth in Green Hall
+(14, 10, 1, '2025-06-23 19:00:00', 150), -- Gladiator in Red Hall
+(15, 1, 4, '2025-06-23 21:30:00', 100), -- Shrek in Gold Hall
+
+-- Сеанси на 24 червня 2025
+(16, 8, 2, '2025-06-24 10:00:00', 100), -- A Minecraft Movie in Blue Hall (Upcoming movie, for future planning)
+(17, 7, 3, '2025-06-24 13:00:00', 150), -- Lock, Stock and Two Smoking Barrels in Green Hall
+(18, 2, 4, '2025-06-24 16:00:00', 100), -- Inception in Gold Hall
+(19, 13, 1, '2025-06-24 19:00:00', 150), -- Ballerina in Red Hall
+(20, 3, 2, '2025-06-24 21:30:00', 100), -- Snatch in Blue Hall
+
+-- Сеанси на 25 червня 2025
+(21, 1, 1, '2025-06-25 11:00:00', 150), -- Shrek in Red Hall
+(22, 10, 3, '2025-06-25 14:00:00', 150), -- Gladiator in Green Hall
+(23, 6, 2, '2025-06-25 17:00:00', 100), -- Pulp Fiction in Blue Hall
+(24, 9, 4, '2025-06-25 20:00:00', 100), -- American Psycho in Gold Hall
+(25, 4, 1, '2025-06-25 22:00:00', 150), -- The Good, the Bad and the Ugly in Red Hall
+
+-- Сеанси на 26 червня 2025 (вихідний)
+(26, 2, 1, '2025-06-26 10:00:00', 150), -- Inception in Red Hall
+(27, 1, 2, '2025-06-26 12:30:00', 100), -- Shrek in Blue Hall
+(28, 13, 3, '2025-06-26 15:00:00', 150), -- Ballerina in Green Hall
+(29, 6, 4, '2025-06-26 18:00:00', 100), -- Pulp Fiction in Gold Hall
+(30, 10, 1, '2025-06-26 21:00:00', 150), -- Gladiator in Red Hall
+(31, 12, 5, '2025-06-26 23:00:00', 50), -- Five Nights at Freddy's 2 in Black Box (Upcoming movie, late show)
+
+-- Сеанси на 27 червня 2025 (вихідний)
+(32, 1, 1, '2025-06-27 10:30:00', 150), -- Shrek in Red Hall
+(33, 2, 2, '2025-06-27 13:00:00', 100), -- Inception in Blue Hall
+(34, 7, 3, '2025-06-27 15:30:00', 150), -- Lock, Stock and Two Smoking Barrels in Green Hall
+(35, 13, 4, '2025-06-27 18:30:00', 100), -- Ballerina in Gold Hall
+(36, 6, 1, '2025-06-27 21:00:00', 150); -- Pulp Fiction in Red Hall
+
