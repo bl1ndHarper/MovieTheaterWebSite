@@ -83,11 +83,16 @@
         </div>
         <div class="offcanvas-body">
             <a class="font-main offcanvas-link
-             @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home" ? "active" : "")
+             @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
+              && ViewContext.RouteData.Values["action"]?.ToString() == "Index"  ? "active" : "")
              " asp-controller="Home" asp-action="Index">
         У прокаті
             </a>
-            <a class="font-main offcanvas-link">
+            <a class="font-main offcanvas-link
+             @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
+              && ViewContext.RouteData.Values["action"]?.ToString() == "Upcoming"  ? "active" : "")
+             "
+            asp-controller="Home" asp-action="Upcoming">
         Скоро в кіно
             </a>
             <a class="font-main offcanvas-link admin-link 
