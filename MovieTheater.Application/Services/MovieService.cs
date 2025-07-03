@@ -26,7 +26,7 @@ namespace MovieTheater.Application.Services
                 .Include(s => s.Hall)
                 .Include(s => s.Movie.AgeRating)
                 .Include(s => s.Movie.Genres)
-                    .ThenInclude(mg => mg.Genre)
+                .ThenInclude(mg => mg.Genre)
                 .ToListAsync();
 
             var grouped = sessions.GroupBy(s => s.MovieId);

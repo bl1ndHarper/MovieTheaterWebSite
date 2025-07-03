@@ -38,10 +38,8 @@ html {
 
 body {
   margin-bottom: 60px;
-  background: #1b0029;
-  background: linear-gradient(19deg, rgb(26, 0, 26) 0%,
-                                  rgba(0, 0, 0, 1) 70%, 
-                                  rgb(4, 2, 34) 100%);
+  background: #040013;
+
   transition: padding-right 0.3s ease;
   font-size: 14px;
 }

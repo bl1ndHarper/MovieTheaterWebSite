@@ -14,11 +14,14 @@ namespace MovieTheater.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IMovieService _movieService;
+      
 
         public HomeController(ILogger<HomeController> logger, IMovieService movieService)
         {
             _logger = logger;
             _movieService = movieService;
+
+            
         }
 
         public async Task<IActionResult> Index()
@@ -27,10 +30,25 @@ namespace MovieTheater.Web.Controllers
             var latestMovies = await _movieService.GetLatestMoviesAsync(6);
             var sessions = await _movieService.GetNowShowingAsync(today);
 
+            var genres = sessions
+                .Select(m => m.Genre)
+                .Where(g => !string.IsNullOrWhiteSpace(g))
+                .Distinct()
+                .OrderBy(g => g)
+                .ToList();
+
+            var ratings = sessions
+                .Select(m => m.AgeRating)
+                .Distinct()
+                .OrderBy(r => r)
+                .ToList();
+
             var viewModel = new HomePageViewModel
             {
                 LatestMovies = latestMovies,
-                AllSessions = sessions
+                AllSessions = sessions,
+                Genres = genres,
+                Ratings = ratings,
             };
 
             return View(viewModel);
