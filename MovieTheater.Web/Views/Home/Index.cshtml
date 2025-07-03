@@ -10,7 +10,7 @@
 }
 
 @* TODO: remove this authorization testing form *@
-<div style=" padding: 20px; background-color: #f4f4f4; border-radius: 10px; max-width: 300px;">
+<div style="display: none; padding: 20px; background-color: #f4f4f4; border-radius: 10px; max-width: 300px;">
     <p><strong>Статус авторизації:</strong></p>
     <p id="auth-status">
         @if (User.Identity?.IsAuthenticated == true)
@@ -53,8 +53,6 @@
 
   <div class="new-movies-container">
 
-    
-
 <div id="movieCarousel" class="carousel slide" >
     <div class="carousel-inner">
         @for (int i = 0; i < Model.LatestMovies.Count; i += 3)
@@ -96,8 +94,11 @@
                                             }
                                         }
                                     </div>
+                                        @{
+                                            var dayNow = DateTime.UtcNow.ToLocalTime().ToString("dd.MM");
+                                        }
                                     <div class="movie-button-div">
-                                        <a href="#" class="movie-button">Детальніше</a>
+                                            <a asp-route="MovieSessionsRoute" asp-route-id="@movie.Id" asp-route-day="@dayNow" class="movie-button">Детальніше</a>
                                     </div>
                                 </div>
                             </div>
@@ -111,50 +112,22 @@
     <button class="new-movie-btn btn-next" data-bs-target="#movieCarousel" data-bs-slide="next">→</button>
 </div>
 
+    @{
+        var today = DateTime.Now.Date;
+        var dates = Enumerable.Range(0, 7).Select(i => today.AddDays(i).ToString("dd.MM")).ToList();
+        var selected = Model.SelectedDate;
+    }
    <div class="container mt-3 row" style=" padding-right: 10px;">
       <p class="new-movies-text font-main col-2 mt-4"> У прокаті</p>
-    <div class="dates-container col-10">
 
-      <div class="date-div">
-        <span class="date-text"> 21.06</span>
-        <a href="#" class="date-circle date-active"></a>
-      </div>
-      
-      <div class="date-div">
-        <span class="date-text"> 22.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-
-       <div class="date-div">
-        <span class="date-text"> 23.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-
-      <div class="date-div">
-        <span class="date-text"> 24.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-
-      <div class="date-div">
-        <span class="date-text"> 25.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-
-      <div class="date-div">
-        <span class="date-text "> 26.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-
-      <div class="date-div">
-        <span class="date-text"> 27.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-      
-       <div class="date-div date-next-week">
-        <i class="fa-solid fa-chevron-up fa-rotate-90 next-week-btn"></i>
-      </div>
-
-
+        <div class="dates-container col-10">
+            @foreach (var date in dates)
+            {
+                <div class="date-div">
+                    <span class="date-text">@(date == today.ToString("dd.MM") ? $"Сьогодні ({date})" : date)</span>
+                    <a asp-controller="Home" asp-action="Index" asp-route-day="@date" class="date-circle @(date==selected?"date-active":"")"></a>
+                </div>
+            }
     </div>
 
     <div class="filters-div mt-4">
@@ -190,17 +163,14 @@
         </select>
         <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
       </div>
-
-        <div id ="searchInput" class="search-div">
+      <div id ="searchInput" class="search-div">
           <input type="text" class="movie-search-input" placeholder="Назва фільму...">
       </div>
-
-
     </div>
  </div>
 
 <div class="container" style="padding: 10px 2rem 0px 1.2rem;">
-    @foreach (var movie in Model.AllSessions)
+    @foreach (var movie in Model.MoviesByDay)
     {
         <div class="movie-session-card mt-3 row">
             <div class="poster-col col-auto">
@@ -228,17 +198,11 @@
                         <span class="me-3"><i class="fa-solid fa-film me-1"></i> @movie.Genre</span>
                         <span><i class="fa-regular fa-clock me-1"></i> @(movie.Duration / 60):@(movie.Duration % 60)</span>
                     </div>
-
-                        @{
-                            var dayNow = DateTime.UtcNow.ToLocalTime().ToString("dd.MM");
-                        }
                     <div class="booking-btn-div font-main">
-                        <a asp-route="MovieSessionsRoute" asp-route-id="@movie.Id" asp-route-day="@dayNow" class="booking-btn">Забронювати</a>
+                        <a asp-route="MovieSessionsRoute" asp-route-id="@movie.Id" asp-route-day="@Model.SelectedDate" class="booking-btn">Забронювати</a>
                     </div>
                 </div>
             </div>
         </div>
     }
 </div>
-
-

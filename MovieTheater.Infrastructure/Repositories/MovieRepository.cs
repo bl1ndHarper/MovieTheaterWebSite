@@ -30,16 +30,16 @@ namespace MovieTheater.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Session>> GetNowShowingSessionsAsync(DateTime date)
+        public async Task<List<Session>> GetNowShowingSessionsAsync(DateTime dateUtc)
         {
+            var start = DateTime.SpecifyKind(dateUtc.Date, DateTimeKind.Utc);
+            var end = start.AddDays(1);
+
             return await _context.Sessions
-                .Include(s => s.Movie)
-                    .ThenInclude(m => m.AgeRating)
-                .Include(s => s.Movie)
-                    .ThenInclude(m => m.Genres)
-                        .ThenInclude(g => g.Genre)
+                .Include(s => s.Movie).ThenInclude(m => m.AgeRating)
+                .Include(s => s.Movie).ThenInclude(m => m.Genres).ThenInclude(g => g.Genre)
                 .Include(s => s.Hall)
-                //.Where(s => s.StartTime.Date > date.Date)     // TODO: uncomment this line when DB is populated
+                .Where(s => s.StartTime >= start && s.StartTime < end)
                 .ToListAsync();
         }
 
@@ -48,6 +48,7 @@ namespace MovieTheater.Infrastructure.Repositories
             return await _context.Movies
                 .Include(m => m.Genres).ThenInclude(g => g.Genre)
                 .Include(m => m.AgeRating)
+                .Include(m => m.Actors).ThenInclude(a => a.Actor)
                 .FirstOrDefaultAsync(m => m.Id == id);
         }
 

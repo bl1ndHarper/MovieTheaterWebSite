@@ -109,23 +109,23 @@ namespace MovieTheater.Application.Services
         public async Task<List<MovieMainDto>> GetNowShowingAsync(DateTime date)
         {
             var sessions = await _movieRepository.GetNowShowingSessionsAsync(date);
-
-            var grouped = sessions.GroupBy(s => s.MovieId);
-
-            return grouped.Select(group =>
-            {
-                var movie = group.First().Movie;
-                return new MovieMainDto
+            return sessions
+                .GroupBy(s => s.MovieId)
+                .Select(g =>
                 {
-                    Id = movie.Id,
-                    Title = movie.Title,
-                    ThumbnailUrl = movie.ThumbnailUrl,
-                    Genre = movie.Genres.FirstOrDefault()?.Genre.Name,
-                    AgeRating = movie.AgeRating.Label,
-                    Duration = movie.Duration,
-                    Sessions = group.Select(s => s.StartTime.ToString("HH:mm")).ToList()
-                };
-            }).ToList();
+                    var mv = g.First().Movie;
+                    return new MovieMainDto
+                    {
+                        Id = mv.Id,
+                        Title = mv.Title,
+                        ThumbnailUrl = mv.ThumbnailUrl,
+                        Genre = mv.Genres.FirstOrDefault()?.Genre.Name,
+                        AgeRating = mv.AgeRating.Label,
+                        Duration = mv.Duration,
+                        Sessions = g.Select(s => s.StartTime.ToString("HH:mm")).ToList()
+                    };
+                })
+                .ToList();
         }
 
         public async Task<List<MovieMainDto>> GetLatestMoviesAsync(int count)
@@ -163,7 +163,11 @@ namespace MovieTheater.Application.Services
             ReleaseYear = movie.ReleaseDate.Year,
             Description = movie.Description,
             MainGenre = movie.Genres.FirstOrDefault()?.Genre,
-            Genres = movie.Genres.ToList()
+            Genres = movie.Genres.ToList(),
+            Actors = movie.Actors.ToList(),
+            DirectorName = movie.DirectorName,
+            DirectorDetailsUrl = movie.DirectorDetailsUrl,
+            ReleaseDate = movie.ReleaseDate
         };
     }
     }

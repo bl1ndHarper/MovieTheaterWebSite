@@ -8,6 +8,8 @@ using MovieTheater.Web.ViewModels;
 using System.Diagnostics;
 using System.Security.Claims;
 using MovieTheater.Application.DTOs;
+using Microsoft.AspNetCore.JsonPatch.Internal;
+using System.Globalization;
 
 namespace MovieTheater.Web.Controllers
 {
@@ -23,12 +25,24 @@ namespace MovieTheater.Web.Controllers
         }
 
         // Index (MVC)
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? day)
         {
+            var selectedDate = string.IsNullOrEmpty(day)
+                ? DateTime.UtcNow.ToString("dd.MM")
+                : day;
+
+            var parsedDate = DateTime.SpecifyKind(
+                DateTime.ParseExact(
+                    selectedDate + "." + DateTime.UtcNow.Year,
+                    "dd.MM.yyyy",
+                    CultureInfo.InvariantCulture),
+                DateTimeKind.Utc);
+
             var vm = new HomePageViewModel
             {
+                SelectedDate = selectedDate,
                 LatestMovies = await GetLatestMovies(6),
-                AllSessions = await GetNowShowing()
+                MoviesByDay = await GetNowShowing(parsedDate)
             };
             return View(vm);
         }
@@ -43,8 +57,8 @@ namespace MovieTheater.Web.Controllers
         private Task<List<MovieMainDto>> GetLatestMovies(int count) =>
             _movieService.GetLatestMoviesAsync(count);
 
-        private Task<List<MovieMainDto>> GetNowShowing() =>
-            _movieService.GetNowShowingAsync(DateTime.UtcNow.Date);
+        private Task<List<MovieMainDto>> GetNowShowing(DateTime parsedDate) =>
+            _movieService.GetNowShowingAsync(parsedDate);
 
 
         // API endpoints
@@ -53,8 +67,8 @@ namespace MovieTheater.Web.Controllers
             Ok(await GetLatestMovies(count));
 
         [HttpGet("api/movies/now-showing")]
-        public async Task<IActionResult> ApiNowShowing() =>
-            Ok(await GetNowShowing());
+//        public async Task<IActionResult> ApiNowShowing() =>
+//            Ok(await GetNowShowing(parsedDate));
 
 
         public IActionResult Privacy()
