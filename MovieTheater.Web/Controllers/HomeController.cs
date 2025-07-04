@@ -7,6 +7,9 @@ using MovieTheater.Web.Models;
 using MovieTheater.Web.ViewModels;
 using System.Diagnostics;
 using System.Security.Claims;
+using MovieTheater.Application.DTOs;
+using Microsoft.AspNetCore.JsonPatch.Internal;
+using System.Globalization;
 
 namespace MovieTheater.Web.Controllers
 {
@@ -24,40 +27,70 @@ namespace MovieTheater.Web.Controllers
             
         }
 
-        public async Task<IActionResult> Index()
+        // Index (MVC)
+        public async Task<IActionResult> Index(string? day)
         {
-            var today = DateTime.UtcNow.Date;
-            var latestMovies = await _movieService.GetLatestMoviesAsync(6);
-            var sessions = await _movieService.GetNowShowingAsync(today);
+            var selectedDate = string.IsNullOrEmpty(day)
+                ? DateTime.UtcNow.ToString("dd.MM")
+                : day;
 
-            var genres = sessions
+            var parsedDate = DateTime.SpecifyKind(
+                DateTime.ParseExact(
+                    selectedDate + "." + DateTime.UtcNow.Year,
+                    "dd.MM.yyyy",
+                    CultureInfo.InvariantCulture),
+                DateTimeKind.Utc);
+
+            var moviesByDay = await GetNowShowing(parsedDate);
+
+            var genres = moviesByDay
                 .Select(m => m.Genre)
                 .Where(g => !string.IsNullOrWhiteSpace(g))
                 .Distinct()
                 .OrderBy(g => g)
                 .ToList();
 
-            var ratings = sessions
+            var ratings = moviesByDay
                 .Select(m => m.AgeRating)
                 .Distinct()
                 .OrderBy(r => r)
                 .ToList();
-
-            var viewModel = new HomePageViewModel
+            var vm = new HomePageViewModel
             {
-                LatestMovies = latestMovies,
-                AllSessions = sessions,
-                Genres = genres,
-                Ratings = ratings,
-            };
+                SelectedDate = selectedDate,
+                LatestMovies = await GetLatestMovies(6),
+                MoviesByDay = moviesByDay,
 
-            return View(viewModel);
+                Genres = genres,
+                Ratings = ratings
+                
+            };
+            return View(vm);
         }
         [HttpGet("/Upcoming")]
         public async Task<IActionResult> Upcoming()
         { 
             return View();
         }
+
+
+        // Private methods
+        private Task<List<MovieMainDto>> GetLatestMovies(int count) =>
+            _movieService.GetLatestMoviesAsync(count);
+
+        private Task<List<MovieMainDto>> GetNowShowing(DateTime parsedDate) =>
+            _movieService.GetNowShowingAsync(parsedDate);
+
+
+        // API endpoints
+        [HttpGet("api/movies/latest/{count}")]
+        public async Task<IActionResult> ApiLatestMovies(int count) =>
+            Ok(await GetLatestMovies(count));
+
+        [HttpGet("api/movies/now-showing")]
+//        public async Task<IActionResult> ApiNowShowing() =>
+//            Ok(await GetNowShowing(parsedDate));
+
 
         public IActionResult Privacy()
         {
@@ -68,49 +101,6 @@ namespace MovieTheater.Web.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> LoginAsAdmin()
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, "1"),
-                new Claim(ClaimTypes.Name, "admin"),
-                new Claim(ClaimTypes.Role, "Admin")
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> LoginAsUser()
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.NameIdentifier, "2"),
-                new Claim(ClaimTypes.Name, "user"),
-                new Claim(ClaimTypes.Role, "User")
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Index", "Home");
         }
     }
 }

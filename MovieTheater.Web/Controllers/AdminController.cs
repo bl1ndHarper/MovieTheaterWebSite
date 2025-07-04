@@ -17,13 +17,11 @@ namespace MovieTheater.Web.Controllers
             return View();
         }
 
-        [Route("UpdateSession/{id}")]
         public async Task<IActionResult> UpdateSession(int id)
         { 
             return View("UpdateSession");
         }
 
-        [Route("AddSession")]
         public async Task<IActionResult> AddSession()
         { 
             return View("AddSession");
