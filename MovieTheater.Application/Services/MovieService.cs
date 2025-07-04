@@ -7,6 +7,7 @@ using MovieTheater.Infrastructure.Entities;
 using MovieTheater.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -106,8 +107,15 @@ namespace MovieTheater.Application.Services
             return true;
         }
 
-        public async Task<List<MovieMainDto>> GetNowShowingAsync(DateTime date)
+        public async Task<List<MovieMainDto>> GetNowShowingAsync(string day)
         {
+            var date = DateTime.SpecifyKind(
+                DateTime.ParseExact(
+                    day + "." + DateTime.UtcNow.Year,
+                    "dd.MM.yyyy",
+                    CultureInfo.InvariantCulture),
+                DateTimeKind.Utc);
+
             var sessions = await _movieRepository.GetNowShowingSessionsAsync(date);
             return sessions
                 .GroupBy(s => s.MovieId)
@@ -146,29 +154,29 @@ namespace MovieTheater.Application.Services
             }).ToList();
         }
 
-    public async Task<MovieDto?> GetMovieByIdAsync(long id)
-    {
-        var movie = await _movieRepository.GetMovieWithDetailsByIdAsync(id);
-        if (movie == null) return null;
-
-        return new MovieDto
+        public async Task<MovieDto?> GetMovieByIdAsync(long id)
         {
-            Id = movie.Id,
-            Title = movie.Title,
-            Duration = movie.Duration,
-            ImdbRating = movie.ImdbRating,
-            ThumbnailUrl = movie.ThumbnailUrl,
-            AgeRatingLabel = movie.AgeRating.Label,
-            MinAgeRating = movie.AgeRating.MinAge,
-            ReleaseYear = movie.ReleaseDate.Year,
-            Description = movie.Description,
-            MainGenre = movie.Genres.FirstOrDefault()?.Genre,
-            Genres = movie.Genres.ToList(),
-            Actors = movie.Actors.ToList(),
-            DirectorName = movie.DirectorName,
-            DirectorDetailsUrl = movie.DirectorDetailsUrl,
-            ReleaseDate = movie.ReleaseDate
-        };
-    }
+            var movie = await _movieRepository.GetMovieWithDetailsByIdAsync(id);
+            if (movie == null) return null;
+
+            return new MovieDto
+            {
+                Id = movie.Id,
+                Title = movie.Title,
+                Duration = movie.Duration,
+                ImdbRating = movie.ImdbRating,
+                ThumbnailUrl = movie.ThumbnailUrl,
+                AgeRatingLabel = movie.AgeRating.Label,
+                MinAgeRating = movie.AgeRating.MinAge,
+                ReleaseYear = movie.ReleaseDate.Year,
+                Description = movie.Description,
+                MainGenre = movie.Genres.FirstOrDefault()?.Genre,
+                Genres = movie.Genres.ToList(),
+                Actors = movie.Actors.ToList(),
+                DirectorName = movie.DirectorName,
+                DirectorDetailsUrl = movie.DirectorDetailsUrl,
+                ReleaseDate = movie.ReleaseDate
+            };
+        }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MovieTheater.Application.Interfaces;
 using MovieTheater.Application.Services;
@@ -15,12 +16,15 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IMovieService, MovieService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 builder.Services.AddScoped<IMovieRepository, MovieRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddAuthorization(options =>
 {
@@ -58,7 +62,30 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
     });
 
+builder.Services.Configure<ApiBehaviorOptions>(o =>
+{
+    o.InvalidModelStateResponseFactory = ctx =>
+    {
+        var errors = ctx.ModelState
+                        .Where(x => x.Value?.Errors.Count > 0)
+                        .ToDictionary(
+                             k => k.Key,
+                             v => v.Value!.Errors.Select(e => e.ErrorMessage));
+
+        var problem = new ValidationProblemDetails((IDictionary<string, string[]>)errors)
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Title  = "Validation error",
+            Detail = "See `errors` field for details"
+        };
+        return new BadRequestObjectResult(problem);
+    };
+});
+
+
 var app = builder.Build();
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
