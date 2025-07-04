@@ -1,0 +1,42 @@
+@using MovieTheater.Application.DTOs;
+@model RegisterRequestDto
+
+@{
+    ViewData["Title"] = "Keen-Chick!: Sign Up";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/account.css" asp-append-version="true" />
+}
+
+ <div class="back-btn-div font-main">
+  <a asp-area="" asp-controller="Home" asp-action="Index" class="back-btn "> ← Назад</a>
+</div>
+<div class="d-flex justify-content-center">
+    <div class="styled-container" style="width:30vw;">
+        <form asp-controller="Account" asp-action="RegisterMvc" method="post" class="d-flex flex-column" id="signUpForm">
+            <p class="font-main form-main-text">Вхід в акаунт</p>
+
+            <label for="userNickname" style="text-align:center" class="font-secondary" required>Логін</label>
+            <div class="d-flex justify-content-center">
+                <input type="text" name="UserName" id="userNickname">
+            </div>
+            
+            <label for="userEmail" class="font-secondary mt-3" required> Електрона пошта</label>
+            <div class="d-flex justify-content-center">
+                <input type="email" name="Email" id="userEmail">
+            </div>
+
+            <label for="userPassword" class="font-secondary mt-3" required> Пароль </label>
+            <div class="d-flex justify-content-center">
+                <input type="password" name="Password" id="userPassword">
+            </div>
+            
+            <div class="d-flex justify-content-center mt-4 mb-3">
+                <button type="submit" id="submitSignIn"> Зареєструватися</button>
+            </div>
+         <span class="link-bottom mt-3 font-secondary"> Є акаунт? <a asp-controller="Account" asp-action="SignIn">Увійти</a></span>
+            
+        </form>
+    </div>
+</div>

@@ -31,25 +31,18 @@ namespace MovieTheater.Web.Controllers
                 ? DateTime.UtcNow.ToString("dd.MM")
                 : day;
 
-            var parsedDate = DateTime.SpecifyKind(
-                DateTime.ParseExact(
-                    selectedDate + "." + DateTime.UtcNow.Year,
-                    "dd.MM.yyyy",
-                    CultureInfo.InvariantCulture),
-                DateTimeKind.Utc);
-
             var vm = new HomePageViewModel
             {
                 SelectedDate = selectedDate,
                 LatestMovies = await GetLatestMovies(6),
-                MoviesByDay = await GetNowShowing(parsedDate)
+                MoviesByDay = await GetNowShowing(selectedDate)
             };
             return View(vm);
         }
         [HttpGet("/Upcoming")]
-        public async Task<IActionResult> Upcoming()
+        public Task<IActionResult> Upcoming()
         { 
-            return View();
+            return Task.FromResult<IActionResult>(View());
         }
 
 
@@ -57,8 +50,17 @@ namespace MovieTheater.Web.Controllers
         private Task<List<MovieMainDto>> GetLatestMovies(int count) =>
             _movieService.GetLatestMoviesAsync(count);
 
-        private Task<List<MovieMainDto>> GetNowShowing(DateTime parsedDate) =>
-            _movieService.GetNowShowingAsync(parsedDate);
+        private Task<List<MovieMainDto>> GetNowShowing(string day)
+        {
+            var parsedDate = DateTime.SpecifyKind(
+                DateTime.ParseExact(
+                    day + "." + DateTime.UtcNow.Year,
+                    "dd.MM.yyyy",
+                    CultureInfo.InvariantCulture),
+                DateTimeKind.Utc);
+
+            return _movieService.GetNowShowingAsync(parsedDate);
+        }
 
 
         // API endpoints
@@ -66,9 +68,9 @@ namespace MovieTheater.Web.Controllers
         public async Task<IActionResult> ApiLatestMovies(int count) =>
             Ok(await GetLatestMovies(count));
 
-        [HttpGet("api/movies/now-showing")]
-//        public async Task<IActionResult> ApiNowShowing() =>
-//            Ok(await GetNowShowing(parsedDate));
+        [HttpGet("api/movies/now-showing/{day}")]
+        public async Task<IActionResult> ApiNowShowing(string day) =>
+            Ok(await GetNowShowing(day));
 
 
         public IActionResult Privacy()

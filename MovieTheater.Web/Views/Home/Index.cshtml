@@ -9,38 +9,6 @@
     <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
 }
 
-@* TODO: remove this authorization testing form *@
-<div style="display: none; padding: 20px; background-color: #f4f4f4; border-radius: 10px; max-width: 300px;">
-    <p><strong>Статус авторизації:</strong></p>
-    <p id="auth-status">
-        @if (User.Identity?.IsAuthenticated == true)
-        {
-            if (User.IsInRole("Admin"))
-            {
-                <text>Ви адмін</text>
-            }
-            else
-            {
-                <text>Ви користувач</text>
-            }
-        }
-        else
-        {
-            <text>Ви не авторизовані</text>
-        }
-    </p>
-
-    <form method="post" asp-controller="Home" asp-action="LoginAsAdmin">
-        <button class="btn btn-danger mb-2">Увійти як Адмін</button>
-    </form>
-    <form method="post" asp-controller="Home" asp-action="LoginAsUser">
-        <button class="btn btn-primary mb-2">Увійти як Користувач</button>
-    </form>
-    <form method="post" asp-controller="Home" asp-action="Logout">
-        <button class="btn btn-secondary">Вийти</button>
-    </form>
-</div>
-
   <div class="greetings-div " >
     <p class="greetings-text-big font-main"> Найкраще місце в Дніпрі для кіноманів</p>
     <p class="greetings-text-small font-secondary"> Keen-chick кожен день чекає 
