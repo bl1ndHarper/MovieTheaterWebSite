@@ -17,11 +17,14 @@ namespace MovieTheater.Web.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IMovieService _movieService;
+      
 
         public HomeController(ILogger<HomeController> logger, IMovieService movieService)
         {
             _logger = logger;
             _movieService = movieService;
+
+            
         }
 
         // Index (MVC)
@@ -38,11 +41,29 @@ namespace MovieTheater.Web.Controllers
                     CultureInfo.InvariantCulture),
                 DateTimeKind.Utc);
 
+            var moviesByDay = await GetNowShowing(parsedDate);
+
+            var genres = moviesByDay
+                .Select(m => m.Genre)
+                .Where(g => !string.IsNullOrWhiteSpace(g))
+                .Distinct()
+                .OrderBy(g => g)
+                .ToList();
+
+            var ratings = moviesByDay
+                .Select(m => m.AgeRating)
+                .Distinct()
+                .OrderBy(r => r)
+                .ToList();
             var vm = new HomePageViewModel
             {
                 SelectedDate = selectedDate,
                 LatestMovies = await GetLatestMovies(6),
-                MoviesByDay = await GetNowShowing(parsedDate)
+                MoviesByDay = moviesByDay,
+
+                Genres = genres,
+                Ratings = ratings
+                
             };
             return View(vm);
         }

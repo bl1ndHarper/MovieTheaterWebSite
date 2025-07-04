@@ -48,7 +48,7 @@
 
 .movie-thumb {
   height: 70vh;
-  width: auto;
+  width: 20vw;
   object-fit: cover;
   border-radius: 8px;
 }
