@@ -23,8 +23,6 @@ namespace MovieTheater.Web.Controllers
         {
             _logger = logger;
             _movieService = movieService;
-
-            
         }
 
         // Index (MVC)
@@ -34,14 +32,7 @@ namespace MovieTheater.Web.Controllers
                 ? DateTime.UtcNow.ToString("dd.MM")
                 : day;
 
-            var parsedDate = DateTime.SpecifyKind(
-                DateTime.ParseExact(
-                    selectedDate + "." + DateTime.UtcNow.Year,
-                    "dd.MM.yyyy",
-                    CultureInfo.InvariantCulture),
-                DateTimeKind.Utc);
-
-            var moviesByDay = await GetNowShowing(parsedDate);
+            var moviesByDay = await _movieService.GetNowShowingAsync(selectedDate);
 
             var genres = moviesByDay
                 .Select(m => m.Genre)
@@ -56,10 +47,12 @@ namespace MovieTheater.Web.Controllers
                 .OrderBy(r => r)
                 .ToList();
 
+            int LatestMoviesCount = 6;
+
             var vm = new HomePageViewModel
             {
                 SelectedDate = selectedDate,
-                LatestMovies = await GetLatestMovies(6),
+                LatestMovies = await _movieService.GetLatestMoviesAsync(LatestMoviesCount),
                 MoviesByDay = moviesByDay,
 
                 Genres = genres,
@@ -68,38 +61,11 @@ namespace MovieTheater.Web.Controllers
             return View(vm);
         }
         [HttpGet("/Upcoming")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public Task<IActionResult> Upcoming()
         { 
             return Task.FromResult<IActionResult>(View());
         }
-
-
-        // Private methods
-        private Task<List<MovieMainDto>> GetLatestMovies(int count) =>
-            _movieService.GetLatestMoviesAsync(count);
-
-        private Task<List<MovieMainDto>> GetNowShowing(string day)
-        {
-            var parsedDate = DateTime.SpecifyKind(
-                DateTime.ParseExact(
-                    day + "." + DateTime.UtcNow.Year,
-                    "dd.MM.yyyy",
-                    CultureInfo.InvariantCulture),
-                DateTimeKind.Utc);
-
-            return _movieService.GetNowShowingAsync(parsedDate);
-        }
-
-
-        // API endpoints
-        [HttpGet("api/movies/latest/{count}")]
-        public async Task<IActionResult> ApiLatestMovies(int count) =>
-            Ok(await GetLatestMovies(count));
-
-        [HttpGet("api/movies/now-showing/{day}")]
-        public async Task<IActionResult> ApiNowShowing(string day) =>
-            Ok(await GetNowShowing(day));
-
 
         public IActionResult Privacy()
         {

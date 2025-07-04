@@ -14,7 +14,7 @@ namespace MovieTheater.Application.Interfaces
         Task<bool> UpdateMovieAsync(long id, MovieUpdateDto dto);
         Task<bool> PatchMovieAsync(long id, JsonPatchDocument<MovieUpdateDto> patch);
         Task<bool> DeleteMovieAsync(long id);
-        Task<List<MovieMainDto>> GetNowShowingAsync(DateTime date);
+        Task<List<MovieMainDto>> GetNowShowingAsync(string day);
         Task<List<MovieMainDto>> GetLatestMoviesAsync(int count);
         Task<MovieDto?> GetMovieByIdAsync(long id);
     }
