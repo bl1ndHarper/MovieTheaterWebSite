@@ -39,6 +39,11 @@ namespace MovieTheater.Application.Services
             };
         }
 
+        public async Task<SessionSeat?> GetSessionSeatAsync(long sessionId, string label)
+        {
+            SessionSeat seat = await _sessionRepository.GetSessionSeatByLabelAsync(sessionId, label);
+            return seat;
+        }
 
         public async Task<MovieSessionDto> CreateSessionAsync(MovieSessionDto dto)
         {

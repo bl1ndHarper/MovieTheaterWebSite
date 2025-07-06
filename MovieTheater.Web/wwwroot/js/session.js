@@ -72,6 +72,7 @@ async function loadSeats(sessionId) {
                 const seatEl = document.createElement("div");
                 seatEl.className = sectorsInfo[sector] >= 200 ? "premium-seat" : "seat";
                 seatEl.dataset.id = `${sector}:${seat.label}`;
+                seatEl.dataset.seatid = seat.id;
                 seatEl.textContent = seat.label.substring(1); // лише число
 
                 if (seat.status === 1) {
@@ -106,8 +107,6 @@ async function loadSeats(sessionId) {
 
     standartSeatName.textContent = `Standard — ${sectorsInfo["Standard"]}₴`;
     vipSeatName.textContent = `VIP — ${sectorsInfo["VIP"]}₴`;
-    
-   
 }
 
 
@@ -119,10 +118,7 @@ const seatlegend = document.getElementById("seatLegendInner");
 sessionBlocks.forEach(block => {
     block.addEventListener("click", () => {
         
-
         seatlegend.classList.remove("hidden");
-
-         
 
         sessionBlocks.forEach(b => b.classList.remove("selected"));
         block.classList.add("selected");
@@ -159,4 +155,53 @@ function openBookingModal() {
 
     const modal = new bootstrap.Modal(document.getElementById("bookingModal"));
     modal.show();
+}
+
+async function submitBooking() {
+    if (!selectedSessionId || selectedSeats.size === 0) return;
+
+    const errors = [];
+    for (const fullId of selectedSeats) {
+        const [sector, label] = fullId.split(":");
+
+        const seatElements = document.querySelectorAll(`[data-id='${fullId}']`);
+        console.log(seatElements);
+        const seatEl = seatElements[0];
+        console.log(seatEl);
+        if (!seatEl) continue;
+
+        const res = await fetch(`/api/sessions/${selectedSessionId}/bookings`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                seatLabel: label
+            })
+        });
+
+        if (res.status === 401) {
+            errors.push("Ви не увійшли в систему. Увійдіть, щоб бронювати.");
+            break;
+        }
+
+        if (res.status === 409) {
+            errors.push(`Місце ${label} вже зайнято.`);
+            continue;
+        }
+
+        if (!res.ok) {
+            const msg = await res.text();
+            errors.push(`Помилка: ${msg}`);
+        }
+    }
+
+    if (errors.length > 0) {
+        alert(errors.join("\n"));
+    } else {
+        alert("Бронювання виконано успішно!");
+        await loadSeats(selectedSessionId);
+        const modal = bootstrap.Modal.getInstance(document.getElementById("bookingModal"));
+        modal.hide();
+    }
 }

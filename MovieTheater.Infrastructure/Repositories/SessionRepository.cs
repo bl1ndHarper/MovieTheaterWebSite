@@ -55,6 +55,14 @@ namespace MovieTheater.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<SessionSeat?> GetSessionSeatByLabelAsync(long sessionId, string label)
+        {
+            var seat = await _context.SessionSeats
+                .Include(s => s.HallSeat).ThenInclude(hs => hs.Sector)
+                .FirstOrDefaultAsync(s => s.SessionId == sessionId && s.HallSeat.Label == label);
+            return seat;
+        }
+
         public Task AddAsync(Session session) =>
             _context.Sessions.AddAsync(session).AsTask();
 

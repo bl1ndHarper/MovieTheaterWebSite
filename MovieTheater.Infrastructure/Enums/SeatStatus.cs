@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MovieTheater.Infrastructure.Enums
 {
-    public enum HallSeatStatus
+    public enum SeatStatus
     {
         Free,
         Reserved,

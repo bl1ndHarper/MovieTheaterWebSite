@@ -7,7 +7,7 @@ public class HallSeat
     public long Id { get; set; }
     public long SectorId { get; set; }
     public string Label { get; set; } = null!;
-    public HallSeatStatus Status { get; set; }
+    public SeatStatus Status { get; set; }
 
     public HallSector Sector { get; set; } = null!;
 }
