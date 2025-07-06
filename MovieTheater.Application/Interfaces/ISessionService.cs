@@ -1,4 +1,5 @@
 ﻿using MovieTheater.Application.DTOs;
+using MovieTheater.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace MovieTheater.Application.Interfaces
         Task<Dictionary<DateTime, List<MovieSessionDto>>> GetMovieSessionsByDayAsync(long movieId, string selectedDate);
         Task<List<string>> GetAvailableSessionDatesAsync(long movieId);
         Task<List<SessionSeatDto>> GetSeatsBySessionIdAsync(long sessionId);
+        Task<SessionSeat?> GetSessionSeatAsync(long sessionId, string label);
     }
 }

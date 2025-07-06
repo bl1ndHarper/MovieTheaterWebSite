@@ -17,7 +17,7 @@ namespace MovieTheater.Infrastructure.Entities
         public long HallSeatId { get; set; }
         public HallSeat HallSeat { get; set; } = null!;
 
-        public HallSeatStatus Status { get; set; } = HallSeatStatus.Free;
+        public SeatStatus Status { get; set; } = SeatStatus.Free;
     }
 
 }

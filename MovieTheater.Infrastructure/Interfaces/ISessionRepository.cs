@@ -11,6 +11,7 @@ namespace MovieTheater.Infrastructure.Interfaces
     {
         Task<List<Session>> GetMovieSessionsByDateAsync(long movieId, DateTime date);
         Task<List<DateTime>> GetAvailableSessionDatesAsync(long movieId);
+        Task<SessionSeat> GetSessionSeatByLabelAsync(long sessionId, string label);
         Task<Session?> GetByIdAsync(long id);
         Task AddAsync(Session session);
         void Remove(Session session);
