@@ -27,8 +27,6 @@ console.log(cards);
   const selectedRating = ratingSelect?.value?.trim().toLowerCase();
   const selectedDuration = durationSelect?.value;
 
-  const cards = document.querySelectorAll('.movie-session-card');
-
   cards.forEach(card => {
     const cardGenre = card.dataset.genre?.trim().toLowerCase();
     const cardRating = card.dataset.rating?.trim().toLowerCase();

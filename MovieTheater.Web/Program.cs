@@ -77,11 +77,17 @@ builder.Services.Configure<ApiBehaviorOptions>(o =>
         var problem = new ValidationProblemDetails((IDictionary<string, string[]>)errors)
         {
             Status = StatusCodes.Status400BadRequest,
-            Title  = "Validation error",
+            Title = "Validation error",
             Detail = "See `errors` field for details"
         };
         return new BadRequestObjectResult(problem);
     };
+});
+
+builder.Services.AddHttpClient("tmdbApi", client =>
+{
+    client.BaseAddress = new Uri("https://api.themoviedb.org/3/");
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
 });
 
 

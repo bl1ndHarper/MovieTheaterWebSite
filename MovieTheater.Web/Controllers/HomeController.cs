@@ -60,11 +60,18 @@ namespace MovieTheater.Web.Controllers
             };
             return View(vm);
         }
+
+
         [HttpGet("/Upcoming")]
         [ApiExplorerSettings(IgnoreApi = true)]
-        public Task<IActionResult> Upcoming()
-        { 
-            return Task.FromResult<IActionResult>(View());
+        public async Task<IActionResult> Upcoming()
+        {
+            var vm = new UpcomingPageViewModel
+            {
+                UpcomingMovies = await _movieService.GetUpcomingMovies()
+            };
+
+            return View(vm);
         }
 
         public IActionResult Privacy()
