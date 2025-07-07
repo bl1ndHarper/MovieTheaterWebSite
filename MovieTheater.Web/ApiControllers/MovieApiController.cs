@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using MovieTheater.Web.Infrastructure;
 using System.Globalization;
 
+
 namespace MovieTheater.Web.ApiControllers
 {
     [Route("api/movies")]
@@ -21,10 +22,10 @@ namespace MovieTheater.Web.ApiControllers
         [HttpPost]
         public async Task<IActionResult> CreateMovie([FromBody] MovieCreateDto dto)
         {
-        if (!ModelState.IsValid) return ApiProblem.Bad("Bad request", "Invalid movie data");
+            if (!ModelState.IsValid) return ApiProblem.Bad("Bad request", "Invalid movie data");
 
-        var created = await _movieService.CreateMovieAsync(dto);
-        return CreatedAtAction(nameof(GetMovie), new { id = created.Id }, created);
+            var created = await _movieService.CreateMovieAsync(dto);
+            return CreatedAtAction(nameof(GetMovie), new { id = created.Id }, created);
         }
 
         [HttpGet("{id:long}")]
@@ -63,7 +64,7 @@ namespace MovieTheater.Web.ApiControllers
                 ? NoContent()
                 : ApiProblem.NotFound("Movie not found", $"Movie id = {id}");
         }
-        
+
         [HttpGet("latest/{count:int}")]
         public async Task<IActionResult> GetLatestMovies(int count)
         {
@@ -73,6 +74,10 @@ namespace MovieTheater.Web.ApiControllers
             return Ok(movies);
         }
 
+        
+        
+
+        
         [HttpGet("now-showing/{day}")]
         public async Task<IActionResult> GetNowShowingMovies(string day)
         {

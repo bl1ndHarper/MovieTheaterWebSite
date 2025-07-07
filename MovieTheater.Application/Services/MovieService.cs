@@ -11,16 +11,19 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace MovieTheater.Application.Services
 {
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public MovieService(IMovieRepository movieRepository)
+        public MovieService(IMovieRepository movieRepository, IHttpClientFactory httpClientFactory)
         {
             _movieRepository = movieRepository;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<MovieMainDto> CreateMovieAsync(MovieCreateDto dto)
@@ -177,6 +180,44 @@ namespace MovieTheater.Application.Services
                 DirectorDetailsUrl = movie.DirectorDetailsUrl,
                 ReleaseDate = movie.ReleaseDate
             };
+        }
+
+
+        public async Task<List<TmdbUpcomingMovie>> GetUpcomingMovies()
+        {
+            var client = _httpClientFactory.CreateClient("tmdbApi");
+            var apiKey = Environment.GetEnvironmentVariable("TMDB_API_KEY");
+            var language = "uk-UA";
+
+            var genreResponse = await client.GetAsync($"genre/movie/list?api_key={apiKey}&language={language}");
+            var genreJson = await genreResponse.Content.ReadAsStringAsync();
+            var genreResult = JsonSerializer.Deserialize<TmdbGenreResponse>(genreJson, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+
+            var genreMap = genreResult?.Genres.ToDictionary(g => g.Id, g => g.Name);
+
+            var response = await client.GetAsync($"movie/upcoming?api_key={apiKey}&language={language}&page=1");
+            
+            if (!response.IsSuccessStatusCode)
+                return new();
+
+            var json = await response.Content.ReadAsStringAsync();
+            var tmdbResponse = JsonSerializer.Deserialize<TmdbUpcomingMoviesResponse>(json, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            });
+
+            var movies = tmdbResponse?.Results ?? new();
+
+            foreach (var movie in movies)
+            {
+                movie.GenreNames = string.Join(", ",
+                    movie.GenreIds.Select(id => genreMap.TryGetValue(id, out var name) ? name : ""));
+            }
+
+            return movies;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿
+﻿@using MovieTheater.Web.ViewModels;
+@model UpcomingPageViewModel
+
 @{
     ViewData["Title"] = "Keen-chick: Скоро у кіно";
 }
@@ -15,70 +17,66 @@
 
 <div class="container mt-4">
   <div class="row row-cols-1 row-cols-md-3 g-4">
-   
+       @foreach (var movie in Model.UpcomingMovies)
+        {
+
     <!-- Одна картка-новий фільм -->
-      <div class="col h-100 ">
-        <div class="styled-container">
+      <div class="col  d-flex">
+        <div class="styled-container d-flex flex-column w-100 ">
             <div class="card-img-container">
-                <img src="https://m.media-amazon.com/images/I/71PuxqbE3pL._UF894,1000_QL80_.jpg" class="card-img-top" alt="movie.Title">
+                <img src="@($"https://image.tmdb.org/t/p/w500{movie.PosterPath}")" class="card-img-top" alt="movie.Title">
             </div>
          
           <div class="card-body">
-            <h5 class="card-title font-main main-text">Назва фільму</h5>
-            <p class="card-text font-secondary">Жанр/інший жанр</p>
-            <p class="card-text font-main">Опис блабалаблабалаалалабалал Опис блабалаблабалаа</p>
-            <p class="card-sec-text font-secondary"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i>2035/02/20</p>
+            <h5 class="card-title font-main main-text">@movie.Title </h5>
+            <p class="card-text font-secondary upcoming-genres">@movie.GenreNames</p>
+
+            <span class="card-text font-main movie-overview" data-fulltext="@movie.Overview">
+            </span>
+            <a href="javascript:void(0);" class="toggle-overview font-secondary" style="font-weight: 700;">...</a>
+            
+            
+            <p class="card-sec-text font-secondary mt-3"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i>@movie.ReleaseDate?.ToString("dd.MM.yyyy")</p>
           </div>
         </div>
       </div>
 
      <!-- кінець однієї картки-нового фільму -->
-
-    <div class="col h-100 ">
-        <div class="styled-container">
-            <div class="card-img-container">
-                <img src="https://m.media-amazon.com/images/I/71PuxqbE3pL._UF894,1000_QL80_.jpg" class="card-img-top" alt="movie.Title">
-            </div>
-         
-          <div class="card-body">
-            <h5 class="card-title font-main main-text">Назва фільму</h5>
-            <p class="card-text font-secondary">Жанр/інший жанр</p>
-            <p class="card-text font-main">Опис блабалаблабалаалалабалал Опис блабалаблабалаа</p>
-            <p class="card-sec-text font-secondary"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i>2035/02/20</p>
-          </div>
-        </div>
-      </div>
-
-       <div class="col h-100 ">
-        <div class="styled-container">
-            <div class="card-img-container">
-                <img src="https://m.media-amazon.com/images/I/71PuxqbE3pL._UF894,1000_QL80_.jpg" class="card-img-top" alt="movie.Title">
-            </div>
-         
-          <div class="card-body">
-            <h5 class="card-title font-main main-text">Назва фільму</h5>
-            <p class="card-text font-secondary">Жанр/інший жанр</p>
-            <p class="card-text font-main">Опис блабалаблабалаалалабалал Опис блабалаблабалаа</p>
-            <p class="card-sec-text font-secondary"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i>2035/02/20</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col h-100 ">
-        <div class="styled-container">
-            <div class="card-img-container">
-                <img src="https://m.media-amazon.com/images/I/71PuxqbE3pL._UF894,1000_QL80_.jpg" class="card-img-top" alt="movie.Title">
-            </div>
-         
-          <div class="card-body">
-            <h5 class="card-title font-main main-text">Назва фільму</h5>
-            <p class="card-text font-secondary">Жанр/інший жанр</p>
-            <p class="card-text font-main">Опис блабалаблабалаалалабалал Опис блабалаблабалаа</p>
-            <p class="card-sec-text font-secondary"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i>2035/02/20</p>
-          </div>
-        </div>
-      </div>
-     
-
+    }
   </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const overviews = document.querySelectorAll(".movie-overview");
+  const trimTo = 150;
+
+  overviews.forEach((el, index) => {
+    const fullText = el.dataset.fulltext;
+    const toggleLink = el.nextElementSibling; 
+
+    if (fullText.length > 150) {
+      const shortText = fullText.slice(0, 150);
+      el.textContent = shortText ;
+      el.classList.add("collapsed");
+      toggleLink.style.display = "inline";
+    } else {
+      el.textContent = fullText;
+      toggleLink.style.display = "none";
+    }
+
+    toggleLink.addEventListener("click", () => {
+      if (el.classList.contains("collapsed")) {
+        el.textContent = fullText;
+        toggleLink.textContent = "згорнути";
+        el.classList.remove("collapsed");
+      } else {
+        el.textContent = fullText.slice(0, 150) ;
+        toggleLink.textContent = "...";
+        el.classList.add("collapsed");
+      }
+    });
+  });
+});
+</script>
+

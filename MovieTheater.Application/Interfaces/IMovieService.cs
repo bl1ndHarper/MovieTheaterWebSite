@@ -17,5 +17,6 @@ namespace MovieTheater.Application.Interfaces
         Task<List<MovieMainDto>> GetNowShowingAsync(string day);
         Task<List<MovieMainDto>> GetLatestMoviesAsync(int count);
         Task<MovieDto?> GetMovieByIdAsync(long id);
+        Task<List<TmdbUpcomingMovie>> GetUpcomingMovies();
     }
 }
