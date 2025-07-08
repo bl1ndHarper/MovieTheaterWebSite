@@ -6,24 +6,29 @@ using Microsoft.AspNetCore.Mvc;
 using MovieTheater.Application.DTOs;
 using MovieTheater.Application.Interfaces;
 using MovieTheater.Infrastructure.Entities;
+using MovieTheater.Infrastructure.Interfaces;
 using System.Security.Claims;
 
 namespace MovieTheater.Application.Services
 {
+
     public class AccountService : IAccountService
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IHttpContextAccessor _httpContext;
+        private readonly IUserRepository _userRepository;
 
         public AccountService(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            IHttpContextAccessor httpContext)
+            IHttpContextAccessor httpContext,
+            IUserRepository userRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _httpContext = httpContext;
+            _userRepository = userRepository;
         }
 
         public async Task<(bool Success, string? Error)> LoginAsync(LoginRequestDto dto)
@@ -93,5 +98,23 @@ namespace MovieTheater.Application.Services
                 props
             );
         }
+
+        public async Task<UserPageDto?> GetAccountInfoAsync(long id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                Console.WriteLine($"!!!🤬🤬🤬!! User with ID={id} not found");
+                return null; // Повертаємо null якщо користувач не знайдений
+            }
+
+            return new UserPageDto
+            {
+                Username = user.Username,
+                Email = user.Email
+            };
+            
+        }
+        
     }
-}
+ }
