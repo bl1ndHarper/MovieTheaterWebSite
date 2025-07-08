@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieTheater.Application.DTOs;
 using MovieTheater.Application.Interfaces;
 using MovieTheater.Infrastructure.Entities;
+using MovieTheater.Web.ViewModels;
 using System.Security.Claims;
 
 [Route("")]
@@ -13,15 +14,18 @@ public class AccountController : Controller
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IAccountService _accountService;
+        private readonly IBookingService _bookingService;
 
         public AccountController(
-            UserManager<User> userManager,
-            SignInManager<User> signInManager,
-            IAccountService accountService)
+        UserManager<User> userManager,
+        SignInManager<User> signInManager,
+        IAccountService accountService,
+        IBookingService bookingService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _accountService = accountService;
+            _bookingService = bookingService;
         }
 
     // Pages (MVC)
@@ -30,6 +34,30 @@ public class AccountController : Controller
 
     [HttpGet("Account/SignUp"), ApiExplorerSettings(IgnoreApi = true)]
     public IActionResult SignUpPage() => View("SignUp");
+
+    [HttpGet("Account/ProfilePage/{accountId}")]
+    [ApiExplorerSettings(IgnoreApi = true)]
+    public async Task<IActionResult> Account(long accountId)
+    {
+        
+        var userDto = await _accountService.GetAccountInfoAsync(accountId);
+        if (userDto == null)
+        {
+            return NotFound();
+        }
+
+        var bookings = await _bookingService.GetGroupedBookingsAsync(accountId);
+
+        var viewModel = new AccountPageViewModel
+        {
+            Username = userDto.Username,
+            Email = userDto.Email,
+            Bookings = bookings
+        };
+        
+
+        return View(viewModel);
+    }
 
     // Forms (MVC)
     [ValidateAntiForgeryToken]

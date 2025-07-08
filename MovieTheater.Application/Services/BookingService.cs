@@ -78,8 +78,48 @@ namespace MovieTheater.Application.Services
             if (b == null || b.UserId != userId) return false;
 
             b.Status = BookingStatus.Cancelled;
+            
+            var sessionSeat = b.Seat;
+            if (sessionSeat != null)
+            {
+                sessionSeat.Status = SeatStatus.Free;
+            }
+
             await _bookingRepository.SaveAsync();
+            Console.WriteLine($"🎟 Скасування: bookingId={id}, SeatId={b.Seat?.Id}, CurrentSeatStatus={b.Seat?.Status}");
             return true;
         }
+
+        public async Task<List<SessionBookingsDto>> GetGroupedBookingsAsync(long userId)
+        {
+            var bookings = await _bookingRepository.GetUserBookingsAsync(userId);
+
+            var today = DateTime.Today;
+            var activeBookings = bookings
+                .Where(b => b.Screening.StartTime >= today)
+                .ToList();
+                
+            var grouped = activeBookings
+                .GroupBy(b => b.Screening)
+                .Select(group => new SessionBookingsDto
+                {
+                    ScreeningId = group.Key.Id,
+                    ScreeningTime = group.Key.StartTime,
+                    MovieTitle = group.Key.Movie?.Title ?? "—",
+                    HallName = group.Key.Hall?.Name ?? "—",
+                    Tickets = group.Select(b => new TicketDto
+                    {
+                        BookingId = b.Id,
+                        SeatNumber = b.Seat?.HallSeat?.Label ?? "???",
+                        SeatPrice = b.Seat?.HallSeat?.Sector?.SeatPrice ?? 0m,
+                        Status = b.Status
+                        
+                    }).ToList()
+                })
+                .ToList();
+            
+            return grouped;
+        }
+
     }
 }

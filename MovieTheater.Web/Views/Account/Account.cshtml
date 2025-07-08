@@ -1,3 +1,6 @@
+@using MovieTheater.Web.ViewModels;
+@model AccountPageViewModel
+
 @{
     ViewData["Title"] = "Keen-Chick!: Account";
 }
@@ -15,90 +18,95 @@
         <div class="d-flex justify-content-left " style="padding-left:2rem; padding-top: 1rem;">
             <div class="d-flex flex-column">
                 <p class="font-main form-main-text" style="text-align:left">Мій аккаунт</p>
-                <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-user" style="margin-right:0.5rem"></i>  Логін: Нікнейм користувача</p>
-                <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-envelope" style="margin-right:0.5rem"></i>  Електрона пошта: пошта користувача</p>
+                <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-user" style="margin-right:0.5rem"></i>  Логін: @Model.Username</p>
+                <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-envelope" style="margin-right:0.5rem"></i>  Електрона пошта: @Model.Email</p>
             </div>
             
         </div>
        <button class="profile-button" style="margin-left: 2rem;"> Змінити пароль</button>
-       <button class="profile-button"> Вийти з акаунту</button>
+       
+       <form asp-controller="Account" asp-action="Logout" onsubmit="return confirmLogout()" method="post" class="d-inline">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="profile-button">Вийти з акаунту</button>
+       </form>
+       
     </div>
 </div>
+@if(Model.Bookings.Any()) {
 <div class="d-flex justify-content-center">
     <div class="styled-container mt-4 " style="width:60vw;">
         <p class="font-main form-main-text" style="text-align:left;padding-left:2rem; padding-top: 1rem;">Мої бронювання</p>
 
-        <div id ="bookingsDiv" class="d-flex flex-column align-items-center ">
-            <!-- Тут будуть усі бронювання через форіч-->
+        @foreach (var session in Model.Bookings){
 
-            <!-- Приклад картки бронювання-->
+        
 
-            <div class="styled-inner-container mt-4" style="width:90%;">
-                
-                <div class="d-flex justify-content-between booking-main-text" style="padding: 1rem 2rem 1rem 2rem;">
-                    <span class="font-main form-main-text" > Назва фільму</span>
-                    <div >
-                        <div class="font-main form-main-text" style="text-align: right; font-size: 14pt;">450₴</div>                       
-                            <div class="booking-status"> Майбутнє </div>
+        <div class="d-flex flex-column align-items-center one-session-bookings mt-3">
+           
+                <div class="d-flex justify-content-between booking-main-text" style="padding: 1rem 2rem 1rem 2rem; width:100%">
+                        <span class="font-main form-main-text" > @session.MovieTitle</span>
+
+                        <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i> @session.ScreeningTime.ToString("dd.MM.yyyy")</p>
+                        <p class="font-secondary profile-text"><i class="user-icon fa-solid fa-location-dot" style="margin-right:0.5rem"></i> @session.HallName</p>
+                        <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-clock" style="margin-right:0.5rem"></i> @session.ScreeningTime.ToString("HH:mm")</p>
+
+                        @{
+                            var totalPrice = session.Tickets.Sum(t => t.SeatPrice);
+                        }
+                        <div class="font-main form-main-text" style="text-align: right; font-size: 14pt;">@totalPrice.ToString("0₴")</div>                       
+                        <div class="booking-status"> Майбутнє </div>
+
                     </div>
+
+                 @foreach (var ticket in session.Tickets)
+                  {        
+                <div class="styled-inner-container mt-3" style="width:90%;">
                     
-                </div>
-
-                <div class="container row">
-                    <div class=" col-6">
-                         <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i> 01.07.2025</p>
-                         <p class="font-secondary profile-text"><i class="user-icon fa-solid fa-location-dot" style="margin-right:0.5rem"></i> Зала 2</p>
-                    </div>
-                    <div class=" col-6">
-                                           <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-clock" style="margin-right:0.5rem"></i> 22:00</p>
-                         <p class="font-secondary profile-text"><i class="user-icon fa-solid fa-chair" style="margin-right:0.5rem"></i> А9,А10,А11</p>
-
-
+                      <div class="d-flex justify-content-between" style="align-items: center;">
+                        <div>
+                             <span class="font-secondary seats-text mt-3"  style="color: #79bac4;"><i class="user-icon fa-solid fa-chair" style="margin-right:0.5rem"></i> @ticket.SeatNumber |</span>     
+                             <span class="font-secondary seats-text " style="margin-left:1rem; ">@ticket.SeatPrice.ToString("0₴")</span>
+                        </div>
+                       
+                        <button class="decline-button" style="margin-left: 2rem;"
+                            data-booking-id="@ticket.BookingId"
+                            onclick="confirmCancel(this)"> Відмінити</button>                   
                     </div>
                 </div>
+                }
+               
 
             </div>
-
-            <!-- Кінець картки бронювання-->
-
-             <!-- Приклад картки бронювання-->
-
-            <div class="styled-inner-container mt-4" style="width:90%;">
-                
-                <div class="d-flex justify-content-between booking-main-text" style="padding: 1rem 2rem 1rem 2rem;">
-                    <span class="font-main form-main-text" > Назва фільму</span>
-                    <div >
-                        <div class="font-main form-main-text" style="text-align: right; font-size: 14pt;">450₴</div>                       
-                            <div class="booking-status"> Майбутнє </div>
-                    </div>
-                    
-                </div>
-
-                <div class="container row">
-                    <div class=" col-6">
-                         <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-calendar" style="margin-right:0.5rem"></i> 01.07.2025</p>
-                         <p class="font-secondary profile-text"><i class="user-icon fa-solid fa-location-dot" style="margin-right:0.5rem"></i> Зала 2</p>
-                    </div>
-                    <div class=" col-6">
-                                           <p class="font-secondary profile-text"><i class="user-icon fa-regular fa-clock" style="margin-right:0.5rem"></i> 22:00</p>
-                         <p class="font-secondary profile-text"><i class="user-icon fa-solid fa-chair" style="margin-right:0.5rem"></i> А9,А10,А11</p>
-
-
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Кінець картки бронювання-->
-            
+        }
+           
 
             
-            
-
-            
-
-            
-
-        </div>
     </div>
 </div>
+}
+
+
+@section Scripts {
+<script>
+    async function confirmCancel(button) {
+        const bookingId = button.getAttribute("data-booking-id");
+
+        const confirmDelete = confirm("Ви справді хочете відмінити бронювання цього білету?");
+        if (!confirmDelete) return;
+
+        const response = await fetch(`/Booking/Cancel/${bookingId}`, {
+            method: "POST"
+        });
+
+        if (response.ok) {
+            location.reload();
+        } else {
+            alert("Помилка скасування бронювання.");
+        }
+    }
+
+    function confirmLogout() {
+        return confirm("Ви справді хочете вийти з акаунту?");
+    }
+</script>
+}

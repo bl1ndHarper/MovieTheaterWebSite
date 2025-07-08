@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc;
 using MovieTheater.Application.Interfaces;
 using MovieTheater.Application.Services;
 
@@ -15,6 +16,16 @@ namespace MovieTheater.Web.Controllers
         {
             var b = await _bookingService.GetAsync(id);
             return b == null ? NotFound() : View(b);
+        }
+
+        [HttpPost("/Booking/Cancel/{id}")]
+        public async Task<IActionResult> Cancel(long id)
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!long.TryParse(userId, out var uid)) return Unauthorized();
+
+            var result = await _bookingService.CancelAsync(id, uid);
+            return result ? Ok() : BadRequest();
         }
     }
 }
