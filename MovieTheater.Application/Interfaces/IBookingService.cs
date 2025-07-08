@@ -12,5 +12,7 @@ namespace MovieTheater.Application.Interfaces
         Task<(bool ok, string? error, BookingDetailsDto? result)> CreateAsync(BookingDto dto);
         Task<BookingDetailsDto?> GetAsync(long id);
         Task<bool> CancelAsync(long id, long userId);
+        Task<List<SessionBookingsDto>> GetGroupedBookingsAsync(long userId);
+        
     }
 }

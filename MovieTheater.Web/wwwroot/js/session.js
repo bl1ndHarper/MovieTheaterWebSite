@@ -68,7 +68,8 @@ async function loadSeats(sessionId) {
 
             rowSeats.forEach(seat => {
                 const sector = seat.sectorName;
-
+                console.log(`[debug] Сектор: "${seat.sectorName}", ціна: ${seat.price}`);
+                
                 const seatEl = document.createElement("div");
                 seatEl.className = sectorsInfo[sector] >= 200 ? "premium-seat" : "seat";
                 seatEl.dataset.id = `${sector}:${seat.label}`;
@@ -105,7 +106,7 @@ async function loadSeats(sessionId) {
     const standartSeatName = document.getElementById("standartPriceName");
     const vipSeatName = document.getElementById("VIPPriceName");
 
-    standartSeatName.textContent = `Standard — ${sectorsInfo["Standard"]}₴`;
+    standartSeatName.textContent = `Стандарт — ${sectorsInfo["Стандарт"]}₴`;
     vipSeatName.textContent = `VIP — ${sectorsInfo["VIP"]}₴`;
 }
 

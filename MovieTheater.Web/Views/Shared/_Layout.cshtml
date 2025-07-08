@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using MovieTheater.Infrastructure.Entities
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<User> UserManager
+@inject SignInManager<User> SignInManager
+
+
+<!DOCTYPE html>
 <html lang="en">
     
 <head>
@@ -45,10 +51,17 @@
                     <a class="site-name-link font-main " asp-area="" asp-controller="Home" asp-action="Index">keen-chick!</a>
                 </div>
 
-                @if (User.Identity?.IsAuthenticated == true){
-        
+                @{
+                    var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+                    var username = User.Identity?.Name;
+                }
+
+                @if (SignInManager.IsSignedIn(User)){
+                
+                
+
                 <div id = "profileLinkDiv" class="profile-link-div">
-                        <a class="profile-link font-main" asp-area="" asp-controller="Account" asp-action="Index">Ім'я користувача</a>
+                        <a class="profile-link font-main" asp-controller="Account" asp-action="ProfilePage" asp-route-id="@userId">@username</a>
                     <i class="user-icon fa-regular fa-user"></i>
                 </div>
                 }
@@ -82,6 +95,10 @@
                     aria-label="Close"></i>
         </div>
         <div class="offcanvas-body">
+            @{
+                var user = await UserManager.GetUserAsync(User);
+                var isAdmin = user != null && await UserManager.IsInRoleAsync(user, "Admin");
+            }
             <a class="font-main offcanvas-link
              @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
               && ViewContext.RouteData.Values["action"]?.ToString() == "Index"  ? "active" : "")
@@ -95,11 +112,14 @@
             asp-controller="Home" asp-action="Upcoming">
         Скоро в кіно
             </a>
+            @if (User.IsInRole("Admin"))
+            {
             <a class="font-main offcanvas-link admin-link 
              @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "active" : "")
              " asp-controller="Admin" asp-action="Index">
         Адмін-панель
             </a>
+            }
 
         </div>
         

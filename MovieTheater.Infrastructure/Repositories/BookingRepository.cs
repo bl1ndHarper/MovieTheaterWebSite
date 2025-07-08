@@ -17,7 +17,9 @@ namespace MovieTheater.Infrastructure.Repositories
         public BookingRepository(ApplicationDbContext context) => _context = context;
 
         public Task<Booking?> GetAsync(long id) =>
-            _context.Bookings.FirstOrDefaultAsync(b => b.Id == id);
+            _context.Bookings
+                .Include(b => b.Seat) 
+                    .FirstOrDefaultAsync(b => b.Id == id);
 
         public Task<bool> SeatAlreadyBookedAsync(long sessionSeatId) =>
             _context.Bookings.AnyAsync(b => b.SessionSeatId == sessionSeatId &&
@@ -28,5 +30,20 @@ namespace MovieTheater.Infrastructure.Repositories
         public Task SaveAsync() => _context.SaveChangesAsync();
 
         public void Remove(Booking b) => _context.Bookings.Remove(b);
+
+
+        public async Task<List<Booking>> GetUserBookingsAsync(long userId)
+        {
+            return await _context.Bookings
+                .Where(b => b.UserId == userId && b.Status == BookingStatus.Booked)
+                .Include(b => b.Screening)
+                    .ThenInclude(s => s.Movie)
+                .Include(b => b.Screening)
+                    .ThenInclude(s => s.Hall) 
+                .Include(b => b.Seat)
+                    .ThenInclude(ss => ss.HallSeat)
+                        .ThenInclude(hs => hs.Sector)
+                .ToListAsync();
+        }
     }
 }

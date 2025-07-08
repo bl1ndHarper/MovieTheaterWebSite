@@ -14,5 +14,7 @@ namespace MovieTheater.Infrastructure.Interfaces
         Task<bool> SeatAlreadyBookedAsync(long sessionSeatId);
         Task SaveAsync();
         void Remove(Booking booking);
+
+        Task<List<Booking>> GetUserBookingsAsync(long userId);
     }
 }

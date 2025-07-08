@@ -7,5 +7,6 @@ namespace MovieTheater.Application.Interfaces
     {
         Task<(bool Success, string? Error)> LoginAsync(LoginRequestDto dto);
         Task<(bool Success, string? Error)> RegisterAsync(RegisterRequestDto dto);
+        Task<UserPageDto?> GetAccountInfoAsync(long id);
     }
 }
