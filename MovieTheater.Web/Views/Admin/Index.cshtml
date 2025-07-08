@@ -1,3 +1,6 @@
+@using MovieTheater.Infrastructure.Entities
+@using MovieTheater.Web.ViewModels
+@model AdminPanelViewModel
 @{
     ViewData["Title"] = "Keen-Chick!: Адмін-панель";
 }
@@ -6,9 +9,8 @@
     <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
 }
 
-<div class="container row">
-    <div class="row">
-        <div class="col-9 admin-panel-left">
+
+        <div style="display: none" class="col-9 admin-panel-left">
             <div class="big-stat-container ">
                 <p class="chart-text font-main"> Відвідуваність сеансів</p>
                 <div class="d-flex justify-content-center">
@@ -46,27 +48,66 @@
             </div>
         </div>
     
-    <div class="col-3 admin-panel-right">
-        <div class="big-stat-container">
-            <div class="d-flex justify-content-between">
-                    <span class="price-div-text"> Звичайний</span>
-
-                    <input type="text" id ="defaultPriceInput" class="price-input" value="150">
-                    
+    @* Функціонал для редагування секторів і залів *@
+    <div class=" container row ">
+      <div class="big-stat-container col-8  ms-5" >
+        <h3 class="font-main chart-text">Редагування залів</h3>
+        <div class="d-flex justify-content-between mt-4">
+          
+          <div class="hall-dropdown-div">
+            <h3 class="font-main stat-text" style="font-size:14pt">Оберіть залу:</h3>
+              <div class="dropdown-wrapper mt-4">
+              <select name="hallId" id="hallsDropdown" class="dropdown-select-admin ">
+                  @foreach (var hall in Model.Halls)
+                  {
+                      <option value="@hall.Id">@hall.Name</option>
+                  }
+              </select>
             </div>
+          </div>
+        
+        
 
-            <div class="d-flex justify-content-between mt-3">
-                    <span class="price-div-text"> Преміум</span>
-                    <input id ="premiumPriceInput" type="text" class="price-input" value="250">
-            </div>
+          <div id="sectorsContainer">
+              @foreach (Hall hall in Model.Halls)
+              {
+                  <div class="sectors" data-hall-id="@hall.Id" style="display: none;">
+                      <h3 class="font-main stat-text" style="text-align:right; font-size:14pt">Сектори залу "@hall.Name"</h3>
+                      @foreach (var sector in hall.Sectors.OrderBy(s => s.Id))
+                      {
+                        <div class="d-flex justify-content-end align-items-center mb-2 mt-4 sector-row" data-sector-id="@sector.Id">
+                            <span class="price-div-text">@sector.Name</span>
 
-            
+                            <input type="number" class="price-input  mx-2 sector-price " placeholder="@sector.SeatPrice.ToString("F2")" />
+
+                            <button class="btn btn-sm btn-outline-success update-price-btn me-2 price-btn" type="button">Зберегти</button>
+
+                            <button class="btn btn-sm btn-outline-danger delete-sector-btn price-btn" type="button"
+                                    data-sector-name="@sector.Name" data-hall-id="@hall.Id">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                      }
+                  </div>
+              }
+              </div>
+          </div>
         </div>
-
-        <div class="d-flex justify-content-center mt-3">
-            <a class="price-btn">Змінити ціну квитків</a>
+        <div class="big-stat-container col-3  ms-4">
+            <h4 class="mt-4 font-main stat-text" style="text-align: center;">Додати сектор</h4>
+          <form asp-action="AddSector" method="post" class="d-flex flex-column mb-3">
+              <input type="hidden" name="hallId" value="@Model.Halls.FirstOrDefault()?.Id" />
+              <input type="text" name="name" placeholder="Назва сектора" class="price-input new-price me-2 mt-3" required />
+              <input type="number" name="seatPrice" placeholder="Ціна" class="price-input new-price me-2 mt-3"   step="0.01" min="0" required />
+              <button type="submit" class="price-btn mt-3">+</button>
+          </form>
         </div>
-        <div class="big-stat-container mt-5 flex-fill">
+      </div>
+
+
+    @* Кінець функціоналу для редагування секторів і залів *@
+
+        <div class="big-stat-container mt-5 flex-fill" style="display: none">
                 <p class ="popular-films-title"> Найпопулярніші фільми </p>
                  <div class="d-flex justify-content-between ">
                      <span class ="popular-films-content"> *Популярний фільм* </span>
@@ -101,9 +142,8 @@
 
             </div>
 
-        </div>
-    </div>
-</div>
+        
+
 
  <div class="container mt-3 row" style=" padding-right: 10px;">
       <p class="new-movies-text font-main col-2 mt-4"> У прокаті</p>
@@ -219,9 +259,7 @@
                     </div>
 
                     <div class="session-times-block">
-                        
                             <div class="session-time text-light-emphasis small">час сеансу</div>
-                        
                     </div>
                 </div>
 
@@ -234,13 +272,32 @@
                     </div>
 
                     <div class="booking-btn-div font-main d-flex justify-content-between">
-                        <a class="booking-btn " asp-controller="Admin" asp-action="UpdateSession" asp-route-id="1" style ="margin-right: 1rem;">Змінити</a>
-                         <a class="booking-btn"   >Видалити</a>
+                        <a class="booking-btn" asp-controller="Admin" asp-action="UpdateSession" asp-route-id="1" style ="margin-right: 1rem;">Змінити</a>
+                        <a class="booking-btn">Видалити</a>
                     </div>
                 </div>
             </div>
         </div>
-    
+</div>
+
+<!-- Modal підтвердження видалення сектору -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Підтвердження видалення</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрити"></button>
+      </div>
+      <div class="modal-body">
+        Ви впевнені, що хочете видалити сектор <span id="modalSectorName"></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Скасувати</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Видалити</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
+<script src="/js/admin.js"></script>
