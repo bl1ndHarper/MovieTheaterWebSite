@@ -9,8 +9,7 @@
     <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
 }
 
-<div class="container row">
-    <div class="row">
+
         <div style="display: none" class="col-9 admin-panel-left">
             <div class="big-stat-container ">
                 <p class="chart-text font-main"> Відвідуваність сеансів</p>
@@ -50,51 +49,65 @@
         </div>
     
     @* Функціонал для редагування секторів і залів *@
-  <div class="big-stat-container ">
-    <h3>Редагування залів</h3>
-      <select name="hallId" id="hallsDropdown" class="form-select">
-          @foreach (var hall in Model.Halls)
-          {
-              <option value="@hall.Id">@hall.Name</option>
-          }
-      </select>
-
-    <div id="sectorsContainer">
-        @foreach (Hall hall in Model.Halls)
-        {
-            <div class="sectors" data-hall-id="@hall.Id" style="display: none;">
-                <h4>Сектори залу "@hall.Name"</h4>
-                @foreach (var sector in hall.Sectors.OrderBy(s => s.Id))
-                {
-                  <div class="d-flex justify-content-between align-items-center mb-2 sector-row" data-sector-id="@sector.Id">
-                      <span class="price-div-text">@sector.Name</span>
-
-                      <input type="number" class="price-input form-control mx-2 sector-price" value="@sector.SeatPrice.ToString("F2")" />
-
-                      <button class="btn btn-sm btn-outline-success update-price-btn me-2" type="button">Зберегти</button>
-
-                      <button class="btn btn-sm btn-outline-danger delete-sector-btn" type="button"
-                              data-sector-name="@sector.Name" data-hall-id="@hall.Id">
-                          <i class="fa-solid fa-trash-can"></i>
-                      </button>
-                  </div>
-                }
+    <div class=" container row ">
+      <div class="big-stat-container col-8  ms-5" >
+        <h3 class="font-main chart-text">Редагування залів</h3>
+        <div class="d-flex justify-content-between mt-4">
+          
+          <div class="hall-dropdown-div">
+            <h3 class="font-main stat-text" style="font-size:14pt">Оберіть залу:</h3>
+              <div class="dropdown-wrapper mt-4">
+              <select name="hallId" id="hallsDropdown" class="dropdown-select-admin ">
+                  @foreach (var hall in Model.Halls)
+                  {
+                      <option value="@hall.Id">@hall.Name</option>
+                  }
+              </select>
             </div>
-        }
-    </div>
+          </div>
+        
+        
 
-      <h4 class="mt-4">Додати сектор</h4>
-      <form asp-action="AddSector" method="post" class="d-flex justify-content-between mb-3">
-          <input type="hidden" name="hallId" value="@Model.Halls.FirstOrDefault()?.Id" />
-          <input type="text" name="name" placeholder="Назва сектора" class="form-control me-2" required />
-          <input type="number" name="seatPrice" placeholder="Ціна" class="form-control me-2" step="0.01" min="0" required />
-          <button type="submit" class="btn btn-primary">+</button>
-      </form>
-  </div>
+          <div id="sectorsContainer">
+              @foreach (Hall hall in Model.Halls)
+              {
+                  <div class="sectors" data-hall-id="@hall.Id" style="display: none;">
+                      <h3 class="font-main stat-text" style="text-align:right; font-size:14pt">Сектори залу "@hall.Name"</h3>
+                      @foreach (var sector in hall.Sectors.OrderBy(s => s.Id))
+                      {
+                        <div class="d-flex justify-content-end align-items-center mb-2 mt-4 sector-row" data-sector-id="@sector.Id">
+                            <span class="price-div-text">@sector.Name</span>
+
+                            <input type="number" class="price-input  mx-2 sector-price " placeholder="@sector.SeatPrice.ToString("F2")" />
+
+                            <button class="btn btn-sm btn-outline-success update-price-btn me-2 price-btn" type="button">Зберегти</button>
+
+                            <button class="btn btn-sm btn-outline-danger delete-sector-btn price-btn" type="button"
+                                    data-sector-name="@sector.Name" data-hall-id="@hall.Id">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                      }
+                  </div>
+              }
+              </div>
+          </div>
+        </div>
+        <div class="big-stat-container col-3  ms-4">
+            <h4 class="mt-4 font-main stat-text" style="text-align: center;">Додати сектор</h4>
+          <form asp-action="AddSector" method="post" class="d-flex flex-column mb-3">
+              <input type="hidden" name="hallId" value="@Model.Halls.FirstOrDefault()?.Id" />
+              <input type="text" name="name" placeholder="Назва сектора" class="price-input new-price me-2 mt-3" required />
+              <input type="number" name="seatPrice" placeholder="Ціна" class="price-input new-price me-2 mt-3"   step="0.01" min="0" required />
+              <button type="submit" class="price-btn mt-3">+</button>
+          </form>
+        </div>
+      </div>
+
 
     @* Кінець функціоналу для редагування секторів і залів *@
 
-        <div class="big-stat-container mt-5 flex-fill">
+        <div class="big-stat-container mt-5 flex-fill" style="display: none">
                 <p class ="popular-films-title"> Найпопулярніші фільми </p>
                  <div class="d-flex justify-content-between ">
                      <span class ="popular-films-content"> *Популярний фільм* </span>
@@ -129,9 +142,8 @@
 
             </div>
 
-        </div>
-    </div>
-</div>
+        
+
 
  <div class="container mt-3 row" style=" padding-right: 10px;">
       <p class="new-movies-text font-main col-2 mt-4"> У прокаті</p>
