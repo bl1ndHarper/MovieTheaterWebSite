@@ -71,7 +71,7 @@ async function loadSeats(sessionId) {
                 console.log(`[debug] Сектор: "${seat.sectorName}", ціна: ${seat.price}`);
                 
                 const seatEl = document.createElement("div");
-                seatEl.className = sectorsInfo[sector] >= 200 ? "premium-seat" : "seat";
+                seatEl.className = sector.toLowerCase() === "vip" ? "premium-seat" : "seat";
                 seatEl.dataset.id = `${sector}:${seat.label}`;
                 seatEl.dataset.seatid = seat.id;
                 seatEl.textContent = seat.label.substring(1); // лише число
