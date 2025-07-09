@@ -49,21 +49,21 @@ document.querySelector(".delete-time-btn").addEventListener("click", async funct
 });
 
 function renderSelectedMovie(movie) {
-    document.querySelector(".movie-thumb").src = `https://image.tmdb.org/t/p/w500${movie.posterPath}`;
+    document.querySelector(".movie-thumb").src = `${movie.thumbnailUrl}`;
     document.querySelector(".session-movie-title").innerText = movie.title;
     document.querySelector(".movie-director").innerHTML = `<span>Режисер:</span> -`; // можна розширити
-    document.querySelector(".movie-desc").innerText = movie.overview;
+    document.querySelector(".movie-desc").innerText = movie.description;
 
     const genresDiv = document.querySelector(".tags-genres-div");
-    genresDiv.innerHTML = movie.genres.map(g =>
-        `<div class="genre-tag text-light-emphasis small">${g.name}</div>`
+    genresDiv.innerHTML = movie.genres.map(genre =>
+        `<div class="genre-tag text-light-emphasis small">${genre.genre.name}</div>`
     ).join("") + `<div class="rating-tag text-light-emphasis small">Рейтинг: ${movie.adult ? "18+" : "13+"}</div>`;
 
     const statsDiv = document.querySelector(".session-info");
     statsDiv.innerHTML = `
         <span class="stats-tag">${movie.adult ? "18+" : "13+"}</span>
-        <span class="stats-tag">⭐ ${movie.voteAverage}/5 IMDb</span>
-        <span class="stats-tag">${movie.runtime} хв</span>
+        <span class="stats-tag">⭐ ${movie.imdbRating}/10 IMDb</span>
+        <span class="stats-tag">${movie.duration} хв</span>
         <span class="stats-tag">${movie.releaseDate?.split("-")[0]}</span>
     `;
 }

@@ -80,9 +80,9 @@ namespace MovieTheater.Infrastructure.Repositories
             {
                 Title = dto.Title,
                 Description = dto.Overview,
-                ThumbnailUrl = $"https://image.tmdb.org/t/p/w500{dto.PosterPath}",
-                ReleaseDate = DateTime.TryParse(dto.ReleaseDate, out var rd) ? rd : DateTime.MinValue,
-                ImdbRating = (decimal)Math.Round(dto.VoteAverage, 1),
+                ThumbnailUrl = $"https://image.tmdb.org/t/p/w500{dto.Poster_Path}",
+                ReleaseDate = DateTime.TryParse(dto.Release_Date, out var rd) ? rd : DateTime.MinValue,
+                ImdbRating = (decimal)Math.Round(dto.Vote_Average, 1),
                 Duration = (short?)dto.Runtime,
                 ActivityStatus = ActivityStatus.Upcoming,
                 AgeRating = rating,

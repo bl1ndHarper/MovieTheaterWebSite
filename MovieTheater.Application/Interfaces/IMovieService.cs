@@ -21,5 +21,6 @@ namespace MovieTheater.Application.Interfaces
         Task<List<MovieSearchResultDto>> SearchMoviesAsync(string query);
         Task<MovieDto?> GetMovieDetailsFromApiAsync(int tmdbId);
         Task<bool> AddMovieFromApiAsync(int tmdbId);
+        Task<bool> SaveMovieFromDtoAsync(MovieSaveDto dto);
     }
 }

@@ -4,6 +4,7 @@ using MovieTheater.Application.DTOs;
 using Microsoft.AspNetCore.JsonPatch;
 using MovieTheater.Web.Infrastructure;
 using System.Globalization;
+using System.Text.Json;
 
 
 namespace MovieTheater.Web.ApiControllers
@@ -105,13 +106,45 @@ namespace MovieTheater.Web.ApiControllers
             return Ok(results);
         }
 
-        [HttpPost("api/admin/movies/add/{tmdbId}")]
-        public async Task<IActionResult> AddMovie(int tmdbId)
+        [HttpPost("api/admin/movies/save")]
+        public async Task<IActionResult> SaveMovie([FromBody] JsonElement raw)
         {
-            var success = await _movieService.AddMovieFromApiAsync(tmdbId);
-            return success
-                ? Ok()
-                : ApiProblem.Bad("Помилка", "Не вдалося додати фільм");
+            var genreNames = new List<string>();
+            if (raw.TryGetProperty("genres", out var genresProp) && genresProp.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in genresProp.EnumerateArray())
+                {
+                    if (item.TryGetProperty("genre", out var genreObj) &&
+                        genreObj.TryGetProperty("name", out var nameProp))
+                    {
+                        var name = nameProp.GetString();
+                        if (!string.IsNullOrWhiteSpace(name))
+                            genreNames.Add(name);
+                    }
+                }
+            }
+
+            using var doc = JsonDocument.Parse(raw.GetRawText());
+            var root = doc.RootElement;
+
+            var filteredProperties = root.EnumerateObject()
+                .Where(p => p.Name != "genres")
+                .ToDictionary(p => p.Name, p => p.Value);
+
+            using var filteredDoc = JsonDocument.Parse(JsonSerializer.Serialize(filteredProperties));
+            var dto = JsonSerializer.Deserialize<MovieSaveDto>(filteredDoc.RootElement.GetRawText(), new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (dto == null)
+                return BadRequest("Невалідні дані");
+
+            dto.Genres = genreNames;
+
+            var result = await _movieService.SaveMovieFromDtoAsync(dto);
+
+            return result ? Ok() : BadRequest("Фільм уже існує або сталася помилка при збереженні");
         }
-        }
+    }
 }

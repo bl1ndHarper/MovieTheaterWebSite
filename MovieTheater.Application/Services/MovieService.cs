@@ -235,9 +235,8 @@ namespace MovieTheater.Application.Services
             return res?.Results
                 .Select(r =>
                 {
-                    string year = "????";
-                    if (DateTime.TryParse(r.ReleaseDate, out var parsed))
-                        year = parsed.Year.ToString();
+                    string pattern = "yyyy-MM-dd";
+                    string year = DateTime.ParseExact(r.Release_Date, pattern, null, DateTimeStyles.None).Year.ToString();
 
                     return new MovieSearchResultDto
                     {
@@ -267,10 +266,10 @@ namespace MovieTheater.Application.Services
             {
                 Title = movieDto.Title,
                 Description = movieDto.Overview,
-                ReleaseDate = DateTime.TryParse(movieDto.ReleaseDate, out var rd) ? rd : DateTime.MinValue,
-                ImdbRating = (decimal)Math.Round(movieDto.VoteAverage, 1),
+                ReleaseDate = DateTime.TryParse(movieDto.Release_Date, out var rd) ? rd : DateTime.MinValue,
+                ImdbRating = (decimal)Math.Round(movieDto.Vote_Average, 1),
                 Duration = (short?)movieDto.Runtime,
-                ThumbnailUrl = $"https://image.tmdb.org/t/p/w500{movieDto.PosterPath}",
+                ThumbnailUrl = $"https://image.tmdb.org/t/p/w500{movieDto.Poster_Path}",
                 DirectorName = "", // TODO: можна витягти з credits
                 Genres = movieDto.Genres.Select(g => new MovieGenre
                 {
@@ -293,15 +292,67 @@ namespace MovieTheater.Application.Services
             {
                 Title = movieDto.Title,
                 Overview = movieDto.Description,
-                PosterPath = movieDto.ThumbnailUrl.Replace("https://image.tmdb.org/t/p/w500", ""),
-                ReleaseDate = movieDto.ReleaseDate.ToString("yyyy-MM-dd"),
-                VoteAverage = (double)movieDto.ImdbRating,
+                Poster_Path = movieDto.ThumbnailUrl.Replace("https://image.tmdb.org/t/p/w500", ""),
+                Release_Date = movieDto.ReleaseDate.ToString("yyyy-MM-dd"),
+                Vote_Average = (double)movieDto.ImdbRating,
                 Runtime = movieDto.Duration ?? 0,
                 Adult = movieDto.AgeRatingLabel == "NC-17",
                 Genres = movieDto.Genres.Select(g => new TmdbGenreDto { Name = g.Genre.Name }).ToList()
             };
 
             await _movieRepository.SaveMovieFromApiAsync(tmdbDto);
+            return true;
+        }
+
+        public async Task<bool> SaveMovieFromDtoAsync(MovieSaveDto dto)
+        {
+            if (await _movieRepository.ExistsByTitleAndYearAsync(dto.Title, dto.ReleaseDate.Year))
+                return false;
+
+            var existingGenres = await _movieRepository.GetGenresByNamesAsync(dto.Genres);
+
+            var newGenres = dto.Genres
+                .Where(name => existingGenres.All(g => g.Name != name))
+                .Select(name => new Genre { Name = name })
+                .ToList();
+
+            if (newGenres.Any())
+            {
+                await _movieRepository.AddGenresAsync(newGenres);
+                await _movieRepository.SaveAsync();
+                existingGenres.AddRange(newGenres);
+            }
+
+            var ratingLabel = dto.Adult ? "NC-17" : "PG-13";
+            var rating = await _dbContext.Ratings.FirstOrDefaultAsync(r => r.Label == ratingLabel)
+                ?? await _dbContext.Ratings.FirstOrDefaultAsync(r => r.Label == "PG-13");
+
+            var movie = new Movie
+            {
+                Title = dto.Title,
+                Description = dto.Description,
+                ThumbnailUrl = dto.ThumbnailUrl,
+                ReleaseDate = DateTime.SpecifyKind(dto.ReleaseDate, DateTimeKind.Utc),
+                ImdbRating = dto.ImdbRating,
+                Duration = dto.Duration,
+                ActivityStatus = ActivityStatus.Upcoming,
+                AgeRating = rating,
+                DirectorName = dto.DirectorName,
+                DirectorDetailsUrl = dto.DirectorDetailsUrl
+            };
+
+            await _movieRepository.AddAsync(movie);
+            await _movieRepository.SaveAsync();
+
+            var genreLinks = existingGenres.Select(g => new MovieGenre
+            {
+                MovieId = movie.Id,
+                GenreId = g.Id
+            }).ToList();
+
+            await _movieRepository.AddMovieGenresAsync(genreLinks);
+            await _movieRepository.SaveAsync();
+
             return true;
         }
     }
