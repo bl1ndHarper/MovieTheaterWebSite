@@ -1,0 +1,657 @@
+-- Create InitialData
+
+INSERT INTO "Ratings" (
+"Id", "Label", "Description", "MinAge"
+)
+VALUES (
+1, 'G', 'All ages admitted', 0
+),
+(
+2, 'PG', 'Parental Guidance Suggested', 4
+),
+(
+3, 'PG-13', 'Parents strongly cautioned', 13
+),
+(
+4, 'R', 'Under 17 requires accompaniying parent or adult guardian', 16
+),
+(
+5, 'NC-17', 'No one 17 and under admitted', 18
+);
+
+INSERT INTO "Movies" (
+"Id", "Title", "Description", "Duration", "TrailerUrl",
+"ThumbnailUrl", "ReleaseDate", "ImdbRating", "ActivityStatus",
+"AgeRatingId", "DirectorDetailsUrl", "DirectorName")
+	VALUES
+(1, 'Shrek', 'A mean lord exiles fairytale creatures to the swamp of a grumpy ogre, who must go on a quest and rescue a princess for the lord in order to get his land back.',
+90, 'https://www.youtube.com/watch?v=CwXOrWvPBPk',
+ 'https://picfiles.alphacoders.com/364/thumb-1920-364107.jpg', '2001-05-18', 7.9, 'active', 1, 'https://en.wikipedia.org/wiki/Andrew_Adamson',
+ 'Andrew Adamson'),
+(2, 'Inception', 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a C.E.O., but his tragic past may doom the project and his team to disaster.',
+148, 'https://www.youtube.com/watch?v=YoHD9XEInc0',
+ 'https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_.jpg', '2010-07-16', 8.8, 'active', 2, 'https://en.wikipedia.org/wiki/Christopher_Nolan', 'Christopher Nolan'),
+(3, 'Snatch', 'Unscrupulous boxing promoters, violent bookmakers, a Russian gangster, incompetent amateur robbers, and Jewish jewelers all collide.', 104, 'https://www.youtube.com/watch?v=ni4tEtuTccc', 'https://m.media-amazon.com/images/M/MV5BYzk5NjJkMTQtN2IyNC00YWM5LTlhZmMtNGI3MWNhMTU1YTc4XkEyXkFqcGc@._V1_.jpg', '2000-08-23', 8.2, 'active', 4, 'https://en.wikipedia.org/wiki/Guy_Ritchie', 'Guy Ritchie'),
+(4, 'The Good, the Bad and the Ugly', 'A bounty hunting scam joins two men in an uneasy alliance against a third in a race to find a fortune in gold.', 178, 'https://www.youtube.com/watch?v=WCN5JJY_wiA', 'https://m.media-amazon.com/images/M/MV5BMWM5ZjQxM2YtNDlmYi00ZDNhLWI4MWUtN2VkYjBlMTY1ZTkwXkEyXkFqcGc@._V1_.jpg', '1966-12-23', 8.8, 'archived', 4,
+'https://en.wikipedia.org/wiki/Sergio_Leone', 'Sergio Leone'),
+(5, 'Phone Booth', 'Publicist Stuart Shepard is trapped in a phone booth by a sniper who insists he confess his sins.', 81, 'https://www.youtube.com/watch?v=gUqTCsjCsA8', 'https://m.media-amazon.com/images/M/MV5BYjJhYTNhYmEtODcyOS00ZGEwLWEwZTYtNzlkMmY0MjQ1OWQwXkEyXkFqcGc@._V1_.jpg', '2002-09-10', 7.1, 'active', 4, 'https://en.wikipedia.org/wiki/Joel_Schumacher', 'Joel Schumacher'),
+(6, 'Pulp Fiction', 'The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine.', 154, 'https://www.youtube.com/watch?v=s7EdQ4FqbhY', 'https://m.media-amazon.com/images/M/MV5BYTViYTE3ZGQtNDBlMC00ZTAyLTkyODMtZGRiZDg0MjA2YThkXkEyXkFqcGc@._V1_.jpg', '1994-10-14', 8.9, 'active', 4, 'https://en.wikipedia.org/wiki/Quentin_Tarantino', 'Quentin Tarantino'),
+(7, 'Lock, Stock and Two Smoking Barrels', 'A botched card game triggers a series of unfortunate events involving gangsters, debt collectors and weed growers.', 107, 'https://www.youtube.com/watch?v=HY7mRdQuUSw', 'https://m.media-amazon.com/images/M/MV5BMmY1M2M5ZmMtYzllZC00YzAxLTk4MjktZDJkNjA1MTUwMGQ4XkEyXkFqcGc@._V1_.jpg', '1998-08-28', 8.2, 'active', 4, 'https://en.wikipedia.org/wiki/Guy_Ritchie', 'Guy Ritchie'),
+(8, 'A Minecraft Movie', 'Four misfits are suddenly pulled through a mysterious portal into a bizarre cubic wonderland that thrives on imagination. To get back home they''ll have to master this world while embarking on a quest with an unexpected expert crafter.',
+120, 'https://www.youtube.com/watch?v=wJO_vIDZn-I', 'https://m.media-amazon.com/images/M/MV5BYzFjMzNjOTktNDBlNy00YWZhLWExYTctZDcxNDA4OWVhOTJjXkEyXkFqcGc@._V1_.jpg', '2025-04-04', 0.0, 'active', 2, 'https://en.wikipedia.org/wiki/Jared_Hess', 'Jared Hess'),
+(9, 'American Psycho', 'A wealthy New York City investment banking executive hides his psychopathic ego from his circle of friends.',
+102, 'https://www.youtube.com/watch?v=81mibtQWWBg', 'https://m.media-amazon.com/images/M/MV5BNzg0ZDBmZDAtZjIyNC00MDE2LWIzY2YtNTkxMjIzNGZmNjIyXkEyXkFqcGc@._V1_.jpg', '2000-04-14', 7.6, 'active', 4, 'https://en.wikipedia.org/wiki/Mary_Harron', 'Mary Harron'),
+(10, 'Gladiator',
+'A former Roman General sets out to exact vengeance against the corrupt emperor who murdered his family.',
+155, 'https://www.youtube.com/watch?v=P5ieIbInFpg', 'https://m.media-amazon.com/images/M/MV5BYWQ4YmNjYjEtOWE1Zi00Y2U4LWI4NTAtMTU0MjkxNWQ1ZmJiXkEyXkFqcGc@._V1_.jpg', '2000-05-05', 8.5, 'archived', 4, 'https://en.wikipedia.org/wiki/Ridley_Scott', 'Ridley Scott'),
+(11, 'Lilo & Stitch', 'A lonely Hawaiian girl befriends a runaway alien, helping to mend her fragmented family.', 108, 'https://www.youtube.com/watch?v=VWqJifMMgZE', 'https://m.media-amazon.com/images/M/MV5BYmFmZjM1ZTEtYzQ5ZS00MTRmLTkzMDktYWMxNTg2NGE3YjY4XkEyXkFqcGc@._V1_.jpg', '2002-06-21', 7.3, 'archived', 1, 'https://en.wikipedia.org/wiki/Dean_Fleischer_Camp', 'Dean Fleischer Camp'),
+(12, 'Five Nights at Freddy''s 2', '1987, after a rather unstable life, Jeremy Fitzgerald found work as a security guard at the new Freddy''s Fazbear Pizzeria, but when he entered there he would realize that not everything there is as it seems.',
+110, 'https://www.youtube.com/watch?v=eGV7zwjvxKs', 'https://m.media-amazon.com/images/M/MV5BYjllM2RjZWYtZjk2MS00OTE3LWE1MTItM2U3Y2ZlNDRkYmNmXkEyXkFqcGc@._V1_.jpg', '2025-11-05', 0.0, 'upcoming', 4, 'https://en.wikipedia.org/wiki/Emma_Tammi', 'Emma Tammi'),
+(13, 'Ballerina',
+'An assassin trained in the traditions of the Ruska Roma organization sets out to seek revenge after her father''s death.', 164, 'https://www.youtube.com/watch?v=0FSwsrFpkbw', 'https://m.media-amazon.com/images/M/MV5BNzdhZmY2OTQtYWI4OC00ZThkLTlhZjAtNzE2YzRjM2Q5YjJlXkEyXkFqcGc@._V1_.jpg', '2025-06-06', 7.2, 'active', 4, 'https://en.wikipedia.org/wiki/Len_Wiseman', 'Len Wiseman');
+
+INSERT INTO "Halls" ("Id", "Name", "Description") VALUES
+(1, 'Червона Зала', 'Головна зала з 126 місцями та звуковою системою Dolby Atmos'),
+(2, 'Синя Зала', 'Мала зала з 84 місцями, підвищений комфорт'),
+(3, 'Зелена Зала', 'Середня зала зі 105 місцями, ідеально для великих компаній');
+
+
+INSERT INTO "HallSectors" ("Id", "HallId", "Name", "SeatPrice") VALUES
+-- Червона Зала (HallId = 1)
+(1, 1, 'Стандарт', 150.00),
+(2, 1, 'VIP', 250.00),
+
+-- Синя Зала (HallId = 2)
+(3, 2, 'Стандарт', 180.00),
+(4, 2, 'VIP', 300.00),
+
+-- Зелена Зала (HallId = 3)
+(5, 3, 'Стандарт', 90.00),
+(6, 3, 'VIP', 150.00);
+
+
+-- --- ГЕНЕРАЦІЯ СИДІНЬ ДЛЯ КОЖНОЇ ЗАЛИ ---
+
+DO $$
+DECLARE
+    standard_sector_id BIGINT;
+    vip_sector_id BIGINT;
+    row_letter CHAR;
+    col INTEGER;
+    i INTEGER;
+BEGIN
+    SELECT "Id" INTO standard_sector_id FROM "HallSectors" WHERE "HallId" = 1 AND "Name" = 'Стандарт';
+    SELECT "Id" INTO vip_sector_id FROM "HallSectors" WHERE "HallId" = 1 AND "Name" = 'VIP';
+
+    -- Стандартні ряди: A–J (10 рядів × 12 місць = 120 сидінь)
+    FOR i IN 65..74 LOOP  -- ASCII 'A' = 65, 'J' = 74
+        row_letter := CHR(i);
+        FOR col IN 1..12 LOOP
+            INSERT INTO "HallSeats" ("SectorId", "Label", "Status")
+            VALUES (standard_sector_id, row_letter || col, 0); -- 0 = Free
+        END LOOP;
+    END LOOP;
+
+    -- VIP ряд: K — 6 місць
+    FOR col IN 1..6 LOOP
+        INSERT INTO "HallSeats" ("SectorId", "Label", "Status")
+        VALUES (vip_sector_id, 'K' || col, 0); -- ВИДАЛЕНО (VIP)
+    END LOOP;
+END $$;
+
+
+-- ГЕНЕРАЦІЯ сидінь для HallId = 2 (Синя Зала) - ОНОВЛЕНО кількість VIP-місць
+DO $$
+DECLARE
+    standard_sector_id BIGINT;
+    vip_sector_id BIGINT;
+    row_letter CHAR;
+    col INTEGER;
+    i INTEGER;
+BEGIN
+    SELECT "Id" INTO standard_sector_id FROM "HallSectors" WHERE "HallId" = 2 AND "Name" = 'Стандарт';
+    SELECT "Id" INTO vip_sector_id FROM "HallSectors" WHERE "HallId" = 2 AND "Name" = 'VIP';
+
+    -- Стандартні ряди: A–J (10 рядів × 8 місць = 80 сидінь)
+    FOR i IN 65..74 LOOP  -- ASCII 'A' = 65, 'J' = 74
+        row_letter := CHR(i);
+        FOR col IN 1..8 LOOP
+            INSERT INTO "HallSeats" ("SectorId", "Label", "Status")
+            VALUES (standard_sector_id, row_letter || col, 0);
+        END LOOP;
+    END LOOP;
+
+    -- VIP ряд: K — 4 місця (ОНОВЛЕНО)
+    FOR col IN 1..4 LOOP -- Змінено: тепер 4 місця
+        INSERT INTO "HallSeats" ("SectorId", "Label", "Status")
+        VALUES (vip_sector_id, 'K' || col, 0); -- ВИДАЛЕНО (VIP)
+    END LOOP;
+END $$;
+
+
+-- ГЕНЕРАЦІЯ сидінь для HallId = 3 (Зелена Зала)
+DO $$
+DECLARE
+    standard_sector_id BIGINT;
+    vip_sector_id BIGINT;
+    row_letter CHAR;
+    col INTEGER;
+    i INTEGER;
+BEGIN
+    SELECT "Id" INTO standard_sector_id FROM "HallSectors" WHERE "HallId" = 3 AND "Name" = 'Стандарт';
+    SELECT "Id" INTO vip_sector_id FROM "HallSectors" WHERE "HallId" = 3 AND "Name" = 'VIP';
+
+    -- Стандартні ряди: A–J (10 рядів × 10 місць = 100 сидінь)
+    FOR i IN 65..74 LOOP  -- ASCII 'A' = 65, 'J' = 74
+        row_letter := CHR(i);
+        FOR col IN 1..10 LOOP
+            INSERT INTO "HallSeats" ("SectorId", "Label", "Status")
+            VALUES (standard_sector_id, row_letter || col, 0);
+        END LOOP;
+    END LOOP;
+
+    -- VIP ряд: K — 5 місць
+    FOR col IN 1..5 LOOP
+        INSERT INTO "HallSeats" ("SectorId", "Label", "Status")
+        VALUES (vip_sector_id, 'K' || col, 0); -- ВИДАЛЕНО (VIP)
+    END LOOP;
+END $$;
+
+
+INSERT INTO "Genres" ("Id", "Name") VALUES
+(1, 'Animation'),
+(2, 'Family'),
+(3, 'Fantasy'),
+(4, 'Adventure'),
+(5, 'Action'),
+(6, 'Sci-Fi'),
+(7, 'Thriller'),
+(8, 'Crime'),
+(9, 'Comedy'),
+(10, 'Western'),
+(11, 'Drama'),
+(12, 'Horror'),
+(13, 'Biography');
+
+INSERT INTO "MovieGenres" ("MovieId", "GenreId") VALUES
+(1, 1), -- Shrek (Animation)
+(1, 2), -- Shrek (Family)
+(1, 3), -- Shrek (Fantasy)
+(1, 4), -- Shrek (Adventure)
+(1, 9), -- Shrek (Comedy)
+
+(2, 5), -- Inception (Action)
+(2, 6), -- Inception (Sci-Fi)
+(2, 7), -- Inception (Thriller)
+
+(3, 8), -- Snatch (Crime)
+(3, 9), -- Snatch (Comedy)
+(3, 5), -- Snatch (Action)
+
+(4, 10), -- The Good, the Bad and the Ugly (Western)
+(4, 4), -- The Good, the Bad and the Ugly (Adventure)
+
+(5, 7), -- Phone Booth (Thriller)
+(5, 8), -- Phone Booth (Crime)
+(5, 11), -- Phone Booth (Drama)
+
+(6, 8), -- Pulp Fiction (Crime)
+(6, 11), -- Pulp Fiction (Drama)
+(6, 7), -- Pulp Fiction (Thriller)
+
+(7, 8), -- Lock, Stock and Two Smoking Barrels (Crime)
+(7, 9), -- Lock, Stock and Two Smoking Barrels (Comedy)
+(7, 7), -- Lock, Stock and Two Smoking Barrels (Thriller)
+
+(8, 1), -- A Minecraft Movie (Animation)
+(8, 4), -- A Minecraft Movie (Adventure)
+(8, 2), -- A Minecraft Movie (Family)
+(8, 3), -- A Minecraft Movie (Fantasy)
+
+(9, 8), -- American Psycho (Crime)
+(9, 11), -- American Psycho (Drama)
+(9, 12), -- American Psycho (Horror)
+(9, 7), -- American Psycho (Thriller)
+
+(10, 5), -- Gladiator (Action)
+(10, 4), -- Gladiator (Adventure)
+(10, 11), -- Gladiator (Drama)
+(10, 13), -- Gladiator (Biography/History)
+
+(11, 1), -- Lilo & Stitch (Animation)
+(11, 2), -- Lilo & Stitch (Family)
+(11, 6), -- Lilo & Stitch (Sci-Fi)
+(11, 9), -- Lilo & Stitch (Comedy)
+
+(12, 12), -- Five Nights at Freddy's 2 (Horror)
+(12, 7), -- Five Nights at Freddy's 2 (Thriller)
+
+(13, 5), -- Ballerina (Action)
+(13, 7); -- Ballerina (Thriller)
+
+INSERT INTO "Actors" ("Id", "Name", "DetailsUrl") VALUES
+(1, 'Mike Myers', 'https://en.wikipedia.org/wiki/Mike_Myers'),
+(2, 'Eddie Murphy', 'https://en.wikipedia.org/wiki/Eddie_Murphy'),
+(3, 'Cameron Diaz', 'https://en.wikipedia.org/wiki/Cameron_Diaz'),
+(4, 'Leonardo DiCaprio', 'https://en.wikipedia.org/wiki/Leonardo_DiCaprio'),
+(5, 'Joseph Gordon-Levitt', 'https://en.wikipedia.org/wiki/Joseph_Gordon-Levitt'),
+(6, 'Tom Hardy', 'https://en.wikipedia.org/wiki/Tom_Hardy'),
+(7, 'Jason Statham', 'https://en.wikipedia.org/wiki/Jason_Statham'),
+(8, 'Brad Pitt', 'https://en.wikipedia.org/wiki/Brad_Pitt'),
+(9, 'Benicio del Toro', 'https://en.wikipedia.org/wiki/Benicio_del_Toro'),
+(10, 'Clint Eastwood', 'https://en.wikipedia.org/wiki/Clint_Eastwood'),
+(11, 'Lee Van Cleef', 'https://en.wikipedia.org/wiki/Lee_Van_Cleef'),
+(12, 'Eli Wallach', 'https://en.wikipedia.org/wiki/Eli_Wallach'),
+(13, 'Colin Farrell', 'https://en.wikipedia.org/wiki/Colin_Farrell'),
+(14, 'Forest Whitaker', 'https://en.wikipedia.org/wiki/Forest_Whitaker'),
+(15, 'Bruce Willis', 'https://en.wikipedia.org/wiki/Bruce_Willis'),
+(16, 'John Travolta', 'https://en.wikipedia.org/wiki/John_Travolta'),
+(17, 'Samuel L. Jackson', 'https://en.wikipedia.org/wiki/Samuel_L._Jackson'),
+(18, 'Uma Thurman', 'https://en.wikipedia.org/wiki/Uma_Thurman'),
+(19, 'Vinnie Jones', 'https://en.wikipedia.org/wiki/Vinnie_Jones'),
+(20, 'Guy Ritchie', 'https://en.wikipedia.org/wiki/Guy_Ritchie'), -- Often has small cameos in his films
+(21, 'Christian Bale', 'https://en.wikipedia.org/wiki/Christian_Bale'),
+(22, 'Willem Dafoe', 'https://en.wikipedia.org/wiki/Willem_Dafoe'),
+(23, 'Russell Crowe', 'https://en.wikipedia.org/wiki/Russell_Crowe'),
+(24, 'Joaquin Phoenix', 'https://en.wikipedia.org/wiki/Joaquin_Phoenix'),
+(25, 'Daveigh Chase', 'https://en.wikipedia.org/wiki/Daveigh_Chase'),
+(26, 'Chris Sanders', 'https://en.wikipedia.org/wiki/Chris_Sanders_(animator)'),
+(27, 'Tia Carrere', 'https://en.wikipedia.org/wiki/Tia_Carrere'),
+(28, 'Josh Hutcherson', 'https://en.wikipedia.org/wiki/Josh_Hutcherson'),
+(29, 'Elizabeth Lail', 'https://en.wikipedia.org/wiki/Elizabeth_Lail'),
+(30, 'Chloe Coleman', 'https://en.wikipedia.org/wiki/Chloe_Coleman'),
+(31, 'Ana de Armas', 'https://en.wikipedia.org/wiki/Ana_de_Armas'),
+(32, 'Keanu Reeves', 'https://en.wikipedia.org/wiki/Keanu_Reeves');
+
+INSERT INTO "MovieActors" ("MovieId", "ActorId") VALUES
+(1, 1),  -- Shrek - Mike Myers (Shrek)
+(1, 2),  -- Shrek - Eddie Murphy (Donkey)
+(1, 3),  -- Shrek - Cameron Diaz (Princess Fiona)
+
+(2, 4),  -- Inception - Leonardo DiCaprio (Cobb)
+(2, 5),  -- Inception - Joseph Gordon-Levitt (Arthur)
+(2, 6),  -- Inception - Tom Hardy (Eames)
+
+(3, 7),  -- Snatch - Jason Statham (Turkish)
+(3, 8),  -- Snatch - Brad Pitt (Mickey O'Neil)
+(3, 9),  -- Snatch - Benicio del Toro (Franky Four Fingers)
+(3, 19), -- Snatch - Vinnie Jones (Bullet Tooth Tony)
+
+(4, 10), -- The Good, the Bad and the Ugly - Clint Eastwood (Blondie)
+(4, 11), -- The Good, the Bad and the Ugly - Lee Van Cleef (Angel Eyes)
+(4, 12), -- The Good, the Bad and the Ugly - Eli Wallach (Tuco)
+
+(5, 13), -- Phone Booth - Colin Farrell (Stuart Shepard)
+(5, 14), -- Phone Booth - Forest Whitaker (Captain Ramey)
+(5, 15), -- Phone Booth - Bruce Willis (The Caller - voice only, but still an actor)
+
+(6, 16), -- Pulp Fiction - John Travolta (Vincent Vega)
+(6, 17), -- Pulp Fiction - Samuel L. Jackson (Jules Winnfield)
+(6, 18), -- Pulp Fiction - Uma Thurman (Mia Wallace)
+(6, 15), -- Pulp Fiction - Bruce Willis (Butch Coolidge)
+
+(7, 7),  -- Lock, Stock and Two Smoking Barrels - Jason Statham (Bacon)
+(7, 19), -- Lock, Stock and Two Smoking Barrels - Vinnie Jones (Big Chris)
+(7, 20), -- Lock, Stock and Two Smoking Barrels - Guy Ritchie (brief cameo as Man with Gun)
+
+(8, 28), -- A Minecraft Movie - Josh Hutcherson (Possible lead)
+(8, 30), -- A Minecraft Movie - Chloe Coleman (Possible lead)
+
+(9, 21), -- American Psycho - Christian Bale (Patrick Bateman)
+(9, 22), -- American Psycho - Willem Dafoe (Donald Kimball)
+
+(10, 23), -- Gladiator - Russell Crowe (Maximus Decimus Meridius)
+(10, 24), -- Gladiator - Joaquin Phoenix (Commodus)
+
+(11, 25), -- Lilo & Stitch - Daveigh Chase (Lilo Pelekai - voice)
+(11, 26), -- Lilo & Stitch - Chris Sanders (Stitch - voice)
+(11, 27), -- Lilo & Stitch - Tia Carrere (Nani Pelekai - voice)
+
+(12, 28), -- Five Nights at Freddy's 2 - Josh Hutcherson (Mike Schmidt)
+(12, 29), -- Five Nights at Freddy's 2 - Elizabeth Lail (Vanessa)
+
+(13, 31), -- Ballerina - Ana de Armas (Rooney)
+(13, 32); -- Ballerina - Keanu Reeves (John Wick)
+
+INSERT INTO "Sessions" ("MovieId", "HallId", "StartTime", "SeatsTotal") VALUES
+
+-- День 1: Четвер, 3 липня 2025
+(2, 1, '2025-07-03 10:00:00', 126),
+(6, 2, '2025-07-03 10:15:00', 84),
+(10, 3, '2025-07-03 10:30:00', 105),
+(1, 1, '2025-07-03 12:30:00', 126),
+(4, 2, '2025-07-03 12:45:00', 84),
+(7, 3, '2025-07-03 13:00:00', 105),
+(9, 1, '2025-07-03 15:00:00', 126),
+(3, 2, '2025-07-03 15:15:00', 84),
+(11, 3, '2025-07-03 15:30:00', 105),
+(5, 1, '2025-07-03 17:30:00', 126),
+(8, 2, '2025-07-03 17:45:00', 84),
+(12, 3, '2025-07-03 18:00:00', 105),
+(2, 1, '2025-07-03 20:00:00', 126),
+(6, 2, '2025-07-03 20:15:00', 84),
+(10, 3, '2025-07-03 20:30:00', 105),
+(13, 1, '2025-07-03 22:30:00', 126),
+(1, 2, '2025-07-03 22:45:00', 84),
+(4, 3, '2025-07-03 23:00:00', 105),
+
+-- День 2: П'ятниця, 4 липня 2025
+(7, 1, '2025-07-04 10:00:00', 126),
+(9, 2, '2025-07-04 10:15:00', 84),
+(3, 3, '2025-07-04 10:30:00', 105),
+(11, 1, '2025-07-04 12:30:00', 126),
+(5, 2, '2025-07-04 12:45:00', 84),
+(8, 3, '2025-07-04 13:00:00', 105),
+(12, 1, '2025-07-04 15:00:00', 126),
+(2, 2, '2025-07-04 15:15:00', 84),
+(6, 3, '2025-07-04 15:30:00', 105),
+(10, 1, '2025-07-04 17:30:00', 126),
+(13, 2, '2025-07-04 17:45:00', 84),
+(1, 3, '2025-07-04 18:00:00', 105),
+(4, 1, '2025-07-04 20:00:00', 126),
+(7, 2, '2025-07-04 20:15:00', 84),
+(9, 3, '2025-07-04 20:30:00', 105),
+(3, 1, '2025-07-04 22:30:00', 126),
+(11, 2, '2025-07-04 22:45:00', 84),
+(5, 3, '2025-07-04 23:00:00', 105),
+
+-- День 3: Субота, 5 липня 2025
+(8, 1, '2025-07-05 10:00:00', 126),
+(12, 2, '2025-07-05 10:15:00', 84),
+(2, 3, '2025-07-05 10:30:00', 105),
+(6, 1, '2025-07-05 12:00:00', 126),
+(10, 2, '2025-07-05 12:15:00', 84),
+(13, 3, '2025-07-05 12:30:00', 105),
+(1, 1, '2025-07-05 14:00:00', 126),
+(4, 2, '2025-07-05 14:15:00', 84),
+(7, 3, '2025-07-05 14:30:00', 105),
+(9, 1, '2025-07-05 16:00:00', 126),
+(3, 2, '2025-07-05 16:15:00', 84),
+(11, 3, '2025-07-05 16:30:00', 105),
+(5, 1, '2025-07-05 18:00:00', 126),
+(8, 2, '2025-07-05 18:15:00', 84),
+(12, 3, '2025-07-05 18:30:00', 105),
+(2, 1, '2025-07-05 20:00:00', 126),
+(6, 2, '2025-07-05 20:15:00', 84),
+(10, 3, '2025-07-05 20:30:00', 105),
+(13, 1, '2025-07-05 22:00:00', 126),
+(1, 2, '2025-07-05 22:15:00', 84),
+(4, 3, '2025-07-05 22:30:00', 105),
+
+-- День 4: Неділя, 6 липня 2025
+(7, 1, '2025-07-06 10:00:00', 126),
+(9, 2, '2025-07-06 10:15:00', 84),
+(3, 3, '2025-07-06 10:30:00', 105),
+(11, 1, '2025-07-06 12:30:00', 126),
+(5, 2, '2025-07-06 12:45:00', 84),
+(8, 3, '2025-07-06 13:00:00', 105),
+(12, 1, '2025-07-06 15:00:00', 126),
+(2, 2, '2025-07-06 15:15:00', 84),
+(6, 3, '2025-07-06 15:30:00', 105),
+(10, 1, '2025-07-06 17:30:00', 126),
+(13, 2, '2025-07-06 17:45:00', 84),
+(1, 3, '2025-07-06 18:00:00', 105),
+(4, 1, '2025-07-06 20:00:00', 126),
+(7, 2, '2025-07-06 20:15:00', 84),
+(9, 3, '2025-07-06 20:30:00', 105),
+(3, 1, '2025-07-06 22:30:00', 126),
+(11, 2, '2025-07-06 22:45:00', 84),
+(5, 3, '2025-07-06 23:00:00', 105),
+
+-- День 5: Понеділок, 7 липня 2025
+(2, 1, '2025-07-07 10:00:00', 126),
+(6, 2, '2025-07-07 10:30:00', 84),
+(10, 3, '2025-07-07 11:00:00', 105),
+(1, 1, '2025-07-07 12:30:00', 126),
+(4, 2, '2025-07-07 13:00:00', 84),
+(7, 3, '2025-07-07 13:30:00', 105),
+(9, 1, '2025-07-07 15:00:00', 126),
+(3, 2, '2025-07-07 15:30:00', 84),
+(11, 3, '2025-07-07 16:00:00', 105),
+(5, 1, '2025-07-07 17:30:00', 126),
+(8, 2, '2025-07-07 18:00:00', 84),
+(12, 3, '2025-07-07 18:30:00', 105),
+(2, 1, '2025-07-07 20:00:00', 126),
+(6, 2, '2025-07-07 20:30:00', 84),
+(10, 3, '2025-07-07 21:00:00', 105),
+
+-- День 6: Вівторок, 8 липня 2025
+(13, 1, '2025-07-08 10:00:00', 126),
+(1, 2, '2025-07-08 10:30:00', 84),
+(4, 3, '2025-07-08 11:00:00', 105),
+(7, 1, '2025-07-08 12:30:00', 126),
+(9, 2, '2025-07-08 13:00:00', 84),
+(3, 3, '2025-07-08 13:30:00', 105),
+(11, 1, '2025-07-08 15:00:00', 126),
+(5, 2, '2025-07-08 15:30:00', 84),
+(8, 3, '2025-07-08 16:00:00', 105),
+(12, 1, '2025-07-08 17:30:00', 126),
+(2, 2, '2025-07-08 18:00:00', 84),
+(6, 3, '2025-07-08 18:30:00', 105),
+(10, 1, '2025-07-08 20:00:00', 126),
+(13, 2, '2025-07-08 20:30:00', 84),
+(1, 3, '2025-07-08 21:00:00', 105),
+
+-- День 7: Середа, 9 липня 2025
+(4, 1, '2025-07-09 10:00:00', 126),
+(7, 2, '2025-07-09 10:30:00', 84),
+(9, 3, '2025-07-09 11:00:00', 105),
+(3, 1, '2025-07-09 12:30:00', 126),
+(11, 2, '2025-07-09 13:00:00', 84),
+(5, 3, '2025-07-09 13:30:00', 105),
+(8, 1, '2025-07-09 15:00:00', 126),
+(12, 2, '2025-07-09 15:30:00', 84),
+(2, 3, '2025-07-09 16:00:00', 105),
+(6, 1, '2025-07-09 17:30:00', 126),
+(10, 2, '2025-07-09 18:00:00', 84),
+(13, 3, '2025-07-09 18:30:00', 105),
+(1, 1, '2025-07-09 20:00:00', 126),
+(4, 2, '2025-07-09 20:30:00', 84),
+(7, 3, '2025-07-09 21:00:00', 105),
+
+--newWeek
+
+-- День 8: Четвер, 10 липня 2025
+(9, 1, '2025-07-10 10:00:00', 126),
+(3, 2, '2025-07-10 10:15:00', 84),
+(11, 3, '2025-07-10 10:30:00', 105),
+(5, 1, '2025-07-10 12:30:00', 126),
+(8, 2, '2025-07-10 12:45:00', 84),
+(12, 3, '2025-07-10 13:00:00', 105),
+(2, 1, '2025-07-10 15:00:00', 126),
+(6, 2, '2025-07-10 15:15:00', 84),
+(10, 3, '2025-07-10 15:30:00', 105),
+(13, 1, '2025-07-10 17:30:00', 126),
+(1, 2, '2025-07-10 17:45:00', 84),
+(4, 3, '2025-07-10 18:00:00', 105),
+(7, 1, '2025-07-10 20:00:00', 126),
+(9, 2, '2025-07-10 20:15:00', 84),
+(3, 3, '2025-07-10 20:30:00', 105),
+(11, 1, '2025-07-10 22:30:00', 126),
+(5, 2, '2025-07-10 22:45:00', 84),
+(8, 3, '2025-07-10 23:00:00', 105),
+
+-- День 9: П'ятниця, 11 липня 2025
+(12, 1, '2025-07-11 10:00:00', 126),
+(2, 2, '2025-07-11 10:15:00', 84),
+(6, 3, '2025-07-11 10:30:00', 105),
+(10, 1, '2025-07-11 12:30:00', 126),
+(13, 2, '2025-07-11 12:45:00', 84),
+(1, 3, '2025-07-11 13:00:00', 105),
+(4, 1, '2025-07-11 15:00:00', 126),
+(7, 2, '2025-07-11 15:15:00', 84),
+(9, 3, '2025-07-11 15:30:00', 105),
+(3, 1, '2025-07-11 17:30:00', 126),
+(11, 2, '2025-07-11 17:45:00', 84),
+(5, 3, '2025-07-11 18:00:00', 105),
+(8, 1, '2025-07-11 20:00:00', 126),
+(12, 2, '2025-07-11 20:15:00', 84),
+(2, 3, '2025-07-11 20:30:00', 105),
+(6, 1, '2025-07-11 22:30:00', 126),
+(10, 2, '2025-07-11 22:45:00', 84),
+(13, 3, '2025-07-11 23:00:00', 105),
+
+-- День 10: Субота, 12 липня 2025
+(1, 1, '2025-07-12 10:00:00', 126),
+(4, 2, '2025-07-12 10:15:00', 84),
+(7, 3, '2025-07-12 10:30:00', 105),
+(9, 1, '2025-07-12 12:00:00', 126),
+(3, 2, '2025-07-12 12:15:00', 84),
+(11, 3, '2025-07-12 12:30:00', 105),
+(5, 1, '2025-07-12 14:00:00', 126),
+(8, 2, '2025-07-12 14:15:00', 84),
+(12, 3, '2025-07-12 14:30:00', 105),
+(2, 1, '2025-07-12 16:00:00', 126),
+(6, 2, '2025-07-12 16:15:00', 84),
+(10, 3, '2025-07-12 16:30:00', 105),
+(13, 1, '2025-07-12 18:00:00', 126),
+(1, 2, '2025-07-12 18:15:00', 84),
+(4, 3, '2025-07-12 18:30:00', 105),
+(7, 1, '2025-07-12 20:00:00', 126),
+(9, 2, '2025-07-12 20:15:00', 84),
+(3, 3, '2025-07-12 20:30:00', 105),
+(11, 1, '2025-07-12 22:00:00', 126),
+(5, 2, '2025-07-12 22:15:00', 84),
+(8, 3, '2025-07-12 22:30:00', 105),
+
+-- День 11: Неділя, 13 липня 2025
+(12, 1, '2025-07-13 10:00:00', 126),
+(2, 2, '2025-07-13 10:15:00', 84),
+(6, 3, '2025-07-13 10:30:00', 105),
+(10, 1, '2025-07-13 12:30:00', 126),
+(13, 2, '2025-07-13 12:45:00', 84),
+(1, 3, '2025-07-13 13:00:00', 105),
+(4, 1, '2025-07-13 15:00:00', 126),
+(7, 2, '2025-07-13 15:15:00', 84),
+(9, 3, '2025-07-13 15:30:00', 105),
+(3, 1, '2025-07-13 17:30:00', 126),
+(11, 2, '2025-07-13 17:45:00', 84),
+(5, 3, '2025-07-13 18:00:00', 105),
+(8, 1, '2025-07-13 20:00:00', 126),
+(12, 2, '2025-07-13 20:15:00', 84),
+(2, 3, '2025-07-13 20:30:00', 105),
+(6, 1, '2025-07-13 22:00:00', 126),
+(10, 2, '2025-07-13 22:15:00', 84),
+(13, 3, '2025-07-13 22:30:00', 105),
+
+-- День 12: Понеділок, 14 липня 2025
+(1, 1, '2025-07-14 10:00:00', 126),
+(4, 2, '2025-07-14 10:30:00', 84),
+(7, 3, '2025-07-14 11:00:00', 105),
+(9, 1, '2025-07-14 12:30:00', 126),
+(3, 2, '2025-07-14 13:00:00', 84),
+(11, 3, '2025-07-14 13:30:00', 105),
+(5, 1, '2025-07-14 15:00:00', 126),
+(8, 2, '2025-07-14 15:30:00', 84),
+(12, 3, '2025-07-14 16:00:00', 105),
+(2, 1, '2025-07-14 17:30:00', 126),
+(6, 2, '2025-07-14 18:00:00', 84),
+(10, 3, '2025-07-14 18:30:00', 105),
+(13, 1, '2025-07-14 20:00:00', 126),
+(1, 2, '2025-07-14 20:30:00', 84),
+(4, 3, '2025-07-14 21:00:00', 105),
+
+-- День 13: Вівторок, 15 липня 2025
+(7, 1, '2025-07-15 10:00:00', 126),
+(9, 2, '2025-07-15 10:30:00', 84),
+(3, 3, '2025-07-15 11:00:00', 105),
+(11, 1, '2025-07-15 12:30:00', 126),
+(5, 2, '2025-07-15 13:00:00', 84),
+(8, 3, '2025-07-15 13:30:00', 105),
+(12, 1, '2025-07-15 15:00:00', 126),
+(2, 2, '2025-07-15 15:30:00', 84),
+(6, 3, '2025-07-15 16:00:00', 105),
+(10, 1, '2025-07-15 17:30:00', 126),
+(13, 2, '2025-07-15 18:00:00', 84),
+(1, 3, '2025-07-15 18:30:00', 105),
+(4, 1, '2025-07-15 20:00:00', 126),
+(7, 2, '2025-07-15 20:30:00', 84),
+(9, 3, '2025-07-15 21:00:00', 105),
+
+-- День 14: Середа, 16 липня 2025
+(3, 1, '2025-07-16 10:00:00', 126),
+(11, 2, '2025-07-16 10:30:00', 84),
+(5, 3, '2025-07-16 11:00:00', 105),
+(8, 1, '2025-07-16 12:30:00', 126),
+(12, 2, '2025-07-16 13:00:00', 84),
+(2, 3, '2025-07-16 13:30:00', 105),
+(6, 1, '2025-07-16 15:00:00', 126),
+(10, 2, '2025-07-16 15:30:00', 84),
+(13, 3, '2025-07-16 16:00:00', 105),
+(1, 1, '2025-07-16 17:30:00', 126),
+(4, 2, '2025-07-16 18:00:00', 84),
+(7, 3, '2025-07-16 18:30:00', 105),
+(9, 1, '2025-07-16 20:00:00', 126),
+(3, 2, '2025-07-16 20:30:00', 84),
+(11, 3, '2025-07-16 21:00:00', 105);
+
+
+-- --- ГЕНЕРАЦІЯ ТА РАНДОМІЗАЦІЯ ДАНИХ У ТАБЛИЦІ SESSIONSEATS ---
+
+-- Частина 1: Заповнення таблиці SessionSeats для ВСІХ сеансів
+-- Для кожного сеансу вставляємо всі сидіння з відповідної зали
+DO $$
+DECLARE
+    session_record RECORD;
+    hall_seat_id BIGINT;
+    current_hall_id BIGINT;
+BEGIN
+    FOR session_record IN SELECT "Id", "HallId" FROM "Sessions"
+    LOOP
+        current_hall_id := session_record."HallId";
+
+        FOR hall_seat_id IN SELECT hs."Id"
+                             FROM "HallSeats" hs
+                             JOIN "HallSectors" hsec ON hs."SectorId" = hsec."Id"
+                             WHERE hsec."HallId" = current_hall_id
+        LOOP
+            INSERT INTO "SessionSeats" ("SessionId", "HallSeatId", "Status")
+            VALUES (session_record."Id", hall_seat_id, 0);
+        END LOOP;
+    END LOOP;
+END $$;
+
+
+-- Частина 2: Рандомізація статусу сидінь для ВСІХ сеансів
+-- Робимо деякі місця зайнятими (Status = 1)
+DO $$
+DECLARE
+    session_id BIGINT;
+    seat_ids BIGINT[];
+    total_seats_in_hall INTEGER;
+    num_to_occupy INTEGER;
+BEGIN
+    FOR session_id IN SELECT "Id" FROM "Sessions"
+    LOOP
+        SELECT s."SeatsTotal" INTO total_seats_in_hall
+        FROM "Sessions" s
+        WHERE s."Id" = session_id;
+
+        -- Визначаємо випадкову кількість місць для зайняття: від 10% до 40% від загальної кількості сидінь в залі
+        num_to_occupy := FLOOR(random() * (0.4 * total_seats_in_hall - 0.1 * total_seats_in_hall + 1) + (0.1 * total_seats_in_hall));
+
+        -- Переконуємось, що num_to_occupy не менше 5 (щоб завжди були зайняті місця)
+        IF num_to_occupy < 5 THEN
+            num_to_occupy := 5;
+        END IF;
+
+        -- Якщо num_to_occupy виходить за межі загальної кількості сидінь, обмежуємо її
+        IF num_to_occupy > total_seats_in_hall THEN
+            num_to_occupy := total_seats_in_hall;
+        END IF;
+
+        SELECT ARRAY(
+            SELECT "HallSeatId"
+            FROM "SessionSeats"
+            WHERE "SessionId" = session_id
+            ORDER BY random()
+            LIMIT num_to_occupy
+        )
+        INTO seat_ids;
+
+        UPDATE "SessionSeats"
+        SET "Status" = 1
+        WHERE "SessionId" = session_id
+          AND "HallSeatId" = ANY(seat_ids);
+    END LOOP;
+END $$;

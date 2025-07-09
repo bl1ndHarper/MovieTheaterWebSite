@@ -1,0 +1,16 @@
+-- Delete all data from tables
+
+-- Видалення даних з таблиць, що мають зовнішні ключі на інші таблиці
+DELETE FROM "MovieGenres";
+DELETE FROM "MovieActors";
+DELETE FROM "Sessions";
+DELETE FROM "HallSeats";
+DELETE FROM "SessionSeats";
+
+-- Видалення даних з таблиць, на які посилаються вищезазначені таблиці
+DELETE FROM "HallSectors";
+DELETE FROM "Movies";
+DELETE FROM "Actors";
+DELETE FROM "Genres";
+DELETE FROM "Halls";
+DELETE FROM "Ratings";
