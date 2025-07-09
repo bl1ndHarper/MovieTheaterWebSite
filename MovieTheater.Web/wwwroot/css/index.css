@@ -546,7 +546,6 @@
 
 .price-btn{
 
-
   padding:  5px 10px 5px 10px;
   border-radius: 20px;
 
@@ -597,4 +596,78 @@
 .stat-container{
   padding: 1rem ;
   width: 50%;
+}
+
+.dropdown-select-admin{
+   
+  background: linear-gradient(140deg, rgba(40,40,85,0.4), rgba(15,15,35,0.6));
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border-radius: 1.5rem;
+  color: #e2edff;
+  font-size: 14px;
+  text-shadow: 1px 1px rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+  position: relative;
+  width: 100%;
+}
+.hall-dropdown-div{
+  width: 22%;
+}
+
+.dropdown-select-admin:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(107, 100, 207, 0.3);
+   background: linear-gradient(140deg, rgba(50, 50, 103, 0.4), rgba(27, 27, 63, 0.6));
+}
+
+.dropdown-select-admin option {
+  background-color: #12172b;
+  color: #e2edff;
+  font-family: "Roboto Condensed", sans-serif;
+  font-size: 14px;
+}
+
+.price-input{
+   appearance: none; 
+  background: linear-gradient(140deg, rgba(40,40,85,0.4), rgba(15,15,35,0.6));
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 0.5rem 2rem 0.5rem 1rem;
+  border-radius: 1.5rem;
+  color: #e2edff;
+  font-size: 14px;
+  text-shadow: 1px 1px rgba(0,0,0,0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  position: relative;
+   width: 40%;
+}
+
+.dropdown-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-wrapper::after {
+  content: "▼";
+  font-size: 10px;
+  color: #e2edff;
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.dropdown-select-admin {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: none;
+}
+
+.new-price{
+  width: 100%;
 }

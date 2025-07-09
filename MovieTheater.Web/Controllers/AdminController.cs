@@ -1,38 +1,39 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieTheater.Web.Models;
-using System.Diagnostics;
+using MovieTheater.Application.Interfaces;
+using MovieTheater.Web.ViewModels;
 
-namespace MovieTheater.Web.Controllers
+public class AdminController : Controller
 {
     [Authorize(Policy = "AdminOnly")]
     public class AdminController : Controller
     {
-        private readonly ILogger<AdminController> _logger;
-        public AdminController(ILogger<AdminController> logger)
-        {
-            _logger = logger;
-        }
+    private readonly ILogger<AdminController> _logger;
+    private readonly IHallService _hallService;
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+    public AdminController(ILogger<AdminController> logger, IHallService hallService)
+    {
+        _logger = logger;
+        _hallService = hallService;
+    }
 
-        public async Task<IActionResult> UpdateSession(int id)
-        { 
-            return View("UpdateSession");
-        }
+    public async Task<IActionResult> Index()
+    {
+        var halls = await _hallService.GetAllHallsWithSectorsAsync();
+        return View(new AdminPanelViewModel { Halls = halls });
+    }
 
-        public async Task<IActionResult> AddSession()
-        { 
-            return View("AddSession");
-        }
+    [HttpPost]
+    public async Task<IActionResult> UpdateSectorPrice(long sectorId, decimal price)
+    {
+        await _hallService.UpdateSectorPriceAsync(sectorId, price);
+        return Ok();
+    }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+    [HttpPost]
+    public async Task<IActionResult> AddSector(long hallId, string name, decimal seatPrice)
+    {
+        await _hallService.AddSectorAsync(hallId, name, seatPrice);
+        return RedirectToAction("Index");
     }
 }
