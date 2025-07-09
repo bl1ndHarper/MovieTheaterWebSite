@@ -18,5 +18,8 @@ namespace MovieTheater.Application.Interfaces
         Task<List<MovieMainDto>> GetLatestMoviesAsync(int count);
         Task<MovieDto?> GetMovieByIdAsync(long id);
         Task<List<TmdbUpcomingMovie>> GetUpcomingMovies();
+        Task<List<MovieSearchResultDto>> SearchMoviesAsync(string query);
+        Task<MovieDto?> GetMovieDetailsFromApiAsync(int tmdbId);
+        Task<bool> AddMovieFromApiAsync(int tmdbId);
     }
 }

@@ -12,18 +12,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
+using System.Net.Http.Json;
+using MovieTheater.Infrastructure.Enums;
+using MovieTheater.Domain.DTOs;
 
 namespace MovieTheater.Application.Services
 {
     public class MovieService : IMovieService
     {
         private readonly IMovieRepository _movieRepository;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly string _apiKey = Environment.GetEnvironmentVariable("TMDB_API_KEY");
 
-        public MovieService(IMovieRepository movieRepository, IHttpClientFactory httpClientFactory)
+        public MovieService(
+            IMovieRepository movieRepository,
+            IHttpClientFactory httpClientFactory,
+            ApplicationDbContext dbContext)
         {
             _movieRepository = movieRepository;
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClientFactory.CreateClient("tmdbApi");
+            _dbContext = dbContext;
         }
 
         public async Task<MovieMainDto> CreateMovieAsync(MovieCreateDto dto)
@@ -182,14 +191,12 @@ namespace MovieTheater.Application.Services
             };
         }
 
-
         public async Task<List<TmdbUpcomingMovie>> GetUpcomingMovies()
         {
-            var client = _httpClientFactory.CreateClient("tmdbApi");
             var apiKey = Environment.GetEnvironmentVariable("TMDB_API_KEY");
             var language = "uk-UA";
 
-            var genreResponse = await client.GetAsync($"genre/movie/list?api_key={apiKey}&language={language}");
+            var genreResponse = await _httpClient.GetAsync($"genre/movie/list?api_key={apiKey}&language={language}");
             var genreJson = await genreResponse.Content.ReadAsStringAsync();
             var genreResult = JsonSerializer.Deserialize<TmdbGenreResponse>(genreJson, new JsonSerializerOptions
             {
@@ -198,8 +205,8 @@ namespace MovieTheater.Application.Services
 
             var genreMap = genreResult?.Genres.ToDictionary(g => g.Id, g => g.Name);
 
-            var response = await client.GetAsync($"movie/upcoming?api_key={apiKey}&language={language}&page=1");
-            
+            var response = await _httpClient.GetAsync($"movie/upcoming?api_key={apiKey}&language={language}&page=1");
+
             if (!response.IsSuccessStatusCode)
                 return new();
 
@@ -218,6 +225,84 @@ namespace MovieTheater.Application.Services
             }
 
             return movies;
+        }
+
+        public async Task<List<MovieSearchResultDto>> SearchMoviesAsync(string query)
+        {
+            var url = $"https://api.themoviedb.org/3/search/movie?api_key={_apiKey}&query={Uri.EscapeDataString(query)}&language=uk-UA";
+            var res = await _httpClient.GetFromJsonAsync<TmdbSearchResponse>(url);
+
+            return res?.Results
+                .Select(r =>
+                {
+                    string year = "????";
+                    if (DateTime.TryParse(r.ReleaseDate, out var parsed))
+                        year = parsed.Year.ToString();
+
+                    return new MovieSearchResultDto
+                    {
+                        TmdbId = r.Id,
+                        Title = r.Title,
+                        ReleaseDate = year
+                    };
+                })
+                .ToList() ?? new();
+        }
+
+        public async Task<MovieDto?> GetMovieDetailsFromApiAsync(int tmdbId)
+        {
+            var response = await _httpClient.GetAsync(
+                $"https://api.themoviedb.org/3/movie/{tmdbId}?api_key={_apiKey}&language=uk-UA&append_to_response=credits");
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            var content = await response.Content.ReadAsStringAsync();
+            var movieDto = JsonSerializer.Deserialize<TmdbMovieDto>(content, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (movieDto == null)
+                return null;
+
+            return new MovieDto
+            {
+                Title = movieDto.Title,
+                Description = movieDto.Overview,
+                ReleaseDate = DateTime.TryParse(movieDto.ReleaseDate, out var rd) ? rd : DateTime.MinValue,
+                ImdbRating = (decimal)Math.Round(movieDto.VoteAverage, 1),
+                Duration = (short?)movieDto.Runtime,
+                ThumbnailUrl = $"https://image.tmdb.org/t/p/w500{movieDto.PosterPath}",
+                DirectorName = "", // TODO: можна витягти з credits
+                Genres = movieDto.Genres.Select(g => new MovieGenre
+                {
+                    Genre = new Genre { Name = g.Name }
+                }).ToList()
+            };
+        }
+
+        public async Task<bool> AddMovieFromApiAsync(int tmdbId)
+        {
+            var movieDto = await GetMovieDetailsFromApiAsync(tmdbId);
+            if (movieDto == null)
+                return false;
+
+            var alreadyExists = await _movieRepository.ExistsByTitleAndYearAsync(movieDto.Title, movieDto.ReleaseDate.Year);
+            if (alreadyExists)
+                return false;
+
+            TmdbMovieDto tmdbDto = new()
+            {
+                Title = movieDto.Title,
+                Overview = movieDto.Description,
+                PosterPath = movieDto.ThumbnailUrl.Replace("https://image.tmdb.org/t/p/w500", ""),
+                ReleaseDate = movieDto.ReleaseDate.ToString("yyyy-MM-dd"),
+                VoteAverage = (double)movieDto.ImdbRating,
+                Runtime = movieDto.Duration ?? 0,
+                Adult = movieDto.AgeRatingLabel == "NC-17",
+                Genres = movieDto.Genres.Select(g => new TmdbGenreDto { Name = g.Genre.Name }).ToList()
+            };
+
+            await _movieRepository.SaveMovieFromApiAsync(tmdbDto);
+            return true;
         }
     }
 }

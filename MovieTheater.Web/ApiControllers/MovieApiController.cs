@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace MovieTheater.Web.ApiControllers
 {
-    [Route("api/movies")]
+    [Route("")]
     [ApiController]
     public class MovieApiController : ControllerBase
     {
@@ -28,7 +28,7 @@ namespace MovieTheater.Web.ApiControllers
             return CreatedAtAction(nameof(GetMovie), new { id = created.Id }, created);
         }
 
-        [HttpGet("{id:long}")]
+        [HttpGet("api/movies/{id:long}")]
         public async Task<IActionResult> GetMovie(long id)
         {
             var movie = await _movieService.GetMovieByIdAsync(id);
@@ -37,7 +37,7 @@ namespace MovieTheater.Web.ApiControllers
                 : Ok(movie);
         }
 
-        [HttpPut("{id:long}")]
+        [HttpPut("api/movies/{id:long}")]
         public async Task<IActionResult> UpdateMovie(long id, MovieUpdateDto dto)
         {
             if (!ModelState.IsValid) return ApiProblem.Bad("Bad request", "Invalid movie data");
@@ -47,7 +47,7 @@ namespace MovieTheater.Web.ApiControllers
                 : ApiProblem.NotFound("Movie not found", $"id = {id}");
         }
 
-        [HttpPatch("{id:long}")]
+        [HttpPatch("api/movies/{id:long}")]
         public async Task<IActionResult> PatchMovie(long id, JsonPatchDocument<MovieUpdateDto> patch)
         {
             if (patch == null) return ApiProblem.Bad("Bad request", "Patch document required");
@@ -57,7 +57,7 @@ namespace MovieTheater.Web.ApiControllers
                 : ApiProblem.NotFound("Movie not found", $"id = {id}");
         }
 
-        [HttpDelete("{id:long}")]
+        [HttpDelete("api/movies/{id:long}")]
         public async Task<IActionResult> DeleteMovie(long id)
         {
             return await _movieService.DeleteMovieAsync(id)
@@ -65,7 +65,7 @@ namespace MovieTheater.Web.ApiControllers
                 : ApiProblem.NotFound("Movie not found", $"Movie id = {id}");
         }
 
-        [HttpGet("latest/{count:int}")]
+        [HttpGet("api/movies/latest/{count:int}")]
         public async Task<IActionResult> GetLatestMovies(int count)
         {
             if (count <= 0) return Infrastructure.ApiProblem.Bad("Invalid count", "Count must be positive");
@@ -74,11 +74,7 @@ namespace MovieTheater.Web.ApiControllers
             return Ok(movies);
         }
 
-        
-        
-
-        
-        [HttpGet("now-showing/{day}")]
+        [HttpGet("api/movies/now-showing/{day}")]
         public async Task<IActionResult> GetNowShowingMovies(string day)
         {
             if (!DateTime.TryParseExact(
@@ -92,5 +88,30 @@ namespace MovieTheater.Web.ApiControllers
             var movies = await _movieService.GetNowShowingAsync(day);
             return Ok(movies);
         }
-    }
+
+        [HttpGet("api/admin/movies/details/{tmdbId}")]
+        public async Task<IActionResult> GetMovieDetailsFromTmdb(int tmdbId)
+        {
+            var movie = await _movieService.GetMovieDetailsFromApiAsync(tmdbId);
+            return movie == null
+                ? ApiProblem.NotFound("Not found", $"Movie with TMDB id = {tmdbId} not found")
+                : Ok(movie);
+        }
+
+        [HttpGet("api/admin/movies/search")]
+        public async Task<IActionResult> SearchMovies(string query)
+        {
+            var results = await _movieService.SearchMoviesAsync(query);
+            return Ok(results);
+        }
+
+        [HttpPost("api/admin/movies/add/{tmdbId}")]
+        public async Task<IActionResult> AddMovie(int tmdbId)
+        {
+            var success = await _movieService.AddMovieFromApiAsync(tmdbId);
+            return success
+                ? Ok()
+                : ApiProblem.Bad("Помилка", "Не вдалося додати фільм");
+        }
+        }
 }

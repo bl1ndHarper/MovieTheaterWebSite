@@ -1,9 +1,13 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using MovieTheater.Infrastructure.Enums;
 
 namespace MovieTheater.Infrastructure.Entities;
 
 public class Movie
 {
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public long Id { get; set; }
     public string Title { get; set; } = null!;
     public string? Description { get; set; }

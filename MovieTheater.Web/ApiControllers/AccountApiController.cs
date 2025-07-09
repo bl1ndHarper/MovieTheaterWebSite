@@ -22,8 +22,6 @@ public class AccountApiController : ControllerBase
             _accountService = accountService;
         }
 
-
-    // API endpoints
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginRequestDto dto)
     {
