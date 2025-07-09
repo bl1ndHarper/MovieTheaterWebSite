@@ -4,11 +4,12 @@ using MovieTheater.Application.DTOs;
 using Microsoft.AspNetCore.JsonPatch;
 using MovieTheater.Web.Infrastructure;
 using System.Globalization;
+using System.Text.Json;
 
 
 namespace MovieTheater.Web.ApiControllers
 {
-    [Route("api/movies")]
+    [Route("")]
     [ApiController]
     public class MovieApiController : ControllerBase
     {
@@ -28,7 +29,7 @@ namespace MovieTheater.Web.ApiControllers
             return CreatedAtAction(nameof(GetMovie), new { id = created.Id }, created);
         }
 
-        [HttpGet("{id:long}")]
+        [HttpGet("api/movies/{id:long}")]
         public async Task<IActionResult> GetMovie(long id)
         {
             var movie = await _movieService.GetMovieByIdAsync(id);
@@ -37,7 +38,7 @@ namespace MovieTheater.Web.ApiControllers
                 : Ok(movie);
         }
 
-        [HttpPut("{id:long}")]
+        [HttpPut("api/movies/{id:long}")]
         public async Task<IActionResult> UpdateMovie(long id, MovieUpdateDto dto)
         {
             if (!ModelState.IsValid) return ApiProblem.Bad("Bad request", "Invalid movie data");
@@ -47,7 +48,7 @@ namespace MovieTheater.Web.ApiControllers
                 : ApiProblem.NotFound("Movie not found", $"id = {id}");
         }
 
-        [HttpPatch("{id:long}")]
+        [HttpPatch("api/movies/{id:long}")]
         public async Task<IActionResult> PatchMovie(long id, JsonPatchDocument<MovieUpdateDto> patch)
         {
             if (patch == null) return ApiProblem.Bad("Bad request", "Patch document required");
@@ -57,7 +58,7 @@ namespace MovieTheater.Web.ApiControllers
                 : ApiProblem.NotFound("Movie not found", $"id = {id}");
         }
 
-        [HttpDelete("{id:long}")]
+        [HttpDelete("api/movies/{id:long}")]
         public async Task<IActionResult> DeleteMovie(long id)
         {
             return await _movieService.DeleteMovieAsync(id)
@@ -65,7 +66,7 @@ namespace MovieTheater.Web.ApiControllers
                 : ApiProblem.NotFound("Movie not found", $"Movie id = {id}");
         }
 
-        [HttpGet("latest/{count:int}")]
+        [HttpGet("api/movies/latest/{count:int}")]
         public async Task<IActionResult> GetLatestMovies(int count)
         {
             if (count <= 0) return Infrastructure.ApiProblem.Bad("Invalid count", "Count must be positive");
@@ -74,11 +75,7 @@ namespace MovieTheater.Web.ApiControllers
             return Ok(movies);
         }
 
-        
-        
-
-        
-        [HttpGet("now-showing/{day}")]
+        [HttpGet("api/movies/now-showing/{day}")]
         public async Task<IActionResult> GetNowShowingMovies(string day)
         {
             if (!DateTime.TryParseExact(
@@ -91,6 +88,63 @@ namespace MovieTheater.Web.ApiControllers
 
             var movies = await _movieService.GetNowShowingAsync(day);
             return Ok(movies);
+        }
+
+        [HttpGet("api/admin/movies/details/{tmdbId}")]
+        public async Task<IActionResult> GetMovieDetailsFromTmdb(int tmdbId)
+        {
+            var movie = await _movieService.GetMovieDetailsFromApiAsync(tmdbId);
+            return movie == null
+                ? ApiProblem.NotFound("Not found", $"Movie with TMDB id = {tmdbId} not found")
+                : Ok(movie);
+        }
+
+        [HttpGet("api/admin/movies/search")]
+        public async Task<IActionResult> SearchMovies(string query)
+        {
+            var results = await _movieService.SearchMoviesAsync(query);
+            return Ok(results);
+        }
+
+        [HttpPost("api/admin/movies/save")]
+        public async Task<IActionResult> SaveMovie([FromBody] JsonElement raw)
+        {
+            var genreNames = new List<string>();
+            if (raw.TryGetProperty("genres", out var genresProp) && genresProp.ValueKind == JsonValueKind.Array)
+            {
+                foreach (var item in genresProp.EnumerateArray())
+                {
+                    if (item.TryGetProperty("genre", out var genreObj) &&
+                        genreObj.TryGetProperty("name", out var nameProp))
+                    {
+                        var name = nameProp.GetString();
+                        if (!string.IsNullOrWhiteSpace(name))
+                            genreNames.Add(name);
+                    }
+                }
+            }
+
+            using var doc = JsonDocument.Parse(raw.GetRawText());
+            var root = doc.RootElement;
+
+            var filteredProperties = root.EnumerateObject()
+                .Where(p => p.Name != "genres")
+                .ToDictionary(p => p.Name, p => p.Value);
+
+            using var filteredDoc = JsonDocument.Parse(JsonSerializer.Serialize(filteredProperties));
+            var dto = JsonSerializer.Deserialize<MovieSaveDto>(filteredDoc.RootElement.GetRawText(), new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+
+            if (dto == null)
+                return BadRequest("Невалідні дані");
+
+            dto.Genres = genreNames;
+
+            var result = await _movieService.SaveMovieFromDtoAsync(dto);
+
+            return result ? Ok() : BadRequest("Фільм уже існує або сталася помилка при збереженні");
         }
     }
 }

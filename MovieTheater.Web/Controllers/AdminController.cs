@@ -1,9 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieTheater.Application.Interfaces;
 using MovieTheater.Web.ViewModels;
 
 public class AdminController : Controller
 {
+    [Authorize(Policy = "AdminOnly")]
+    public class AdminController : Controller
+    {
     private readonly ILogger<AdminController> _logger;
     private readonly IHallService _hallService;
 

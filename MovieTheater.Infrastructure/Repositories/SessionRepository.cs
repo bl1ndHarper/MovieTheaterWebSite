@@ -47,8 +47,7 @@ namespace MovieTheater.Infrastructure.Repositories
             var today = DateTime.UtcNow.Date;
 
             return await _context.Sessions
-                //.Where(s => s.MovieId == movieId && s.StartTime.Date >= today)    // TODO: uncomment this line when DB is populated
-                .Where(s => s.MovieId == movieId)
+                .Where(s => s.MovieId == movieId && s.StartTime.Date >= today)
                 .Select(s => s.StartTime.Date)
                 .Distinct()
                 .OrderBy(d => d)

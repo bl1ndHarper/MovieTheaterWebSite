@@ -19,14 +19,9 @@ namespace MovieTheater.Infrastructure.Repositories
         public async Task<User?> GetByIdAsync(long id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null)
-                Console.WriteLine($"!🤬🤬🤬!!! User with ID={id} not found");
 
             return user;
 
         }
-
-        
-        
     }
 }

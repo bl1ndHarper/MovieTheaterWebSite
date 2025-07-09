@@ -2,11 +2,14 @@
 using MovieTheater.Infrastructure.Data;
 using MovieTheater.Infrastructure.Entities;
 using MovieTheater.Infrastructure.Interfaces;
+using MovieTheater;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MovieTheater.Domain.DTOs;
+using MovieTheater.Infrastructure.Enums;
 
 namespace MovieTheater.Infrastructure.Repositories
 {
@@ -50,6 +53,74 @@ namespace MovieTheater.Infrastructure.Repositories
                 .Include(m => m.AgeRating)
                 .Include(m => m.Actors).ThenInclude(a => a.Actor)
                 .FirstOrDefaultAsync(m => m.Id == id);
+        }
+
+        public async Task SaveMovieFromApiAsync(TmdbMovieDto dto)
+        {
+            var genreNames = dto.Genres.Select(g => g.Name).Distinct().ToList();
+            var existingGenres = await GetGenresByNamesAsync(genreNames);
+
+            var newGenres = genreNames
+                .Where(name => existingGenres.All(g => g.Name != name))
+                .Select(name => new Genre { Name = name })
+                .ToList();
+
+            if (newGenres.Any())
+            {
+                await AddGenresAsync(newGenres);
+                await SaveAsync();
+                existingGenres.AddRange(newGenres);
+            }
+
+            var ratingLabel = dto.Adult ? "NC-17" : "PG-13";
+            var rating = await _context.Ratings.FirstOrDefaultAsync(r => r.Label == ratingLabel)
+                ?? await _context.Ratings.FirstOrDefaultAsync(r => r.Label == "PG-13");
+
+            var movie = new Movie
+            {
+                Title = dto.Title,
+                Description = dto.Overview,
+                ThumbnailUrl = $"https://image.tmdb.org/t/p/w500{dto.Poster_Path}",
+                ReleaseDate = DateTime.TryParse(dto.Release_Date, out var rd) ? rd : DateTime.MinValue,
+                ImdbRating = (decimal)Math.Round(dto.Vote_Average, 1),
+                Duration = (short?)dto.Runtime,
+                ActivityStatus = ActivityStatus.Upcoming,
+                AgeRating = rating,
+                DirectorName = ""
+            };
+
+            await AddAsync(movie);
+            await SaveAsync();
+
+            var genresToLink = existingGenres
+                .Select(g => new MovieGenre
+                {
+                    MovieId = movie.Id,
+                    GenreId = g.Id
+                }).ToList();
+
+            await AddMovieGenresAsync(genresToLink);
+            await SaveAsync();
+        }
+
+        public async Task<List<Genre>> GetGenresByNamesAsync(List<string> names) =>
+            await _context.Genres.Where(g => names.Contains(g.Name)).ToListAsync();
+
+        public async Task AddGenresAsync(IEnumerable<Genre> genres)
+        {
+            await _context.Genres.AddRangeAsync(genres);
+        }
+
+        public async Task AddMovieGenresAsync(IEnumerable<MovieGenre> movieGenres)
+        {
+            await _context.MovieGenres.AddRangeAsync(movieGenres);
+        }
+
+        public async Task<bool> ExistsByTitleAndYearAsync(string title, int year)
+        {
+            return await _context.Movies.AnyAsync(m =>
+                m.Title == title &&
+                m.ReleaseDate.Year == year);
         }
 
         public Task<Movie?> GetByIdAsync(long id) =>

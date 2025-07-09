@@ -97,7 +97,7 @@
         <div class="offcanvas-body">
             @{
                 var user = await UserManager.GetUserAsync(User);
-                var isAdmin = user != null && await UserManager.IsInRoleAsync(user, "Admin");
+                var isAdmin = user != null && user.IsAdmin ? true : false;
             }
             <a class="font-main offcanvas-link
              @(ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
@@ -112,7 +112,8 @@
             asp-controller="Home" asp-action="Upcoming">
         Скоро в кіно
             </a>
-            @if (User.IsInRole("Admin"))
+            @* Тут необхідно перевіряти чи є користувач адміном *@
+            @if (isAdmin)
             {
             <a class="font-main offcanvas-link admin-link 
              @(ViewContext.RouteData.Values["controller"]?.ToString() == "Admin" ? "active" : "")
