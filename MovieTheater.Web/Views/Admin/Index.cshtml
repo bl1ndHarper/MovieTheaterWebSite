@@ -1,6 +1,6 @@
 @using MovieTheater.Infrastructure.Entities
 @using MovieTheater.Web.ViewModels
-@model AdminPanelViewModel
+@model AdminHomePageViewModel
 @{
     ViewData["Title"] = "Keen-Chick!: Адмін-панель";
 }
@@ -8,46 +8,7 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
 }
-
-
-        <div style="display: none" class="col-9 admin-panel-left">
-            <div class="big-stat-container ">
-                <p class="chart-text font-main"> Відвідуваність сеансів</p>
-                <div class="d-flex justify-content-center">
-                    <img src="https://stock-maks.com/uploads/posts/2022-08/1661184981_1.jpg" alt="">
-                </div>
-            </div>
-
-            <div class="big-stat-container mt-5">
-
-                <div class="d-flex justify-content-between stat-container"  >
-                    <span class="stat-text" style="color:rgba(217, 254, 255, 1);"> Статистична Метрика:</span>
-                     <span class="stat-text" > Її показник:</span>
-                </div>
-
-                <div class="d-flex justify-content-between stat-container"  >
-                    <span class="stat-text" style="color:rgba(217, 254, 255, 1);"> Статистична Метрика:</span>
-                     <span class="stat-text" > Її показник:</span>
-                </div>
-
-                <div class="d-flex justify-content-between stat-container"  >
-                    <span class="stat-text" style="color:rgba(217, 254, 255, 1);"> Статистична Метрика:</span>
-                     <span class="stat-text" > Її показник:</span>
-                </div>
-
-                <div class="d-flex justify-content-between stat-container"  >
-                    <span class="stat-text" style="color:rgba(217, 254, 255, 1);"> Статистична Метрика:</span>
-                     <span class="stat-text" > Її показник:</span>
-                </div>
-
-                <div class="d-flex justify-content-between stat-container"  >
-                    <span class="stat-text" style="color:rgba(217, 254, 255, 1);"> Статистична Метрика:</span>
-                     <span class="stat-text" > Її показник:</span>
-                </div>
-
-            </div>
-        </div>
-    
+ 
     @* Функціонал для редагування секторів і залів *@
     <div class=" container row ">
       <div class="big-stat-container col-8  ms-5" >
@@ -65,8 +26,6 @@
               </select>
             </div>
           </div>
-        
-        
 
           <div id="sectorsContainer">
               @foreach (Hall hall in Model.Halls)
@@ -107,134 +66,79 @@
 
     @* Кінець функціоналу для редагування секторів і залів *@
 
-        <div class="big-stat-container mt-5 flex-fill" style="display: none">
-                <p class ="popular-films-title"> Найпопулярніші фільми </p>
-                 <div class="d-flex justify-content-between ">
-                     <span class ="popular-films-content"> *Популярний фільм* </span>
-                     <span class ="popular-films-content"> *відвідувачі* </span>
-                 </div>
-
-                  <div class="d-flex justify-content-between ">
-                     <span class ="popular-films-content"> *Популярний фільм* </span>
-                     <span class ="popular-films-content"> *відвідувачі* </span>
-                 </div>
-
-                  <div class="d-flex justify-content-between ">
-                     <span class ="popular-films-content"> *Популярний фільм* </span>
-                     <span class ="popular-films-content"> *відвідувачі* </span>
-                 </div>
-
-                    <p class ="popular-films-title"> НайНЕпопулярніші фільми </p>
-                 <div class="d-flex justify-content-between ">
-                     <span class ="popular-films-content"> *фуфло фільм* </span>
-                     <span class ="popular-films-content"> *відвідувачі* </span>
-                 </div>
-
-                  <div class="d-flex justify-content-between ">
-                     <span class ="popular-films-content"> *фуфло фільм* </span>
-                     <span class ="popular-films-content"> *відвідувачі* </span>
-                 </div>
-
-                  <div class="d-flex justify-content-between ">
-                     <span class ="popular-films-content"> *фуфло фільм* </span>
-                     <span class ="popular-films-content"> *відвідувачі* </span>
-                 </div>
-
-            </div>
-
-        
-
+  @{
+  var today = DateTime.Now.Date;
+  var dates = Enumerable.Range(0, 7).Select(i => today.AddDays(i).ToString("dd.MM")).ToList();
+  var selected = Model.SelectedDate;
+  }
 
  <div class="container mt-3 row" style=" padding-right: 10px;">
       <p class="new-movies-text font-main col-2 mt-4"> У прокаті</p>
-    <div class="dates-container col-10">
-
-      <div class="date-div">
-        <span class="date-text"> Усі</span>
-        <a href="#" class="date-circle date-active"></a>
-      </div>
+    <div class="dates-container-admin col-10">
       
-
-      <div class="date-div">
-        <span class="date-text"> 21.06</span>
-        <a href="#" class="date-circle "></a>
+      <div class="date-div-admin">
+        <span class="date-text">Застарілі</span>
+        <a asp-controller="Admin" asp-action="Index" asp-route-day="past"
+          class="date-circle @(selected == "past" ? "date-active" : "")"></a>
       </div>
-      
-      <div class="date-div">
-        <span class="date-text"> 22.06</span>
-        <a href="#" class="date-circle"></a>
+      @foreach (var date in dates)
+            {
+                <div class="date-div-admin">
+                    <span class="date-text">@(date == today.ToString("dd.MM") ? $"Сьогодні ({date})" : date)</span>
+                    <a asp-controller="Admin" asp-action="Index" asp-route-day="@date" class="date-circle @(date==selected?"date-active":"")"></a>
+                </div>
+            }
+
+      <div class="date-div-admin">
+        <span class="date-text">Майбутні</span>
+        <a asp-controller="Admin" asp-action="Index" asp-route-day="future"
+          class="date-circle @(selected == "future" ? "date-active" : "")"></a>
       </div>
-
-       <div class="date-div">
-        <span class="date-text"> 23.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-
-      <div class="date-div">
-        <span class="date-text"> 24.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-
-      <div class="date-div">
-        <span class="date-text"> 25.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-
-      <div class="date-div">
-        <span class="date-text "> 26.06</span>
-        <a href="#" class="date-circle"></a>
-      </div>
-
-      
-      
-       <div class="date-div date-next-week">
-        <i class="fa-solid fa-chevron-up fa-rotate-90 next-week-btn"></i>
-      </div>
-
-
     </div>
 
     <div class="filters-div mt-4">
       <div id ="genreDropdown" class="dropdown-div">
-        <select class="dropdown-select">
-          <option selected disabled hidden>Жанр</option>
-          <option>Бойовик</option>
-          <option>Драма</option>
-          <option>Комедія</option>
-          <option>Будь-який</option>
+        <select name="genre" class="dropdown-select">
+          <option selected disabled hidden value="">Жанр</option>
+          @foreach (var genre in Model.Genres)
+            {
+                <option value="@genre">@genre</option>
+            }
+        <option value="будь-який">Будь-який</option>
         </select>
         <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
       </div>
 
-      <div id ="ratingDropdown" class="dropdown-div">
-        <select class="dropdown-select">
-          <option selected disabled hidden>Рейтинг</option>
-          <option>12+</option>
-          <option>16+</option>
-          <option>18+</option>
-          <option>Будь-який</option>
+      <div  id ="ratingDropdown" class="dropdown-div">
+        <select  name="rating" class="dropdown-select">
+          <option selected disabled hidden value="">Рейтинг</option>
+          @foreach (var rating in Model.Ratings)
+            {
+                <option value="@rating">@rating</option>
+            }
+        <option value="будь-який">Будь-який</option>
         </select>
         <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
       </div>
 
-      <div id ="lengthDropdown" class="dropdown-div">
-        <select class="dropdown-select">
-          <option selected disabled hidden>Довжина</option>
-          <option>Менше години</option>
-          <option>1 год -2 год</option>
-          <option>Більше 2 годин</option>
-          <option>Будь-який</option>
+      <div  id ="lengthDropdown" class="dropdown-div">
+        <select name="duration" class="dropdown-select">
+          <option selected disabled hidden value="">Довжина</option>
+            <option value="<90">Менше години</option>
+            <option value="90-120">1 год - 2 год</option>
+            <option value="120-150">2–2.5 год</option>
+            <option value=">150">Більше 2.5 годин</option>
+            <option value="будь-який">Будь-який</option>
         </select>
         <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
       </div>
 
-        <div id ="searchInput" class="search-div">
-          <input type="text" class="movie-search-input" placeholder="Назва фільму...">
+        <div class="search-div">
+          <input id ="searchInput" type="text" class="movie-search-input" placeholder="Назва фільму...">
       </div>
-
-
     </div>
  </div>
+
 <div class="container mt-3">
     <div class="row">
         <div class=" col-6">
@@ -245,40 +149,118 @@
         </div>
     </div>
 </div>
-<div class="container" style="padding: 10px 2rem 0px 1.2rem;">
-    <!-- Тут буде foreach для фільмів-->
-        <div class="movie-session-card mt-3 row">
+
+
+<!-- Якщо обрано past\future такий вивід фільмів -->
+@if (Model.MoviesGroupedByDate.Any())
+{
+    @foreach (var group in Model.MoviesGroupedByDate)
+    {
+        <h4 class="text-light font-main mt-4" style="color:rgb(144, 168, 211);font-size: 20pt;">@group.Date.ToString("dd.MM.yyyy")</h4>
+        <hr class="text-light" style="height:3px;border-radius:3px;color:rgb(144, 168, 211)">
+
+        @foreach (var movie in group.Movies)
+        {
+          <div class="movie-session-card mt-3 row"
+                data-genre="@movie.Genre"
+                data-rating="@movie.AgeRating"
+                data-duration="@movie.Duration">
             <div class="poster-col col-auto">
-                <img src="https://c8.alamy.com/comp/2JKYCXN/movie-poster-inception-2010-2JKYCXN.jpg" alt="Назва фільму" class="movie-thumb" />
+                <img src="@movie.ThumbnailUrl" alt="@movie.Title" class="movie-thumb" />
             </div>
 
             <div class="flex-grow-1 col">
                 <div class="title-sessiontimes-div container d-flex justify-content-between mb-5">
                     <div class="movie-title-div">
-                        <span class="mb-2 session-movie-title font-main">Назва фільму</span>
+                        <span class="mb-2 session-movie-title font-main">@movie.Title</span>
                     </div>
 
                     <div class="session-times-block">
-                            <div class="session-time text-light-emphasis small">час сеансу</div>
+                        @foreach (var time in movie.Sessions)
+                        {
+                            <div class="session-time text-light-emphasis small">@time</div>
+                        }
                     </div>
                 </div>
 
                 <div class="sessioninfo-booking-div container d-flex justify-content-between">
                     <div class="session-info text-muted small pt-2 font-secondary">
                         <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
-                        <span class="me-3"><i class="fa-solid fa-child me-1"></i> Рейтинг фільму за віком</span>
-                        <span class="me-3"><i class="fa-solid fa-film me-1"></i> Жанр фільму</span>
-                        <span><i class="fa-regular fa-clock me-1"></i> @(222 / 60):@(222 % 60)</span>
+                        <span class="me-3"><i class="fa-solid fa-child me-1"></i> @movie.AgeRating</span>
+                        <span class="me-3"><i class="fa-solid fa-film me-1"></i> @movie.Genre</span>
+                        <span><i class="fa-regular fa-clock me-1"></i>@TimeSpan.FromMinutes(movie.Duration ?? 0).ToString(@"h\:mm")</span>
                     </div>
 
+                        @{
+                            var dayNow = DateTime.UtcNow.ToLocalTime().ToString("dd.MM");
+                        }
                     <div class="booking-btn-div font-main d-flex justify-content-between">
-                        <a class="booking-btn" asp-controller="Admin" asp-action="UpdateSession" asp-route-id="1" style ="margin-right: 1rem;">Змінити</a>
+                        <a class="booking-btn" asp-controller="Admin" asp-action="UpdateSession" asp-route-id="@movie.Id" style ="margin-right: 1rem;">Змінити</a>
                         <a class="booking-btn">Видалити</a>
                     </div>
                 </div>
             </div>
         </div>
+   
+        }
+    }
+}
+ <!-- Якщо обрано конкретну дату то такий вивід фільмів -->
+@if ((Model.MoviesGroupedByDate == null || !Model.MoviesGroupedByDate.Any()) && Model.MoviesByDay.Any())
+{
+    @foreach (var movie in Model.MoviesByDay)
+    {
+        <div class="movie-session-card mt-3 row"
+            data-genre="@movie.Genre"
+            data-rating="@movie.AgeRating"
+            data-duration="@movie.Duration">
+          <div class="poster-col col-auto">
+              <img src="@movie.ThumbnailUrl" alt="@movie.Title" class="movie-thumb" />
+          </div>
+
+          <div class="flex-grow-1 col">
+              <div class="title-sessiontimes-div container d-flex justify-content-between mb-5">
+                  <div class="movie-title-div">
+                      <span class="mb-2 session-movie-title font-main">@movie.Title</span>
+                  </div>
+
+                  <div class="session-times-block">
+                      @foreach (var time in movie.Sessions)
+                      {
+                          <div class="session-time text-light-emphasis small">@time</div>
+                      }
+                  </div>
+              </div>
+
+              <div class="sessioninfo-booking-div container d-flex justify-content-between">
+                  <div class="session-info text-muted small pt-2 font-secondary">
+                      <span class="me-3"><i class="fa-solid fa-door-open me-1"></i> Зала 1</span>
+                      <span class="me-3"><i class="fa-solid fa-child me-1"></i> @movie.AgeRating</span>
+                      <span class="me-3"><i class="fa-solid fa-film me-1"></i> @movie.Genre</span>
+                      <span><i class="fa-regular fa-clock me-1"></i>@TimeSpan.FromMinutes(movie.Duration ?? 0).ToString(@"h\:mm")</span>
+                  </div>
+
+                      @{
+                          var dayNow = DateTime.UtcNow.ToLocalTime().ToString("dd.MM");
+                      }
+                  <div class="booking-btn-div font-main d-flex justify-content-between">
+                      <a class="booking-btn" asp-controller="Admin" asp-action="UpdateSession" asp-route-id="@movie.Id" style ="margin-right: 1rem;">Змінити</a>
+                      <a class="booking-btn">Видалити</a>
+                  </div>
+              </div>
+          </div>
+      </div>
+   
+    }
+}
+
+
+
+        
 </div>
+
+<script src="/js/filters.js"></script>
+
 
 <!-- Modal підтвердження видалення сектору -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">

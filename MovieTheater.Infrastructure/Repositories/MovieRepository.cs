@@ -46,6 +46,29 @@ namespace MovieTheater.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<Session>> GetSessionsBeforeAsync(DateTime nowUtc, int daysBack = 7)
+        {
+
+            var fromDate = nowUtc.Date.AddDays(-daysBack);
+
+            return await _context.Sessions
+                .Include(s => s.Movie).ThenInclude(m => m.AgeRating)
+                .Include(s => s.Movie).ThenInclude(m => m.Genres).ThenInclude(g => g.Genre)
+                .Include(s => s.Hall)
+                .Where(s => s.StartTime >= fromDate && s.StartTime < nowUtc)
+                .ToListAsync();
+        }
+
+        public async Task<List<Session>> GetSessionsAfterAsync(DateTime nowUtc)
+        {
+            return await _context.Sessions
+                .Include(s => s.Movie).ThenInclude(m => m.AgeRating)
+                .Include(s => s.Movie).ThenInclude(m => m.Genres).ThenInclude(g => g.Genre)
+                .Include(s => s.Hall)
+                .Where(s => s.StartTime >= nowUtc)
+                .ToListAsync();
+        }
+
         public async Task<Movie?> GetMovieWithDetailsByIdAsync(long id)
         {
             return await _context.Movies
