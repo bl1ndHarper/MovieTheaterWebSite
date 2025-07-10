@@ -671,3 +671,18 @@
 .new-price{
   width: 100%;
 }
+
+.dates-container-admin {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6%; 
+  align-items: center;
+}
+
+.date-div-admin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 10pt; 
+  
+}

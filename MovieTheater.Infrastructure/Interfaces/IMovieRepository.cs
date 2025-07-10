@@ -23,5 +23,8 @@ namespace MovieTheater.Infrastructure.Interfaces
         Task AddGenresAsync(IEnumerable<Genre> genres);
         Task AddMovieGenresAsync(IEnumerable<MovieGenre> movieGenres);
         Task<bool> ExistsByTitleAndYearAsync(string title, int year);
+
+        Task<List<Session>> GetSessionsBeforeAsync(DateTime nowUtc, int daysBack);
+        Task<List<Session>> GetSessionsAfterAsync(DateTime nowUtc);
     }
 }

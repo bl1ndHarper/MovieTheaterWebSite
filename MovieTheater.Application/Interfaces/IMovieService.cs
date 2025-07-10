@@ -22,5 +22,7 @@ namespace MovieTheater.Application.Interfaces
         Task<MovieDto?> GetMovieDetailsFromApiAsync(int tmdbId);
         Task<bool> AddMovieFromApiAsync(int tmdbId);
         Task<bool> SaveMovieFromDtoAsync(MovieSaveDto dto);
+
+        Task<List<MovieSessionsByDateDto>> GetGroupedByDateAsync(string mode,int daysBack );
     }
 }

@@ -121,6 +121,8 @@ namespace MovieTheater.Application.Services
 
         public async Task<List<MovieMainDto>> GetNowShowingAsync(string day)
         {
+            List<Session> sessions;
+
             var date = DateTime.SpecifyKind(
                 DateTime.ParseExact(
                     day + "." + DateTime.UtcNow.Year,
@@ -128,7 +130,8 @@ namespace MovieTheater.Application.Services
                     CultureInfo.InvariantCulture),
                 DateTimeKind.Utc);
 
-            var sessions = await _movieRepository.GetNowShowingSessionsAsync(date);
+            sessions = await _movieRepository.GetNowShowingSessionsAsync(date);
+            
             return sessions
                 .GroupBy(s => s.MovieId)
                 .Select(g =>
@@ -142,11 +145,66 @@ namespace MovieTheater.Application.Services
                         Genre = mv.Genres.FirstOrDefault()?.Genre.Name,
                         AgeRating = mv.AgeRating.Label,
                         Duration = mv.Duration,
-                        Sessions = g.Select(s => s.StartTime.ToString("HH:mm")).ToList()
+                        Sessions = g.Select(s => s.StartTime.ToLocalTime().ToString("HH:mm")).ToList()
                     };
                 })
                 .ToList();
         }
+            
+        public async Task<List<MovieSessionsByDateDto>> GetGroupedByDateAsync(string mode, int daysBack = 7)
+        {
+            var now = DateTime.UtcNow;
+            List<Session> sessions;
+
+            if (mode == "past")
+                sessions = await _movieRepository.GetSessionsBeforeAsync(now, daysBack);
+            else if (mode == "future")
+                sessions = await _movieRepository.GetSessionsAfterAsync(now);
+            else
+                return new(); // fallback
+
+            var groupedByDate = sessions
+                .GroupBy(s => s.StartTime.Date)
+                .OrderBy(g => mode == "past" ? -g.Key.Ticks : g.Key.Ticks)
+                .ToList();
+
+            var result = new List<MovieSessionsByDateDto>();
+
+            foreach (var group in groupedByDate)
+            {
+                var movies = group
+                    .GroupBy(s => s.MovieId)
+                    .Select(g =>
+                    {
+                        var mv = g.First().Movie;
+                        return new MovieMainDto
+                        {
+                            Id = mv.Id,
+                            Title = mv.Title,
+                            ThumbnailUrl = mv.ThumbnailUrl,
+                            Genre = mv.Genres.FirstOrDefault()?.Genre.Name,
+                            AgeRating = mv.AgeRating.Label,
+                            Duration = mv.Duration,
+                            Sessions = g
+                                .OrderBy(s => s.StartTime)
+                                .Select(s => s.StartTime.ToLocalTime().ToString("HH:mm"))
+                                .ToList()
+                        };
+                    })
+                    .ToList();
+
+                result.Add(new MovieSessionsByDateDto
+                {
+                    Date = group.Key,
+                    Movies = movies
+                });
+            }
+
+            return result;
+        }
+
+            
+        
 
         public async Task<List<MovieMainDto>> GetLatestMoviesAsync(int count)
         {
