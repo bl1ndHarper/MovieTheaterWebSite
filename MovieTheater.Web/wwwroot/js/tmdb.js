@@ -5,6 +5,11 @@ document.getElementById("searchMovieBtn").addEventListener("click", async functi
     if (!query) return;
 
     const response = await fetch(`/api/admin/movies/search?query=${encodeURIComponent(query)}`);
+    if (!response.ok) {
+        const err = await response.json();
+        alert(err.detail || "Помилка пошуку фільмів");
+        return;
+    }
     const movies = await response.json();
 
     const container = document.getElementById("foundMoviesDiv");
@@ -24,7 +29,11 @@ document.getElementById("searchMovieBtn").addEventListener("click", async functi
         icon.addEventListener("click", async function () {
             const tmdbId = this.dataset.id;
             const res = await fetch(`/api/admin/movies/details/${tmdbId}`);
-            if (!res.ok) return alert("Помилка завантаження деталей");
+            if (!res.ok) {
+                const err = await res.json();
+                alert(err.detail || "Помилка завантаження деталей");
+                return;
+            }
 
             selectedMovie = await res.json();
             renderSelectedMovie(selectedMovie);
@@ -33,18 +42,19 @@ document.getElementById("searchMovieBtn").addEventListener("click", async functi
 });
 
 document.querySelector(".delete-time-btn").addEventListener("click", async function () {
-    if (!selectedMovie) return alert("Фільм не обрано");
+    if (!selectedMovie) return alert("No movie was selected");
 
     const response = await fetch("/api/admin/movies/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(selectedMovie)
     });
-
+    
     if (response.ok) {
         alert("Фільм збережено");
     } else {
-        alert("Помилка під час збереження");
+        const err = await response.json();
+        alert(err.detail || "Помилка під час збереження");
     }
 });
 

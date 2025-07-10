@@ -93,58 +93,88 @@ namespace MovieTheater.Web.ApiControllers
         [HttpGet("api/admin/movies/details/{tmdbId}")]
         public async Task<IActionResult> GetMovieDetailsFromTmdb(int tmdbId)
         {
-            var movie = await _movieService.GetMovieDetailsFromApiAsync(tmdbId);
-            return movie == null
-                ? ApiProblem.NotFound("Not found", $"Movie with TMDB id = {tmdbId} not found")
-                : Ok(movie);
+            try
+            {
+                var movie = await _movieService.GetMovieDetailsFromApiAsync(tmdbId);
+                return movie == null
+                    ? ApiProblem.NotFound("Not found", $"Movie with TMDB id = {tmdbId} not found or lacks essential data")
+                    : Ok(movie);
+            }
+            catch (Exception ex)
+            {
+                return ApiProblem.Internal($"Failed to get movie details: {ex.Message}");
+            }
         }
 
         [HttpGet("api/admin/movies/search")]
         public async Task<IActionResult> SearchMovies(string query)
         {
-            var results = await _movieService.SearchMoviesAsync(query);
-            return Ok(results);
+            if (string.IsNullOrWhiteSpace(query))
+                return ApiProblem.Bad("Missing query", "Search query is empty");
+
+            try
+            {
+                var results = await _movieService.SearchMoviesAsync(query);
+                if (results == null || results.Count == 0)
+                    return ApiProblem.NotFound("No results", $"No movies found for '{query}'");
+
+                return Ok(results);
+            }
+            catch (Exception ex)
+            {
+                return ApiProblem.Internal($"Failed to search movies: {ex.Message}");
+            }
         }
 
         [HttpPost("api/admin/movies/save")]
         public async Task<IActionResult> SaveMovie([FromBody] JsonElement raw)
         {
-            var genreNames = new List<string>();
-            if (raw.TryGetProperty("genres", out var genresProp) && genresProp.ValueKind == JsonValueKind.Array)
+            try
             {
-                foreach (var item in genresProp.EnumerateArray())
+                var genreNames = new List<string>();
+                if (raw.TryGetProperty("genres", out var genresProp) && genresProp.ValueKind == JsonValueKind.Array)
                 {
-                    if (item.TryGetProperty("genre", out var genreObj) &&
-                        genreObj.TryGetProperty("name", out var nameProp))
+                    foreach (var item in genresProp.EnumerateArray())
                     {
-                        var name = nameProp.GetString();
-                        if (!string.IsNullOrWhiteSpace(name))
-                            genreNames.Add(name);
+                        if (item.TryGetProperty("genre", out var genreObj) &&
+                            genreObj.TryGetProperty("name", out var nameProp))
+                        {
+                            var name = nameProp.GetString();
+                            if (!string.IsNullOrWhiteSpace(name))
+                                genreNames.Add(name);
+                        }
                     }
                 }
+
+                using var doc = JsonDocument.Parse(raw.GetRawText());
+                var root = doc.RootElement;
+
+                var filteredProperties = root.EnumerateObject()
+                    .Where(p => p.Name != "genres")
+                    .ToDictionary(p => p.Name, p => p.Value);
+
+                using var filteredDoc = JsonDocument.Parse(JsonSerializer.Serialize(filteredProperties));
+                var dto = JsonSerializer.Deserialize<MovieSaveDto>(filteredDoc.RootElement.GetRawText(), new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (dto == null)
+                    return ApiProblem.Bad("Invalid data", "MovieSaveDto could not be deserialized");
+
+                dto.Genres = genreNames;
+
+                var result = await _movieService.SaveMovieFromDtoAsync(dto);
+                return result ? Ok() : ApiProblem.Conflict("Duplicate movie or failed save", "The movie may already exist or save failed");
             }
-
-            using var doc = JsonDocument.Parse(raw.GetRawText());
-            var root = doc.RootElement;
-
-            var filteredProperties = root.EnumerateObject()
-                .Where(p => p.Name != "genres")
-                .ToDictionary(p => p.Name, p => p.Value);
-
-            using var filteredDoc = JsonDocument.Parse(JsonSerializer.Serialize(filteredProperties));
-            var dto = JsonSerializer.Deserialize<MovieSaveDto>(filteredDoc.RootElement.GetRawText(), new JsonSerializerOptions
+            catch (JsonException ex)
             {
-                PropertyNameCaseInsensitive = true
-            });
-
-            if (dto == null)
-                return BadRequest("Невалідні дані");
-
-            dto.Genres = genreNames;
-
-            var result = await _movieService.SaveMovieFromDtoAsync(dto);
-
-            return result ? Ok() : BadRequest("Фільм уже існує або сталася помилка при збереженні");
+                return ApiProblem.Bad("Invalid JSON", ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return ApiProblem.Internal($"Error while saving movie: {ex.Message}");
+            }
         }
     }
 }

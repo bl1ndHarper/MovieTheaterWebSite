@@ -19,6 +19,7 @@ namespace MovieTheater.Web.Controllers
         }
 
         [HttpPost("/Booking/Cancel/{id}")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public async Task<IActionResult> Cancel(long id)
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
