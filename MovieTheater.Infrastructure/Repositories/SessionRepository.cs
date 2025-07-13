@@ -65,6 +65,19 @@ namespace MovieTheater.Infrastructure.Repositories
         public Task AddAsync(Session session) =>
             _context.Sessions.AddAsync(session).AsTask();
 
+        public async Task AddSessionsAsync(List<Session> sessions)
+        {
+        await _context.Sessions.AddRangeAsync(sessions);
+        }
+
+        public async Task<bool> SessionExistsAsync(DateTime startTime, int hallId, int movieId)
+        {
+            return await _context.Sessions.AnyAsync(s =>
+                s.StartTime == startTime &&
+                s.HallId == hallId &&
+                s.MovieId == movieId);
+        }
+
         public void Remove(Session session) =>
             _context.Sessions.Remove(session);
 

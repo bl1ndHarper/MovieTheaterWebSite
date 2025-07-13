@@ -176,5 +176,21 @@ namespace MovieTheater.Web.ApiControllers
                 return ApiProblem.Internal($"Error while saving movie: {ex.Message}");
             }
         }
+
+        [HttpGet("api/movies/all")] 
+        public async Task<IActionResult> GetAllLocalMovies()
+        {
+            try
+            {
+                var movies = await _movieService.GetAllMoviesAsync(); 
+              
+                return Ok(movies); 
+            }
+            catch (Exception ex)
+            {
+               
+                return ApiProblem.Internal($"Failed to retrieve movies: {ex.Message}");
+            }
+        }
     }
 }

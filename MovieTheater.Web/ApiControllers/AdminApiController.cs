@@ -13,10 +13,12 @@ namespace MovieTheater.Web.ApiControllers
     public class AdminApiController : ControllerBase
     {
         private readonly IHallService _hallService;
+        private readonly ISessionService _sessionService;
 
-        public AdminApiController(IHallService hallService)
+        public AdminApiController(IHallService hallService, ISessionService sessionService)
         {
             _hallService = hallService;
+            _sessionService = sessionService;
         }
 
         [HttpPost("hall/{hallId}/sector/{sectorId}/price")]
@@ -63,11 +65,33 @@ namespace MovieTheater.Web.ApiControllers
                 return ApiProblem.Internal(ex.Message);
             }
         }
-    }
 
-    public class SectorPriceUpdateRequest
-    {
-        public long SectorId { get; set; }
-        public decimal Price { get; set; }
+        [HttpGet("halls")]
+        public async Task<IActionResult> GetAllHalls()
+        {
+            var halls = await _hallService.GetAllHallsWithSectorsAsync();
+            return Ok(halls.Select(h => new { h.Id, h.Name }));
+        }
+
+
+        [HttpPost("sessions/create")]
+        public async Task<IActionResult> CreateSessions([FromBody] List<SessionCreateDto> dtos)
+        {
+                if (dtos == null || !dtos.Any())
+                    return ApiProblem.Bad("No sessions data ", "Немає даних сеансів");
+
+                var success = await _sessionService.CreateSessionsAsync(dtos);
+
+                if (success)
+                    return NoContent();
+                else
+                    return BadRequest("не вдалося створити сеанси");
+        }
+
+        public class SectorPriceUpdateRequest
+        {
+            public long SectorId { get; set; }
+            public decimal Price { get; set; }
+        }
     }
 }

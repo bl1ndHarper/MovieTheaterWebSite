@@ -26,5 +26,6 @@ namespace MovieTheater.Infrastructure.Interfaces
 
         Task<List<Session>> GetSessionsBeforeAsync(DateTime nowUtc, int daysBack);
         Task<List<Session>> GetSessionsAfterAsync(DateTime nowUtc);
+        Task<List<Movie>> GetAllMoviesForListAsync();
     }
 }

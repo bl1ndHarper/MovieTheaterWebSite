@@ -15,6 +15,8 @@ namespace MovieTheater.Infrastructure.Interfaces
         Task<Session?> GetByIdAsync(long id);
         Task AddAsync(Session session);
         void Remove(Session session);
+        Task AddSessionsAsync(List<Session> sessions);
+        Task<bool> SessionExistsAsync(DateTime startTime, int hallId, int movieId);
         Task SaveAsync();
     }
 }

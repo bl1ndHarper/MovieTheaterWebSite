@@ -74,12 +74,13 @@ builder.Services.Configure<ApiBehaviorOptions>(o =>
     o.InvalidModelStateResponseFactory = ctx =>
     {
         var errors = ctx.ModelState
-                        .Where(x => x.Value?.Errors.Count > 0)
-                        .ToDictionary(
-                             k => k.Key,
-                             v => v.Value!.Errors.Select(e => e.ErrorMessage));
+            .Where(x => x.Value?.Errors.Count > 0)
+            .ToDictionary(
+                k => k.Key,
+                // ****** ЗМІНА ТУТ: ДОДАЙТЕ .ToArray() ******
+                v => v.Value!.Errors.Select(e => e.ErrorMessage).ToArray()); // <-- Тепер це string[]
 
-        var problem = new ValidationProblemDetails((IDictionary<string, string[]>)errors)
+        var problem = new ValidationProblemDetails(errors) // Тут вже не потрібен явний привід, бо тип вже правильний
         {
             Status = StatusCodes.Status400BadRequest,
             Title = "Validation error",
@@ -112,6 +113,7 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

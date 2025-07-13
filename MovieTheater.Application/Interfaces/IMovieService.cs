@@ -19,10 +19,12 @@ namespace MovieTheater.Application.Interfaces
         Task<MovieDto?> GetMovieByIdAsync(long id);
         Task<List<TmdbUpcomingMovie>> GetUpcomingMovies();
         Task<List<MovieSearchResultDto>> SearchMoviesAsync(string query);
-        Task<MovieDto?> GetMovieDetailsFromApiAsync(int tmdbId);
+        Task<MoviePreviewDto?> GetMovieDetailsFromApiAsync(int tmdbId);
         Task<bool> AddMovieFromApiAsync(int tmdbId);
         Task<bool> SaveMovieFromDtoAsync(MovieSaveDto dto);
 
-        Task<List<MovieSessionsByDateDto>> GetGroupedByDateAsync(string mode,int daysBack );
+        Task<List<MovieSessionsByDateDto>> GetGroupedByDateAsync(string mode, int daysBack);
+
+         Task<List<MovieListItemDto>> GetAllMoviesAsync();
     }
 }
