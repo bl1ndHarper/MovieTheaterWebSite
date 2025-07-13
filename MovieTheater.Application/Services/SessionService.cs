@@ -5,6 +5,7 @@ using MovieTheater.Infrastructure.Data;
 using MovieTheater.Infrastructure.Entities;
 using MovieTheater.Infrastructure.Interfaces;
 using System;
+using Microsoft.Extensions.Logging; 
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -18,11 +19,14 @@ namespace MovieTheater.Application.Services
     {
         private readonly ISessionRepository _sessionRepository;
         private readonly IMovieRepository _movieRepository;
+        private readonly ILogger<SessionService> _logger;
 
-        public SessionService(ISessionRepository sessionRepository, IMovieRepository movieRepository)
+
+        public SessionService(ISessionRepository sessionRepository, IMovieRepository movieRepository, ILogger<SessionService> logger)
         {
             _sessionRepository = sessionRepository;
             _movieRepository = movieRepository;
+            _logger = logger;
         }
         public async Task<MovieSessionDto?> GetSessionByIdAsync(long id)
         {
@@ -59,6 +63,51 @@ namespace MovieTheater.Application.Services
             await _sessionRepository.SaveAsync();
 
             return new MovieSessionDto { Id = session.Id, MovieId = session.MovieId };
+        }
+
+        public async Task<bool> CreateSessionsAsync(List<SessionCreateDto> dtos)
+        {
+             try
+            {
+                var validSessions = new List<Session>();
+                foreach (var dto in dtos)
+                {
+                    
+                    _logger.LogDebug("Checking if session exists: StartTime={StartTime}, HallId={HallId}, MovieId={MovieId}", dto.StartTime, dto.HallId, dto.MovieId);
+
+                    var exists = await _sessionRepository.SessionExistsAsync(dto.StartTime, dto.HallId, dto.MovieId);
+                    if (!exists)
+                    {
+                        validSessions.Add(new Session
+                        {
+                            StartTime = dto.StartTime,
+                            HallId = dto.HallId,
+                            MovieId = dto.MovieId
+                        });
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Skipping duplicate session: StartTime={StartTime}, HallId={HallId}, MovieId={MovieId}", dto.StartTime, dto.HallId, dto.MovieId);
+                    }
+                }
+
+                if (validSessions.Any())
+                {
+                    _logger.LogInformation("Attempting to add {Count} new sessions.", validSessions.Count);
+                    await _sessionRepository.AddSessionsAsync(validSessions);
+                    await _sessionRepository.SaveAsync();
+                    _logger.LogInformation("Successfully added and saved sessions.");
+                    return true;
+                }
+                _logger.LogInformation("No new sessions to add.");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                
+                _logger.LogError(ex, "Failed to create sessions due to an unhandled exception in SessionService.");
+                throw; 
+            }
         }
 
         public async Task<bool> DeleteSessionAsync(long id)

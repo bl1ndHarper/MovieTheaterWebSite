@@ -19,5 +19,7 @@ namespace MovieTheater.Application.Interfaces
         Task<List<string>> GetAvailableSessionDatesAsync(long movieId);
         Task<List<SessionSeatDto>> GetSeatsBySessionIdAsync(long sessionId);
         Task<SessionSeat?> GetSessionSeatAsync(long sessionId, string label);
+
+        Task<bool> CreateSessionsAsync(List<SessionCreateDto> dtos);
     }
 }

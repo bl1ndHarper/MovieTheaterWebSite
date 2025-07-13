@@ -131,7 +131,7 @@ namespace MovieTheater.Application.Services
                 DateTimeKind.Utc);
 
             sessions = await _movieRepository.GetNowShowingSessionsAsync(date);
-            
+
             return sessions
                 .GroupBy(s => s.MovieId)
                 .Select(g =>
@@ -150,7 +150,7 @@ namespace MovieTheater.Application.Services
                 })
                 .ToList();
         }
-            
+
         public async Task<List<MovieSessionsByDateDto>> GetGroupedByDateAsync(string mode, int daysBack = 7)
         {
             var now = DateTime.UtcNow;
@@ -203,8 +203,8 @@ namespace MovieTheater.Application.Services
             return result;
         }
 
-            
-        
+
+
 
         public async Task<List<MovieMainDto>> GetLatestMoviesAsync(int count)
         {
@@ -294,7 +294,9 @@ namespace MovieTheater.Application.Services
                 .Select(r =>
                 {
                     string pattern = "yyyy-MM-dd";
-                    string year = DateTime.ParseExact(r.Release_Date, pattern, null, DateTimeStyles.None).Year.ToString();
+                    string year = !string.IsNullOrWhiteSpace(r.Release_Date)
+                        ? DateTime.ParseExact(r.Release_Date, "yyyy-MM-dd", null).Year.ToString()
+                        : "Невідомо"; // або "", або null
 
                     return new MovieSearchResultDto
                     {
@@ -306,7 +308,7 @@ namespace MovieTheater.Application.Services
                 .ToList() ?? new();
         }
 
-        public async Task<MovieDto?> GetMovieDetailsFromApiAsync(int tmdbId)
+        public async Task<MoviePreviewDto?> GetMovieDetailsFromApiAsync(int tmdbId)
         {
             var response = await _httpClient.GetAsync(
                 $"https://api.themoviedb.org/3/movie/{tmdbId}?api_key={_apiKey}&language=uk-UA&append_to_response=credits");
@@ -320,7 +322,14 @@ namespace MovieTheater.Application.Services
             if (movieDto == null)
                 return null;
 
-            return new MovieDto
+            var director = movieDto.Credits?.Crew?.FirstOrDefault(c => c.Job == "Director")?.Name ?? "Невідомо";
+            var actors = movieDto.Credits?.Cast?
+                    .Where(c => !string.IsNullOrWhiteSpace(c.Name))
+                    .Take(5)
+                    .Select(c => c.Name)
+                    .ToList() ?? new();
+
+            return new MoviePreviewDto
             {
                 Title = movieDto.Title,
                 Description = movieDto.Overview,
@@ -328,7 +337,8 @@ namespace MovieTheater.Application.Services
                 ImdbRating = (decimal)Math.Round(movieDto.Vote_Average, 1),
                 Duration = (short?)movieDto.Runtime,
                 ThumbnailUrl = $"https://image.tmdb.org/t/p/w500{movieDto.Poster_Path}",
-                DirectorName = "", // TODO: можна витягти з credits
+                DirectorName = director,
+                ActorNames = actors,
                 Genres = movieDto.Genres.Select(g => new MovieGenre
                 {
                     Genre = new Genre { Name = g.Name }
@@ -370,7 +380,8 @@ namespace MovieTheater.Application.Services
             var existingGenres = await _movieRepository.GetGenresByNamesAsync(dto.Genres);
 
             var newGenres = dto.Genres
-                .Where(name => existingGenres.All(g => g.Name != name))
+                .Where(name => !existingGenres.Any(g => string.Equals(g.Name, name, StringComparison.OrdinalIgnoreCase)))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
                 .Select(name => new Genre { Name = name })
                 .ToList();
 
@@ -413,5 +424,23 @@ namespace MovieTheater.Application.Services
 
             return true;
         }
+        
+        public async Task<List<MovieListItemDto>> GetAllMoviesAsync() 
+        {
+         
+            var moviesFromDb = await _movieRepository.GetAllMoviesForListAsync();
+            var movieListItemDtos = moviesFromDb
+                .Select(movie => new MovieListItemDto
+                {
+                    Id = movie.Id,
+                    Title = movie.Title,
+                    ReleaseYear = movie.ReleaseDate.Year 
+                })
+                .ToList();
+
+            return movieListItemDtos;
+        }
+        
+        
     }
 }

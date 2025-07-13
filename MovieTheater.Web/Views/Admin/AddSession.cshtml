@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "Keen-chick: перегляд сеансу";
+    ViewData["Title"] = "Keen-chick: додавання сеансу";
 }
 
 @section Styles {
@@ -11,64 +11,20 @@
   <div class="back-btn-div font-main">
     <a asp-area="" asp-controller="Admin" asp-action="Index" class="back-btn "> ← Назад</a>
   </div>
-  <div class="container">
+
+  <div class="movie-selection-div mt-4 container">
     <div class="row">
-        <div class="col-9 ">
-          <div class="movie-info-big-div row mt-4">
-              <div class="poster-col col-auto">
-                  <img src=https://static.vecteezy.com/system/resources/thumbnails/004/141/669/small_2x/no-photo-or-blank-image-icon-loading-images-or-missing-image-mark-image-not-available-or-image-coming-soon-sign-simple-nature-silhouette-in-frame-isolated-illustration-vector.jpg
-                  alt="Jeepers Creepers" class="movie-thumb">
-              </div>
-              <div class="movie-info-div col">
-                <div class="movie-title-div">
-                  <span class="mb-2 session-movie-title font-main">Назва фільму</span>
-                </div>
-                  <div class="tags-genres-div mt-2">
-                    </div>
-
-                  <div class="session-info font-secondary mt-2" style="margin-left: 0px;">
-                    <span class="stats-tag" style="margin-left: 0px;">Вік</span>
-                    <span class="stats-tag">⭐ рейтинг/ 10 IMBD</span>
-                    <span class="stats-tag">Тривалість</span>
-                    <span class="stats-tag">Рік випуску</span>
-                  </div>
-
-                <p class="movie-director font-main">
-                  <span> Режисер: </span>
-                </p>
-
-                <p class="movie-actors font-main">
-                  <span> Актори: </span>
-                </p>
-
-                <p class="movie-desc font-main">
-                  <span> Короткий опис: </span>
-                </p>
-              </div>
-          </div>
+        <div class="col-12">
+            <h4 class="font-main session-movie-title">Виберіть фільм для сеансу:</h4>
+                <select id="existingMovieSelect" class="select-movie mb-3 mt-3">
+                <option value="">-- Оберіть фільм --</option>
+                </select>
+            <span id="selectedMovieDisplay" class="font-secondary selected-movie-name" style="margin-left: 10px;"></span>
         </div>
+    </div>
+</div>
 
-        <div class="col-3  ml-3 ">
-            <div class="styled-container mt-4 " style="padding: 15px;">
-              <p class="font-secondary change-movie-text mt-3"> Додати фільм</p>
-              <input id="searchMovieInApi" type="text" placeholder="Шукати фільм..." class="form-control mt-2" />
-              <button id="searchMovieBtn" class="btn btn-primary mt-2" style="width: 100%;">
-                  <i class="fa fa-search"></i> Знайти
-              </button>
 
-              <div id = "foundMoviesDiv" class="search-active">
-
-                  <!-- Тут знайдені фільми -->
-
-              </div>
-            </div>
-
-             <div class="mt-3" style="width:70%;margin-left:15%">
-                <button class="delete-time-btn" style="font-size:16pt">Додати</button>
-            </div>
-
-        </div>
- </div>
 
 <div class="session-time-windows-div mt-4 container" style=" cursor:default">
     <div class ="row session-times-text-div" style=" width:100%">
@@ -113,12 +69,14 @@
     -->
 
      <!-- Кнопка для додавання нового часу сеансу-->
-    <button class=" session-time-add-window">
+    <button class="session-time-add-window">
        <i class="fa-solid fa-plus addMovieIcon" ></i>
     </button>
 
 </div>
-
+<div class = "d-flex justify-content-center">
+<button id= "AddSession" class="delete-time-btn mt-4" style="font-size:16pt; width:30%">Додати сенаси</button>
+</div>
 
       <!-- бібліотека календаря -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -152,4 +110,4 @@
     });
 </script>
 
-<script src="/js/tmdb.js"></script>
+<script src="/js/add_session.js" ></script>

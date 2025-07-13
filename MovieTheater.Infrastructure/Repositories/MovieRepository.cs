@@ -126,8 +126,14 @@ namespace MovieTheater.Infrastructure.Repositories
             await SaveAsync();
         }
 
-        public async Task<List<Genre>> GetGenresByNamesAsync(List<string> names) =>
-            await _context.Genres.Where(g => names.Contains(g.Name)).ToListAsync();
+        public async Task<List<Genre>> GetGenresByNamesAsync(List<string> names)
+        { 
+            var normalized = names.Select(n => n.Trim().ToLower()).ToList();
+
+                return await _context.Genres
+                .Where(g => normalized.Contains(g.Name.ToLower()))
+                .ToListAsync();
+        }
 
         public async Task AddGenresAsync(IEnumerable<Genre> genres)
         {
@@ -146,6 +152,12 @@ namespace MovieTheater.Infrastructure.Repositories
                 m.ReleaseDate.Year == year);
         }
 
+         public async Task<List<Movie>> GetAllMoviesForListAsync()
+        {
+        return await _context.Movies
+                             .OrderByDescending(m => m.ReleaseDate)
+                             .ToListAsync();
+        }
         public Task<Movie?> GetByIdAsync(long id) =>
             _context.Movies.FindAsync(id).AsTask();
 

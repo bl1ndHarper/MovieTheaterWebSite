@@ -54,10 +54,17 @@ namespace MovieTheater.Web.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> AddMovie()
+        { 
+            return View("AddMovie");
+        }
+
+        [HttpGet]
         public async Task<IActionResult> AddSession()
         { 
             return View("AddSession");
         }
+
 
         [HttpPost]
         public async Task<IActionResult> AddSector(long hallId, string name, decimal seatPrice)
