@@ -47,4 +47,4 @@ Also i took a part in backend stuff: made all logic for upcoming movies page, ma
 made final tweaks on add movie and create session pages, also fixed lots of logical and visual bugs.
 
 ## DEMO LINK: 
- to be added
+ https://youtu.be/pvS277vG_rY
